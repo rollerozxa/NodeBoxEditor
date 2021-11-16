@@ -17,8 +17,7 @@ enum FileFormatError
 enum FileFormatType
 {
 	FILE_FORMAT_NBE,
-	FILE_FORMAT_LUA,
-	FILE_FORMAT_CPP
+	FILE_FORMAT_LUA
 };
 
 class Project;

@@ -52,7 +52,6 @@ set(NBE_SRC
 	src/FileFormat/helpers.cpp
 	src/FileFormat/NBE.cpp
 	src/FileFormat/Lua.cpp
-	src/FileFormat/CPP.cpp
 	src/FileFormat/obj.cpp
 
 	src/util/string.cpp

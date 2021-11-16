@@ -176,8 +176,6 @@ void FileDialog_export(EditorState *state, int parser)
 
 	if (parser == (int)FILE_FORMAT_LUA)
 		filters[0] = "*.lua";
-	else if (parser == (int)FILE_FORMAT_CPP)
-		filters[0] = "*.cpp";
 
 	const char *cfile = tinyfd_saveFileDialog("Save Project", path.c_str(),
 			1, filters);
