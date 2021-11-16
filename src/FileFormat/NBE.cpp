@@ -136,7 +136,7 @@ const char* getLabelForECUBE_SIDE(ECUBE_SIDE face)
 		return "right";
 	case (ECS_FRONT):
 		return "front";
-	case (ECS_BACK):
+	default: // case (ECS_BACK)
 		return "back";
 	}
 }
@@ -153,7 +153,7 @@ ECUBE_SIDE cubeSideFromString(std::string input)
 		return ECS_BOTTOM;
 	} else if (input == "front") {
 		return ECS_FRONT;
-	} else if (input == "back") {
+	} else { // input == "back"
 		return ECS_BACK;
 	}
 }

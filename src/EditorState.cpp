@@ -79,7 +79,7 @@ EViewportType EditorState::getEViewportType(EViewport id)
 		return stringToType(settings->get("viewport_top_right"), VIEWT_TOP);
 	case VIEW_BL:
 		return stringToType(settings->get("viewport_bottom_left"), VIEWT_FRONT);
-	case VIEW_BR:
+	default: // case VIEW_BR
 		return stringToType(settings->get("viewport_bottom_right"), VIEWT_PERS);
 	}
 }
