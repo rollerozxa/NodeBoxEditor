@@ -52,8 +52,8 @@ misrepresented as being the original software.
 
 
 #ifdef _WIN32
- #include <Windows.h>
- #include <Shlobj.h>
+ #include <windows.h>
+ #include <shlobj.h>
 #else
  #include <string.h>
  #include <limits.h>

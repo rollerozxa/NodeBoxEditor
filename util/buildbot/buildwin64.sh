@@ -16,8 +16,8 @@ packagedir=$builddir/packages
 libdir=$builddir/libs
 
 toolchain_file=$dir/toolchain_mingw64.cmake
-irrlicht_version=1.8.1
-zlib_version=1.2.8
+irrlicht_version=1.8.4
+zlib_version=1.2.11
 
 mkdir -p $packagedir
 mkdir -p $libdir
@@ -25,15 +25,15 @@ mkdir -p $libdir
 cd $builddir
 
 # Get stuff
-[ -e $packagedir/irrlicht-$irrlicht_version.zip ] || wget http://sfan5.pf-control.de/irrlicht-$irrlicht_version-win64.zip \
+[ -e $packagedir/irrlicht-$irrlicht_version.zip ] || wget http://minetest.kitsunemimi.pw/irrlicht-$irrlicht_version-win64.zip \
 	-c -O $packagedir/irrlicht-$irrlicht_version.zip
-[ -e $packagedir/zlib-$zlib_version.zip ] || wget http://sfan5.pf-control.de/zlib-$zlib_version-win64.zip \
+[ -e $packagedir/zlib-$zlib_version.zip ] || wget http://minetest.kitsunemimi.pw/zlib-$zlib_version-win64.zip \
 	-c -O $packagedir/zlib-$zlib_version.zip
 
 
 # Extract stuff
 cd $libdir
-[ -d irrlicht-$irrlicht_version ] || unzip -o $packagedir/irrlicht-$irrlicht_version.zip
+[ -d irrlicht-$irrlicht_version ] || unzip -o $packagedir/irrlicht-$irrlicht_version.zip -d irrlicht-$irrlicht_version/
 [ -d zlib ] || unzip -o $packagedir/zlib-$zlib_version.zip -d zlib
 
 # Get nodeboxeditor
@@ -50,7 +50,7 @@ git_hash=`git show | head -c14 | tail -c7`
 [ -d _build ] && rm -Rf _build/
 mkdir _build
 cd _build
-cmake .. \
+cmake .. -G Ninja \
 	-DCMAKE_TOOLCHAIN_FILE=$toolchain_file \
 	-DCMAKE_INSTALL_PREFIX=/tmp \
 	\
@@ -62,6 +62,6 @@ cmake .. \
 	-DZLIB_LIBRARIES=$libdir/zlib/lib/libz.dll.a \
 	-DZLIB_DLL=$libdir/zlib/bin/zlib1.dll
 
-make package -j2
+ninja
 
 # EOF
