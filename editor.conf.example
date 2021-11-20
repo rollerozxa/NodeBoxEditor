@@ -42,9 +42,6 @@ hide_other_nodes = true
 # Move all nodes up when a node is placed at negative y
 no_negative_node_y = true
 
-# Driver used to render
-driver = opengl
-
 # Hide the sidebar
 hide_sidebar = false
 

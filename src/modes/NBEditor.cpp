@@ -349,11 +349,7 @@ void CDR::update(NBEditor* editor, bool drag, rect<s32> offset)
 		vector3df wpos = vector3df(0, 0, 0); // The collision position
 
 		// Not used, but required for function
-		#if IRRLICHT_VERSION_MAJOR == 1 && IRRLICHT_VERSION_MINOR < 8
-			const ISceneNode* tmpNode;
-		#else
-			ISceneNode* tmpNode;
-		#endif
+		ISceneNode* tmpNode;
 		triangle3df tmpTri;
 
 		// Execute ray
@@ -456,9 +452,7 @@ void CDR::update(NBEditor* editor, bool drag, rect<s32> offset)
 			->getScreenCoordinatesFrom3DPosition(
 				pos,
 				smgr->getActiveCamera()
-	#if !(IRRLICHT_VERSION_MAJOR == 1 && IRRLICHT_VERSION_MINOR < 8)
 				, true
-	#endif
 			);
 
 	position = cpos + offset.UpperLeftCorner;

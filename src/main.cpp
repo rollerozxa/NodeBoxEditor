@@ -97,7 +97,6 @@ int main(int argc, char *argv[]) {
 	conf->set("default_snap_res", "16");
 	conf->set("limiting", "true");
 	conf->set("fractional_positions", "false");
-	conf->set("driver", "opengl");
 	conf->set("hide_sidebar", "false");
 	conf->set("save_directory", "");
 	conf->set("minetest_root", "");
@@ -128,21 +127,6 @@ int main(int argc, char *argv[]) {
 	// Set up irrlicht device
 	E_DRIVER_TYPE driv = irr::video::EDT_OPENGL;
 
-	const std::string confDriver = str_to_lower(conf->get("driver"));
-#ifdef _IRR_COMPILE_WITH_DIRECT3D_8_
-	if (confDriver == "directx8") {
-		driv = EDT_DIRECT3D8;
-	} else
-#endif
-#ifdef _IRR_COMPILE_WITH_DIRECT3D_9_
-	if (confDriver == "directx9") {
-		driv = EDT_DIRECT3D9;
-	} else
-#endif
-	if (confDriver == "software") {
-		driv = EDT_SOFTWARE;
-	}
-
 	// Start Irrlicht
 	int w = conf->getInt("width");
 	int h = conf->getInt("height");
@@ -163,10 +147,6 @@ int main(int argc, char *argv[]) {
 	if (device == NULL) {
 		return EXIT_FAILURE; // could not create selected driver.
 	}
-
-#if IRRLICHT_VERSION_MAJOR == 1 && IRRLICHT_VERSION_MINOR < 8
-	std::cerr << "Warning! Your Irrlicht version is outdated, so some NBE features will not be available." << std::endl;
-#endif
 
 	// Editor
 	Editor* editor = new Editor();
