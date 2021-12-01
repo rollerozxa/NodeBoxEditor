@@ -189,17 +189,18 @@ bool Editor::run(IrrlichtDevice* irr_device, Configuration* conf,
 #			define ROT_SP_Y 0.5
 #			define ANG_MAX 89
 
-			if (state->keys[KEY_KEY_W])
-				delta.X += ROT_SP_X * dtime;
+			if (state->keys[KEY_KEY_W]) {
+				delta.X += ROT_SP_X;
+			}
 
 			if (state->keys[KEY_KEY_S])
-				delta.X -= ROT_SP_X * dtime;
+				delta.X -= ROT_SP_X;
 
 			if (state->keys[KEY_KEY_A])
-				delta.Y += ROT_SP_Y * dtime;
+				delta.Y += ROT_SP_Y;
 
 			if (state->keys[KEY_KEY_D])
-				delta.Y -= ROT_SP_Y * dtime;
+				delta.Y -= ROT_SP_Y;
 
 			delta += pivot->getRotation();
 			if (delta.X > ANG_MAX)

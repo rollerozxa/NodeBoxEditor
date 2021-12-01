@@ -38,3 +38,6 @@ Desktop.ini
 *~*
 .directory
 *kate-swp*
+
+*.7z
+pkgbuild

@@ -16,32 +16,19 @@ packagedir=$builddir/packages
 libdir=$builddir/libs
 
 toolchain_file=$dir/toolchain_mingw64.cmake
-irrlicht_version=1.8.4
-zlib_version=1.2.11
+mingwdlldir="/usr/x86_64-w64-mingw32/bin"
 
 mkdir -p $packagedir
 mkdir -p $libdir
 
 cd $builddir
 
-# Get stuff
-[ -e $packagedir/irrlicht-$irrlicht_version.zip ] || wget http://minetest.kitsunemimi.pw/irrlicht-$irrlicht_version-win64.zip \
-	-c -O $packagedir/irrlicht-$irrlicht_version.zip
-[ -e $packagedir/zlib-$zlib_version.zip ] || wget http://minetest.kitsunemimi.pw/zlib-$zlib_version-win64.zip \
-	-c -O $packagedir/zlib-$zlib_version.zip
-
-
-# Extract stuff
-cd $libdir
-[ -d irrlicht-$irrlicht_version ] || unzip -o $packagedir/irrlicht-$irrlicht_version.zip -d irrlicht-$irrlicht_version/
-[ -d zlib ] || unzip -o $packagedir/zlib-$zlib_version.zip -d zlib
-
 # Get nodeboxeditor
 cd $builddir
 if [ ! "x$EXISTING_nodeboxeditor_DIR" = "x" ]; then
 	ln -s $EXISTING_nodeboxeditor_DIR nodeboxeditor
 else
-	[ -d nodeboxeditor ] && (cd nodeboxeditor && git pull) || (git clone https://github.com/rubenwardy/nodeboxeditor)
+	[ -d nodeboxeditor ] && (cd nodeboxeditor && git pull) || (git clone https://github.com/ROllerozxa/nodeboxeditor)
 fi
 cd nodeboxeditor
 git_hash=`git show | head -c14 | tail -c7`
@@ -52,16 +39,13 @@ mkdir _build
 cd _build
 cmake .. -G Ninja \
 	-DCMAKE_TOOLCHAIN_FILE=$toolchain_file \
-	-DCMAKE_INSTALL_PREFIX=/tmp \
-	\
-	-DIRRLICHT_INCLUDE_DIR=$libdir/irrlicht-$irrlicht_version/include \
-	-DIRRLICHT_LIBRARY=$libdir/irrlicht-$irrlicht_version/lib/Win64-gcc/libIrrlicht.dll.a \
-	-DIRRLICHT_DLL=$libdir/irrlicht-$irrlicht_version/bin/Win64-gcc/Irrlicht.dll \
-	\
-	-DZLIB_INCLUDE_DIR=$libdir/zlib/include \
-	-DZLIB_LIBRARIES=$libdir/zlib/lib/libz.dll.a \
-	-DZLIB_DLL=$libdir/zlib/bin/zlib1.dll
+	-DCMAKE_INSTALL_PREFIX=/tmp
 
 ninja
 
-# EOF
+# Package the shit
+mkdir -p temp_package/
+cp ../bin/nodeboxeditor.exe temp_package/
+cp lib/irrbloss/bin/Win32-gcc/Irrbloss.dll temp_package/
+cp $mingwdlldir/{lib{gcc_s_seh-1,jpeg-9,png16-16,ssp-0,stdc++-6,winpthread-1},zlib1}.dll temp_package/
+cp -r ../media/ temp_package/

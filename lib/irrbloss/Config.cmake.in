@@ -1,0 +1,5 @@
+@PACKAGE_INIT@
+
+if(NOT TARGET Irrbloss::Irrbloss)
+	include("${CMAKE_CURRENT_LIST_DIR}/IrrblossTargets.cmake")
+endif()

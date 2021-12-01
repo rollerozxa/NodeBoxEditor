@@ -64,7 +64,19 @@ add_executable(${PROJECT_NAME} ${NBE_SRC})
 #
 # Dependencies
 #
-find_package(Irrlicht REQUIRED)
+
+# tell Irrlicht (Irrbloss) to create a static library
+if(WIN32)
+	set(BUILD_SHARED_LIBS ON CACHE BOOL "Build shared library" FORCE)
+else()
+	set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build shared library" FORCE)
+endif()
+add_subdirectory(lib/irrbloss EXCLUDE_FROM_ALL)
+unset(BUILD_SHARED_LIBS CACHE)
+
+if(NOT TARGET Irrbloss)
+	message(FATAL_ERROR "Irrbloss project is missing a CMake target?!")
+endif()
 
 if(WIN32)
 	# Windows
@@ -76,40 +88,25 @@ if(WIN32)
 		set(PLATFORM_LIBS "")
 	endif()
 	set(PLATFORM_LIBS ws2_32.lib shlwapi.lib ${PLATFORM_LIBS})
-
-	# Zlib stuff
-	set(ZLIB_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/../../zlib/zlib-1.2.5"
-			CACHE PATH "Zlib include directory")
-	set(ZLIB_LIBRARIES "${PROJECT_SOURCE_DIR}/../../zlib125dll/dll32/zlibwapi.lib"
-			CACHE FILEPATH "Path to zlibwapi.lib")
-	set(ZLIB_DLL "${PROJECT_SOURCE_DIR}/../../zlib125dll/dll32/zlibwapi.dll"
-			CACHE FILEPATH "Path to zlibwapi.dll (for installation)")
-else(WIN32)
-	find_package(ZLIB REQUIRED)
 endif(WIN32)
 
 
 find_package(X11 REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(JPEG REQUIRED)
-find_package(BZip2 REQUIRED)
 find_package(PNG REQUIRED)
 include_directories(
 	${PROJECT_BINARY_DIR}
-	${IRRLICHT_INCLUDE_DIR}
-	${ZLIB_INCLUDE_DIR}
 	${CMAKE_BUILD_TYPE}
 	${X11_INCLUDE_DIR}
 	${OPENGL_INCLUDE_DIR}
 	${PNG_INCLUDE_DIR}
 )
 set(TLL
-	${IRRLICHT_LIBRARY}
-	${ZLIB_LIBRARIES}
+	Irrbloss::Irrbloss
 	${X11_LIBRARIES}
 	${OPENGL_LIBRARIES}
 	${JPEG_LIBRARIES}
-	${BZIP2_LIBRARIES}
 	${PNG_LIBRARIES}
 )
 if(UNIX)

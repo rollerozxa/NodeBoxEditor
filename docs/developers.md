@@ -110,7 +110,6 @@ This is outdated info, needs updating.
 	* **FileFormat**.cpp/hpp - factory and base class for file formats.
 	* **Lua**.cpp/hpp - the Lua file parser.
 	* **NBE**.cpp/hpp - the NBE file parser.
-	* **MTC**.cpp/hpp - the Minetest Classic (.cpp) file parser.
 * util
 	* **string**.cpp/hpp - helper functions for strings
 
