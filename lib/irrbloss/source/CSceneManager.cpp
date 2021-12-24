@@ -15,9 +15,7 @@
 
 #include "os.h"
 
-#ifdef _IRR_COMPILE_WITH_OBJ_LOADER_
 #include "COBJMeshFileLoader.h"
-#endif
 
 #include "CCubeSceneNode.h"
 #include "CCameraSceneNode.h"
@@ -86,9 +84,7 @@ CSceneManager::CSceneManager(video::IVideoDriver* driver, io::IFileSystem* fs,
 	// TODO: now that we have multiple scene managers, these should be
 	// shallow copies from the previous manager if there is one.
 
-	#ifdef _IRR_COMPILE_WITH_OBJ_LOADER_
 	MeshLoaderList.push_back(new COBJMeshFileLoader(this, FileSystem));
-	#endif
 }
 
 //! destructor

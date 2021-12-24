@@ -54,26 +54,6 @@
 #  error "Only Microsoft Visual Studio 9.0 and later are supported."
 #endif
 
-#if defined(__APPLE__) || defined(MACOSX)
-#if !defined(MACOSX)
-#define MACOSX // legacy support
-#endif
-#if defined(__ENVIRONMENT_IPHONE_OS_VERSION_MIN_REQUIRED__) || defined(__IPHONE_OS_VERSION_MIN_REQUIRED)
-#define _IRR_IOS_PLATFORM_
-#define _IRR_COMPILE_WITH_IOS_DEVICE_
-#define NO_IRR_COMPILE_WITH_OPENGL_
-// The application state events and following methods: IrrlichtDevice::isWindowActive, IrrlichtDevice::isWindowFocused,
-// IrrlichtDevice::isWindowMinimized works out of box only if you'll use built-in CIrrDelegateiOS,
-// so _IRR_COMPILE_WITH_IOS_BUILTIN_MAIN_ must be enabled in this case. If you need a custom UIApplicationDelegate
-// you must disable _IRR_COMPILE_WITH_IOS_BUILTIN_MAIN_ definition and handle all application events yourself.
-#define _IRR_COMPILE_WITH_IOS_BUILTIN_MAIN_
-#else
-#define _IRR_OSX_PLATFORM_
-#define _IRR_COMPILE_WITH_OSX_DEVICE_
-#define NO_IRR_COMPILE_WITH_WEBGL1_
-#endif
-#endif
-
 #if defined(__SVR4) && defined(__sun)
 #define _IRR_SOLARIS_PLATFORM_
 #if defined(__sparc)
@@ -81,7 +61,7 @@
 #endif
 #endif
 
-#if !defined(_IRR_WINDOWS_API_) && !defined(_IRR_OSX_PLATFORM_) && !defined(_IRR_IOS_PLATFORM_) && !defined(_IRR_ANDROID_PLATFORM_) && !defined(_IRR_EMSCRIPTEN_PLATFORM_)
+#if !defined(_IRR_WINDOWS_API_)
 #ifndef _IRR_SOLARIS_PLATFORM_
 #define _IRR_LINUX_PLATFORM_
 #endif
@@ -108,8 +88,6 @@ define out. */
 	#elif defined(_IRR_COMPILE_WITH_X11_DEVICE_)
 		#define _IRR_OPENGL_USE_EXTPOINTER_
 		#define _IRR_COMPILE_WITH_GLX_MANAGER_
-	#elif defined(_IRR_COMPILE_WITH_OSX_DEVICE_)
-		#define _IRR_COMPILE_WITH_NSOGL_MANAGER_
 	#elif defined(_IRR_SOLARIS_PLATFORM_)
 		#define _IRR_COMPILE_WITH_GLX_MANAGER_
 	#elif defined(_IRR_COMPILE_WITH_SDL_DEVICE_)
@@ -160,26 +138,6 @@ you will not be able to use anything provided by the GUI Environment, including 
 #define _IRR_COMPILE_WITH_GUI_
 #ifdef NO_IRR_COMPILE_WITH_GUI_
 #undef _IRR_COMPILE_WITH_GUI_
-#endif
-
-//! Uncomment the following line if you want to ignore the deprecated warnings
-//#define IGNORE_DEPRECATED_WARNING
-
-//! Define _IRR_COMPILE_WITH_SKINNED_MESH_SUPPORT_ if you want to use bone based
-/** animated meshes. If you compile without this, you will be unable to load
-B3D or X meshes */
-#ifdef NO_IRR_COMPILE_WITH_SKINNED_MESH_SUPPORT_
-#undef _IRR_COMPILE_WITH_SKINNED_MESH_SUPPORT_
-#endif
-
-#ifdef _IRR_COMPILE_WITH_SKINNED_MESH_SUPPORT_
-
-#endif // _IRR_COMPILE_WITH_SKINNED_MESH_SUPPORT_
-
-//! Define _IRR_COMPILE_WITH_OBJ_LOADER_ if you want to load Wavefront OBJ files
-#define _IRR_COMPILE_WITH_OBJ_LOADER_
-#ifdef NO_IRR_COMPILE_WITH_OBJ_LOADER_
-#undef _IRR_COMPILE_WITH_OBJ_LOADER_
 #endif
 
 // Some cleanup and standard stuff

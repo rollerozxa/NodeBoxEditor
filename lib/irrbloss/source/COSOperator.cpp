@@ -13,9 +13,6 @@
 #include <unistd.h>
 #ifndef _IRR_ANDROID_PLATFORM_
 #include <sys/types.h>
-#ifdef _IRR_OSX_PLATFORM_
-#include <sys/sysctl.h>
-#endif
 #endif
 #endif
 

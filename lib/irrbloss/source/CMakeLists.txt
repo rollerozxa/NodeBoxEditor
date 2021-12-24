@@ -37,10 +37,7 @@ endif()
 # Platform-specific libs
 
 if(APPLE)
-	find_library(COCOA_LIB Cocoa REQUIRED)
-	find_library(IOKIT_LIB IOKit REQUIRED)
 
-	add_definitions(-DGL_SILENCE_DEPRECATION)
 else()
 	# Unix probably
 	find_package(X11 REQUIRED)
@@ -50,13 +47,11 @@ set(link_includes
 	"${PROJECT_SOURCE_DIR}/include"
 	"${CMAKE_CURRENT_SOURCE_DIR}"
 
-	"${JPEG_INCLUDE_DIR}"
 	"${PNG_INCLUDE_DIR}"
 
 	${OPENGL_INCLUDE_DIR}
 	${EGL_INCLUDE_DIR}
 
-	"$<$<PLATFORM_ID:Android>:${ANDROID_NDK}/sources/android/native_app_glue>"
 	${X11_INCLUDE_DIR}
 )
 
@@ -151,15 +146,6 @@ add_library(IRROTHEROBJ OBJECT
 	Irrlicht.cpp
 	os.cpp
 )
-
-if(APPLE)
-	# Build all IRROTHEROBJ sources as objc++, including the .cpp's
-	set_target_properties(IRROTHEROBJ PROPERTIES COMPILE_OPTIONS "-xobjective-c++")
-	target_sources(IRROTHEROBJ PRIVATE
-		CIrrDeviceOSX.mm
-		CNSOGLManager.mm
-	)
-endif()
 
 add_library(IRRGUIOBJ OBJECT
 	CGUIButton.cpp
