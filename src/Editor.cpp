@@ -395,7 +395,7 @@ void Editor::LoadScene()
 
 	// Add sky box
 	scene::IMeshSceneNode* skybox = smgr->addCubeSceneNode(50);
-	skybox->setMaterialTexture(0, driver->getTexture("media/sky.jpg"));
+	skybox->setMaterialTexture(0, driver->getTexture("media/sky.png"));
 	skybox->setMaterialFlag(video::EMF_BILINEAR_FILTER, false);
 	skybox->setMaterialFlag(video::EMF_LIGHTING, false);
 	smgr->getMeshManipulator()->flipSurfaces(skybox->getMesh());

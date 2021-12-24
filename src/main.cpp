@@ -20,29 +20,29 @@
 void findWorkingDirectory(bool &editor_is_installed)
 {
 	std::cerr << "Looking for the working directory..." << std::endl;
-	if (FileExists("media/sky.jpg"))
+	if (FileExists("media/sky.png"))
 		return;
 
 	chdir("../");
-	if (FileExists("media/sky.jpg"))
+	if (FileExists("media/sky.png"))
 		return;
 
 	chdir("share/nodeboxeditor");
-	if (FileExists("media/sky.jpg")) {
+	if (FileExists("media/sky.png")) {
 		std::cerr << "Is installed!";
 		editor_is_installed = true;
 		return;
 	}
 
 	chdir("/usr/share/nodeboxeditor");
-	if (FileExists("media/sky.jpg")) {
+	if (FileExists("media/sky.png")) {
 		std::cerr << "Is installed!";
 		editor_is_installed = true;
 		return;
 	}
 
 	chdir("/usr/local/share/nodeboxeditor");
-	if (FileExists("media/sky.jpg")) {
+	if (FileExists("media/sky.png")) {
 		std::cerr << "Is installed!";
 		editor_is_installed = true;
 		return;
@@ -56,11 +56,11 @@ void findWorkingDirectory(bool &editor_is_installed)
 		path = pathWithoutFilename(path);
 		std::cerr << path << std::endl;
 		chdir(path.c_str());
-		if (FileExists("media/sky.jpg"))
+		if (FileExists("media/sky.png"))
 			return;
 
 		chdir("../");
-		if (FileExists("media/sky.jpg"))
+		if (FileExists("media/sky.png"))
 			return;
 	}
 
