@@ -47,5 +47,5 @@ ninja
 mkdir -p temp_package/
 cp ../bin/nodeboxeditor.exe temp_package/
 cp lib/irrbloss/bin/Win32-gcc/Irrbloss.dll temp_package/
-cp $mingwdlldir/{lib{gcc_s_seh-1,jpeg-9,png16-16,ssp-0,stdc++-6,winpthread-1},zlib1}.dll temp_package/
+cp $mingwdlldir/lib{{gcc_s_seh-1,png16-16,ssp-0,stdc++-6,winpthread-1},zlib1}.dll temp_package/
 cp -r ../media/ temp_package/

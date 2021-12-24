@@ -93,7 +93,6 @@ endif(WIN32)
 
 find_package(X11 REQUIRED)
 find_package(OpenGL REQUIRED)
-find_package(JPEG REQUIRED)
 find_package(PNG REQUIRED)
 include_directories(
 	${PROJECT_BINARY_DIR}
@@ -106,7 +105,6 @@ set(TLL
 	Irrbloss::Irrbloss
 	${X11_LIBRARIES}
 	${OPENGL_LIBRARIES}
-	${JPEG_LIBRARIES}
 	${PNG_LIBRARIES}
 )
 if(UNIX)

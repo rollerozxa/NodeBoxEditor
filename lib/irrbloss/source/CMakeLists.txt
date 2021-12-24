@@ -19,7 +19,6 @@ endif()
 
 # Required libs
 
-find_package(JPEG REQUIRED)
 find_package(PNG REQUIRED)
 
 # To configure the features available in this Irrlicht build please edit
@@ -56,7 +55,6 @@ set(link_includes
 )
 
 set(link_libs
-	"${JPEG_LIBRARY}"
 	"${PNG_LIBRARY}"
 
 	${OPENGL_LIBRARIES}
@@ -115,7 +113,6 @@ set(IRRDRVROBJ
 set(IRRIMAGEOBJ
 	CColorConverter.cpp
 	CImage.cpp
-	CImageLoaderJPG.cpp
 	CImageLoaderPNG.cpp
 	CImageWriterPNG.cpp
 )
