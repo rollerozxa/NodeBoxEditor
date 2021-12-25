@@ -63,7 +63,7 @@ CGUIEnvironment::CGUIEnvironment(io::IFileSystem* fs, video::IVideoDriver* drive
 
 	loadBuiltInFont();
 
-	IGUISkin* skin = createSkin( gui::EGST_WINDOWS_METALLIC );
+	IGUISkin* skin = createSkin( gui::EGST_WINDOWS_CLASSIC );
 	setSkin(skin);
 	skin->drop();
 
