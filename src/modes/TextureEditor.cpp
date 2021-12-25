@@ -40,7 +40,7 @@ void drawIconAt(const wchar_t* label, int x, int y, Media::Image *image, IVideoD
 				rect<s32>(0, 0, texture->getSize().Width, texture->getSize().Height));
 		driver->removeTexture(texture);
 	}
-	font->draw(label, rect<s32>(x, y + 68, 64, 25), SColor(255, 255, 255, 255));
+	font->draw(label, rect<s32>(x, y + 68, 64, 25), SColor(255, 0, 0, 0));
 }
 
 void TextureEditor::draw(irr::video::IVideoDriver* driver)
