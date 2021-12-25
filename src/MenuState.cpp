@@ -89,7 +89,7 @@ void MenuState::init()
 	// Help
 	submenu = menubar->getSubMenu(4);
 	submenu->addItem(L"Help...", GUI_HELP_HELP);
-	submenu->addItem(L"Forum Topic...", GUI_HELP_FORUM);
+	//submenu->addItem(L"Forum Topic...", GUI_HELP_FORUM);
 	submenu->addItem(L"Report bugs...", GUI_HELP_REPORT);
 	submenu->addSeparator();
 	submenu->addItem(L"About", GUI_HELP_ABOUT);
@@ -227,23 +227,21 @@ bool MenuState::OnEvent(const SEvent& event)
 				ImageDialog::show(state, NULL, ECS_TOP);
 				return true;
 			case GUI_HELP_HELP:
-				OPEN_URL("http://rubenwardy.com/NodeBoxEditor/?v=");
+				OPEN_URL("https://en.wikipedia.org/wiki/Troubleshooting"); // teehee
 				break;
 			case GUI_HELP_FORUM:
 				OPEN_URL("https://forum.minetest.net/viewtopic.php?f=14&t=2840");
 				break;
 			case GUI_HELP_REPORT:
-				OPEN_URL("https://github.com/rubenwardy/NodeBoxEditor/issues");
+				OPEN_URL("https://github.com/rollerozxa/NodeBoxEditor/issues");
 				break;
 			case GUI_HELP_ABOUT: {
-				core::stringw msg = L"NodeBoxEditor (NBE)\n"
+				core::stringw msg = L"NodeBoxEditor-ROllerozxa\n"
 					L"Version: ";
 
 				msg += EDITOR_TEXT_VERSION_LABEL;
 				msg += L"\n\n"
-					L"A free and open source nodebox editor "
-					L"created by rubenwardy, using C++ and Irrlicht."
-					L"You can download newer versions from the Minetest forum.";
+					L"ROllerozxa's fork of rubenwardy's NodeBoxEditor, a program for creating and editing nodeboxes for Minetest.";
 
 				state->device->getGUIEnvironment()->addMessageBox(L"About", msg.c_str());
 				return true;
