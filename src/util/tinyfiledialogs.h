@@ -5,32 +5,6 @@ created [November 9, 2014]
 Copyright (c) 2014 - 2015 Guillaume Vareille http://ysengrin.com
 http://tinyfiledialogs.sourceforge.net
 
-tiny file dialogs - tinyfd - version 1.7.0 [January 30, 2015] zlib licence.
-Cross-platform dialogs in C/C++ WINDOWS OSX GNOME KDE SOLARIS CONSOLE
-Tested with C & C++ compilers
-on Visual Studio 2013 OSX Linux Freebsd Illumos Solaris.
-
-A single C file (add it to your project) with 6 modal function calls:
-- open file dialog (& multiple files)
-- save file dialog
-- select folder dialog
-- message box (& question)
-- input box
-- color picker.
-
-Conceived as a fully independent complement to GLUT, GLUI, SDL, UNITY3D
-or any GUI-less program, there is NO MAIN LOOP nor init.
-It also provides CONSOLE dialogs on unix.
-
-On Windows native code creates the dialogs (mostly).
-On UNIX it tries successive command line calls:
-- zenity
-- kdialog
-- applescript
-- python 2 / tkinter
-- dialog.
-The same executable can run across desktops and distributions.
-
 - License -
 
 This software is provided 'as-is', without any express or implied
@@ -69,14 +43,6 @@ extern int tinyfd_forceConsole ; /* for UNIX only: 0 (default) or 1 */
 /* 1 forces all dialogs into console mode even when the X server is present */
 /* can be modified at run time */
 
-int tinyfd_messageBox (
-    char const * const aTitle , /* "" */
-    char const * const aMessage , /* "" may contain \n and \t */
-    char const * const aDialogType , /* "ok" "okcancel" "yesno" */
-    char const * const aIconType , /* "info" "warning" "error" "question" */
-    int const aDefaultButton ) ; /* 0 for cancel/no , 1 for ok/yes */
-/* returns 0 for cancel/no , 1 for ok/yes */
-
 char const * tinyfd_saveFileDialog (
     char const * const aTitle , /* "" */
     char const * const aDefaultPathAndFile , /* "" */
@@ -95,38 +61,8 @@ char const * tinyfd_selectFolderDialog (
 	char const * const aTitle , /* "" */
     char const * const aDefaultPath ) ; /* "" */
 
-char const * tinyfd_inputBox(
-	char const * const aTitle , /* "" */
-	char const * const aMessage , /* "" may NOT contain \n nor \t */
-	char const * const aDefaultInput ) ; /* "" */
-/* on cancel it returns aDefaultInput */
-
-char const * tinyfd_colorChooser(
-	char const * const aTitle , /* "" */
-	char const * const aDefaultHexRGB , /* NULL or "#FF0000" */
-	unsigned char aDefaultRGB[3] , /* { 0 , 255 , 255 } */
-	unsigned char aoResultRGB[3] ) ; /* { 0 , 0 , 0 } */
-/* returns the hexcolor as a string "#FF0000" */
-/* aoResultRGB also contains the result */
-/* aDefaultRGB is used only if aDefaultHexRGB is NULL */
-/* aDefaultRGB and aoResultRGB can be the same array */
-
 #ifdef	__cplusplus
 }
 #endif /* __cplusplus */
 
 #endif /* TINYFILEDIALOGS_H */
-
-
-/*
-- On linux: link against Comdlg32.lib User32.lib and Shell32.lib
-- On unix: it tries command line calls, so no such need.
-- Use linux separator on linux and unix separator on unix.
-- char const * fileFilters[3] = { "*.obj" , "*.stl" , "*.dxf" } ;
-- String memory is preallocated statically for all the returned values.
-- On unix you need zenity or kdialog or python2/tkinter or dialog installed.
-  Don't worry, it's already included on most (if not all) desktops.
-- If you pass only a path instead of path + filename,
-  make sure it ends with a separator.
-- tinyfd_forceConsole=1; forces all dialogs into console mode (unix only).
-*/
