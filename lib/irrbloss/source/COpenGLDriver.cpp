@@ -26,7 +26,7 @@ namespace video {
 // Statics variables
 const u16 COpenGLDriver::Quad2DIndices[4] = { 0, 1, 2, 3 };
 
-#if defined(_IRR_COMPILE_WITH_WINDOWS_DEVICE_) || defined(_IRR_COMPILE_WITH_X11_DEVICE_) || defined(_IRR_COMPILE_WITH_OSX_DEVICE_)
+#if defined(_IRR_COMPILE_WITH_WINDOWS_DEVICE_) || defined(_IRR_COMPILE_WITH_X11_DEVICE_)
 COpenGLDriver::COpenGLDriver(const SIrrlichtCreationParameters& params, io::IFileSystem* io, IContextManager* contextManager)
 	: CNullDriver(io, params.WindowSize), COpenGLExtensionHandler(), CacheHandler(0), CurrentRenderMode(ERM_NONE), ResetRenderStates(true),
 	Transformation3DChanged(true), AntiAlias(params.AntiAlias), ColorFormat(ECF_R8G8B8), FixedPipelineState(EOFPS_ENABLE), Params(params),
@@ -3993,7 +3993,7 @@ COpenGLCacheHandler* COpenGLDriver::getCacheHandler() const {
 namespace irr {
 namespace video {
 
-#if defined(_IRR_COMPILE_WITH_WINDOWS_DEVICE_) || defined(_IRR_COMPILE_WITH_X11_DEVICE_) || defined(_IRR_COMPILE_WITH_OSX_DEVICE_)
+#if defined(_IRR_COMPILE_WITH_WINDOWS_DEVICE_) || defined(_IRR_COMPILE_WITH_X11_DEVICE_)
 	IVideoDriver* createOpenGLDriver(const SIrrlichtCreationParameters& params, io::IFileSystem* io, IContextManager* contextManager) {
 #ifdef _IRR_COMPILE_WITH_OPENGL_
 		COpenGLDriver* ogl = new COpenGLDriver(params, io, contextManager);

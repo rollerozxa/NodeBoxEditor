@@ -24,15 +24,6 @@
 	#ifdef _MSC_VER
 		#pragma comment(lib, "OpenGL32.lib")
 	#endif
-
-#elif defined(_IRR_COMPILE_WITH_OSX_DEVICE_)
-	#if defined(_IRR_OPENGL_USE_EXTPOINTER_)
-		#define GL_GLEXT_LEGACY 1
-	#endif
-	#include <OpenGL/gl.h>
-	#if defined(_IRR_OPENGL_USE_EXTPOINTER_)
-		#include <GL/glext.h>
-	#endif
 #elif defined(_IRR_COMPILE_WITH_SDL_DEVICE_) && !defined(_IRR_COMPILE_WITH_X11_DEVICE_)
 	#if defined(_IRR_OPENGL_USE_EXTPOINTER_)
 		#define GL_GLEXT_LEGACY 1

@@ -24,15 +24,12 @@
 //! _IRR_WINDOWS_ for all irrlicht supported Windows versions
 //! _IRR_WINDOWS_API_ for Windows
 //! _IRR_LINUX_PLATFORM_ for Linux (it is defined here if no other os is defined)
-//! _IRR_SOLARIS_PLATFORM_ for Solaris
-//! _IRR_OSX_PLATFORM_ for Apple systems running OSX
 //! _IRR_POSIX_API_ for Posix compatible systems
 //! Note: PLATFORM defines the OS specific layer, API can group several platforms
 
 //! DEVICE is the windowing system used, several PLATFORMs support more than one DEVICE
 //! Irrlicht can be compiled with more than one device
 //! _IRR_COMPILE_WITH_WINDOWS_DEVICE_ for Windows API based device
-//! _IRR_COMPILE_WITH_OSX_DEVICE_ for Cocoa native windowing on OSX
 //! _IRR_COMPILE_WITH_X11_DEVICE_ for Linux X11 based device
 
 //! Passing defines to the compiler which have NO in front of the _IRR definename is an alternative
@@ -54,17 +51,8 @@
 #  error "Only Microsoft Visual Studio 9.0 and later are supported."
 #endif
 
-#if defined(__SVR4) && defined(__sun)
-#define _IRR_SOLARIS_PLATFORM_
-#if defined(__sparc)
-	#define __BIG_ENDIAN__
-#endif
-#endif
-
 #if !defined(_IRR_WINDOWS_API_)
-#ifndef _IRR_SOLARIS_PLATFORM_
 #define _IRR_LINUX_PLATFORM_
-#endif
 #define _IRR_POSIX_API_
 #define _IRR_COMPILE_WITH_X11_DEVICE_
 #endif
@@ -87,8 +75,6 @@ define out. */
 		#define _IRR_COMPILE_WITH_WGL_MANAGER_
 	#elif defined(_IRR_COMPILE_WITH_X11_DEVICE_)
 		#define _IRR_OPENGL_USE_EXTPOINTER_
-		#define _IRR_COMPILE_WITH_GLX_MANAGER_
-	#elif defined(_IRR_SOLARIS_PLATFORM_)
 		#define _IRR_COMPILE_WITH_GLX_MANAGER_
 	#elif defined(_IRR_COMPILE_WITH_SDL_DEVICE_)
 		#define _IRR_OPENGL_USE_EXTPOINTER_

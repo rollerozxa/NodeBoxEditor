@@ -25,7 +25,7 @@
 		#include <io.h> // for _access
 		#include <tchar.h>
 	#endif
-#elif (defined(_IRR_POSIX_API_))
+#elif defined(_IRR_POSIX_API_)
 		#include <stdio.h>
 		#include <stdlib.h>
 		#include <string.h>
@@ -140,7 +140,7 @@ const io::path& CFileSystem::getWorkingDirectory() {
 			WorkingDirectory[FILESYSTEM_NATIVE].replace('\\', '/');
 		#endif
 
-		#if (defined(_IRR_POSIX_API_) || defined(_IRR_OSX_PLATFORM_))
+		#if defined(_IRR_POSIX_API_)
 			// getting the CWD is rather complex as we do not know the size
 			// so try it until the call was successful
 			// Note that neither the first nor the second parameter may be 0 according to POSIX
@@ -198,7 +198,7 @@ io::path CFileSystem::getAbsolutePath(const io::path& filename) const {
 	core::stringc tmp(p);
 	tmp.replace('\\', '/');
 	return tmp;
-#elif (defined(_IRR_POSIX_API_) || defined(_IRR_OSX_PLATFORM_))
+#elif defined(_IRR_POSIX_API_)
 	c8* p=0;
 	c8 fpath[4096];
 	fpath[0]=0;
@@ -420,8 +420,7 @@ IFileList* CFileSystem::createFileList() {
 
 		// --------------------------------------------
 		//! Linux version
-		#if (defined(_IRR_POSIX_API_) || defined(_IRR_OSX_PLATFORM_))
-
+		#if defined(_IRR_POSIX_API_)
 
 		r = new CFileList(Path, false, false);
 

@@ -20,7 +20,7 @@
 	#define bswap_16(X) bswap16(X)
 	#define bswap_32(X) bswap32(X)
 	#define bswap_64(X) bswap64(X)
-#elif !defined(_IRR_SOLARIS_PLATFORM_) && !defined(__PPC__) && !defined(_IRR_WINDOWS_API_)
+#elif !defined(__PPC__) && !defined(_IRR_WINDOWS_API_)
 	#include <byteswap.h>
 #else
 	#define bswap_16(X) ((((X)&0xFF) << 8) | (((X)&0xFF00) >> 8))

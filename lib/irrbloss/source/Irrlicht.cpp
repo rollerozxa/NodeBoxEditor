@@ -22,10 +22,6 @@ static const char* const copyright = "Irrlicht Engine (c) 2002-2017 Nikolaus Geb
 #include "CIrrDeviceLinux.h"
 #endif
 
-#ifdef _IRR_COMPILE_WITH_OSX_DEVICE_
-#include "CIrrDeviceOSX.h"
-#endif
-
 namespace irr {
 	//! stub for calling createDeviceEx
 	IRRLICHT_API IrrlichtDevice* IRRCALLCONV createDevice(video::E_DRIVER_TYPE driverType,
@@ -53,11 +49,6 @@ namespace irr {
 #ifdef _IRR_COMPILE_WITH_WINDOWS_DEVICE_
 		if (params.DeviceType == EIDT_WIN32 || (!dev && params.DeviceType == EIDT_BEST))
 			dev = new CIrrDeviceWin32(params);
-#endif
-
-#ifdef _IRR_COMPILE_WITH_OSX_DEVICE_
-		if (params.DeviceType == EIDT_OSX || (!dev && params.DeviceType == EIDT_BEST))
-			dev = new CIrrDeviceMacOSX(params);
 #endif
 
 #ifdef _IRR_COMPILE_WITH_X11_DEVICE_

@@ -19,9 +19,6 @@
 #if defined(_IRR_COMPILE_WITH_X11_DEVICE_)
 #include "CIrrDeviceLinux.h"
 #endif
-#if defined(_IRR_COMPILE_WITH_OSX_DEVICE_)
-#import <Cocoa/Cocoa.h>
-#endif
 
 #include "fast_atof.h"
 
@@ -52,8 +49,7 @@ void COSOperator::copyToClipboard(const c8* text) const {
 		return;
 
 // Windows version
-#if defined(_IRR_XBOX_PLATFORM_)
-#elif defined(_IRR_WINDOWS_API_)
+#if defined(_IRR_WINDOWS_API_)
 	if (!OpenClipboard(NULL) || text == 0)
 		return;
 
@@ -70,32 +66,16 @@ void COSOperator::copyToClipboard(const c8* text) const {
 	GlobalUnlock(clipbuffer);
 	SetClipboardData(CF_TEXT, clipbuffer);
 	CloseClipboard();
-
-#elif defined(_IRR_COMPILE_WITH_OSX_DEVICE_)
-	NSString *str = nil;
-	NSPasteboard *board = nil;
-
-	if ((text != NULL) && (strlen(text) > 0)) {
-		str = [NSString stringWithCString:text encoding:NSWindowsCP1252StringEncoding];
-		board = [NSPasteboard generalPasteboard];
-		[board declareTypes:[NSArray arrayWithObject:NSStringPboardType] owner:NSApp];
-		[board setString:str forType:NSStringPboardType];
-	}
-
 #elif defined(_IRR_COMPILE_WITH_X11_DEVICE_)
 	if ( IrrDeviceLinux )
 		IrrDeviceLinux->copyToClipboard(text);
-#else
-
 #endif
 }
 
 //! gets text from the clipboard
 //! \return Returns 0 if no string is in there.
 const c8* COSOperator::getTextFromClipboard() const {
-#if defined(_IRR_XBOX_PLATFORM_)
-		return 0;
-#elif defined(_IRR_WINDOWS_API_)
+#if defined(_IRR_WINDOWS_API_)
 	if (!OpenClipboard(NULL))
 		return 0;
 
@@ -106,27 +86,11 @@ const c8* COSOperator::getTextFromClipboard() const {
 	GlobalUnlock( hData );
 	CloseClipboard();
 	return buffer;
-
-#elif defined(_IRR_COMPILE_WITH_OSX_DEVICE_)
-	NSString* str = nil;
-	NSPasteboard* board = nil;
-	char* result = 0;
-
-	board = [NSPasteboard generalPasteboard];
-	str = [board stringForType:NSStringPboardType];
-
-	if (str != nil)
-		result = (char*)[str cStringUsingEncoding:NSWindowsCP1252StringEncoding];
-
-	return (result);
-
 #elif defined(_IRR_COMPILE_WITH_X11_DEVICE_)
 	if ( IrrDeviceLinux )
 		return IrrDeviceLinux->getTextFromClipboard();
 	return 0;
-
 #else
-
 	return 0;
 #endif
 }

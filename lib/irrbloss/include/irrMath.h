@@ -12,7 +12,7 @@
 #include <stdlib.h> // for abs() etc.
 #include <limits.h> // For INT_MAX / UINT_MAX
 
-#if defined(_IRR_SOLARIS_PLATFORM_) || defined(__BORLANDC__) || defined (__BCPLUSPLUS__) || defined (_WIN32_WCE)
+#if defined(__BORLANDC__) || defined (__BCPLUSPLUS__) || defined (_WIN32_WCE)
 	#define sqrtf(X) (irr::f32)sqrt((irr::f64)(X))
 	#define sinf(X) (irr::f32)sin((irr::f64)(X))
 	#define cosf(X) (irr::f32)cos((irr::f64)(X))
