@@ -36,13 +36,9 @@ COpenGLShaderMaterialRenderer::COpenGLShaderMaterialRenderer(video::COpenGLDrive
 	switch (baseMaterial) {
 	case EMT_TRANSPARENT_VERTEX_ALPHA:
 	case EMT_TRANSPARENT_ALPHA_CHANNEL:
-	case EMT_NORMAL_MAP_TRANSPARENT_VERTEX_ALPHA:
-	case EMT_PARALLAX_MAP_TRANSPARENT_VERTEX_ALPHA:
 		Alpha = true;
 		break;
 	case EMT_TRANSPARENT_ADD_COLOR:
-	case EMT_NORMAL_MAP_TRANSPARENT_ADD_COLOR:
-	case EMT_PARALLAX_MAP_TRANSPARENT_ADD_COLOR:
 		FixedBlending = true;
 		break;
 	case EMT_ONETEXTURE_BLEND:
@@ -76,13 +72,9 @@ COpenGLShaderMaterialRenderer::COpenGLShaderMaterialRenderer(COpenGLDriver* driv
 	switch (baseMaterial) {
 	case EMT_TRANSPARENT_VERTEX_ALPHA:
 	case EMT_TRANSPARENT_ALPHA_CHANNEL:
-	case EMT_NORMAL_MAP_TRANSPARENT_VERTEX_ALPHA:
-	case EMT_PARALLAX_MAP_TRANSPARENT_VERTEX_ALPHA:
 		Alpha = true;
 		break;
 	case EMT_TRANSPARENT_ADD_COLOR:
-	case EMT_NORMAL_MAP_TRANSPARENT_ADD_COLOR:
-	case EMT_PARALLAX_MAP_TRANSPARENT_ADD_COLOR:
 		FixedBlending = true;
 		break;
 	case EMT_ONETEXTURE_BLEND:

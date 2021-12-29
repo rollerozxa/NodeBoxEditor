@@ -73,7 +73,6 @@ set(link_libs
 
 set(IRRMESHLOADER
 	COBJMeshFileLoader.cpp
-	CMeshTextureLoader.cpp
 )
 
 add_library(IRRMESHOBJ OBJECT
@@ -101,8 +100,6 @@ set(IRRDRVROBJ
 	CNullDriver.cpp
 	COpenGLCacheHandler.cpp
 	COpenGLDriver.cpp
-	COpenGLNormalMapRenderer.cpp
-	COpenGLParallaxMapRenderer.cpp
 	COpenGLShaderMaterialRenderer.cpp
 	COpenGLSLMaterialRenderer.cpp
 	COpenGLExtensionHandler.cpp
