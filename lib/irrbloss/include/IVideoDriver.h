@@ -24,7 +24,6 @@
 namespace irr {
 namespace io
 {
-	class IAttributes;
 	struct SAttributeReadWriteOptions;
 	class IReadFile;
 	class IWriteFile;
@@ -1448,7 +1447,6 @@ namespace video {
 
 		//! Only used by the engine internally.
 		/** Passes the global material flag AllowZWriteOnTransparent.
-		Use the SceneManager attribute to set this value from your app.
 		\param flag Default behavior is to disable ZWrite, i.e. false. */
 		virtual void setAllowZWriteOnTransparent(bool flag) =0;
 

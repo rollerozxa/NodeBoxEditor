@@ -9,7 +9,6 @@
 #include "IGUISpriteBank.h"
 #include "IGUIElement.h"
 #include "IVideoDriver.h"
-#include "IAttributes.h"
 
 namespace irr {
 namespace gui

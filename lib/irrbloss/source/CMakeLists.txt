@@ -131,7 +131,6 @@ add_library(IRRIOOBJ OBJECT
 	CMemoryFile.cpp
 	CReadFile.cpp
 	CWriteFile.cpp
-	CAttributes.cpp
 )
 
 add_library(IRROTHEROBJ OBJECT

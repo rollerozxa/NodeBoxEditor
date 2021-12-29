@@ -12,7 +12,6 @@
 #include "SMeshBuffer.h"
 #include "SAnimatedMesh.h"
 #include "IReadFile.h"
-#include "IAttributes.h"
 #include "fast_atof.h"
 #include "coreutil.h"
 #include "os.h"

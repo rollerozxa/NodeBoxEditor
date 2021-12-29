@@ -52,7 +52,6 @@
 #include "heapsort.h"
 #include "IAnimatedMesh.h"
 #include "IAnimatedMeshSceneNode.h"
-#include "IAttributes.h"
 #include "ICameraSceneNode.h"
 #include "IContextManager.h"
 #include "ICursorControl.h"
@@ -243,4 +242,3 @@ namespace irr {
 */
 
 #endif
-

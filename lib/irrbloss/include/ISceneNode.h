@@ -15,7 +15,6 @@
 #include "aabbox3d.h"
 #include "matrix4.h"
 #include "irrList.h"
-#include "IAttributes.h"
 
 namespace irr {
 namespace scene

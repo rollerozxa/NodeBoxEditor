@@ -12,7 +12,6 @@
 #include "irrArray.h"
 #include "irrString.h"
 #include "irrMap.h"
-#include "IAttributes.h"
 #include "IMesh.h"
 #include "IMeshBuffer.h"
 #include "IMeshSceneNode.h"
@@ -866,8 +865,6 @@ namespace video {
 		f32 FogDensity;
 		SColor FogColor;
 		SExposedVideoData ExposedData;
-
-		io::IAttributes* DriverAttributes;
 
 		SOverrideMaterial OverrideMaterial;
 		SMaterial OverrideMaterial2D;

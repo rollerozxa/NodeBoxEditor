@@ -18,7 +18,6 @@ namespace io {
 class IReadFile;
 class IWriteFile;
 class IFileList;
-class IAttributes;
 
 
 //! The FileSystem manages files and archives and provides access to them.

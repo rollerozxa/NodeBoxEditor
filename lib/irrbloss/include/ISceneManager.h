@@ -21,7 +21,6 @@ namespace irr {
 
 namespace io {
 	class IReadFile;
-	class IAttributes;
 	class IWriteFile;
 	class IFileSystem;
 } // end namespace io

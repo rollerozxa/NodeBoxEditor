@@ -5,7 +5,6 @@
 #include "CNullDriver.h"
 #include "os.h"
 #include "CImage.h"
-#include "CAttributes.h"
 #include "IReadFile.h"
 #include "IWriteFile.h"
 #include "IImageLoader.h"
@@ -33,22 +32,6 @@ CNullDriver::CNullDriver(io::IFileSystem* io, const core::dimension2d<u32>& scre
 	#ifdef _DEBUG
 	setDebugName("CNullDriver");
 	#endif
-
-	DriverAttributes = new io::CAttributes();
-	DriverAttributes->addInt("MaxTextures", _IRR_MATERIAL_MAX_TEXTURES_);
-	DriverAttributes->addInt("MaxSupportedTextures", _IRR_MATERIAL_MAX_TEXTURES_);
-	DriverAttributes->addInt("MaxLights", getMaximalDynamicLightAmount());
-	DriverAttributes->addInt("MaxAnisotropy", 1);
-//	DriverAttributes->addInt("MaxUserClipPlanes", 0);
-//	DriverAttributes->addInt("MaxAuxBuffers", 0);
-	DriverAttributes->addInt("MaxMultipleRenderTargets", 1);
-	DriverAttributes->addInt("MaxIndices", -1);
-	DriverAttributes->addInt("MaxTextureSize", -1);
-//	DriverAttributes->addInt("MaxGeometryVerticesOut", 0);
-//	DriverAttributes->addFloat("MaxTextureLODBias", 0.f);
-	DriverAttributes->addInt("Version", 1);
-//	DriverAttributes->addInt("ShaderLanguageVersion", 0);
-//	DriverAttributes->addInt("AntiAlias", 0);
 
 	setFog();
 
@@ -92,9 +75,6 @@ CNullDriver::CNullDriver(io::IFileSystem* io, const core::dimension2d<u32>& scre
 
 //! destructor
 CNullDriver::~CNullDriver() {
-	if (DriverAttributes)
-		DriverAttributes->drop();
-
 	if (FileSystem)
 		FileSystem->drop();
 
