@@ -204,22 +204,6 @@ namespace video {
 		//! \return Returns the name of the video driver.
 		virtual const wchar_t* getName() const _IRR_OVERRIDE_;
 
-		//! deletes all dynamic lights there are
-		virtual void deleteAllDynamicLights() _IRR_OVERRIDE_;
-
-		//! adds a dynamic light, returning an index to the light
-		//! \param light: the light data to use to create the light
-		//! \return An index to the light, or -1 if an error occurs
-		virtual s32 addDynamicLight(const SLight& light) _IRR_OVERRIDE_;
-
-		//! Turns a dynamic light on or off
-		//! \param lightIndex: the index returned by addDynamicLight
-		//! \param turnOn: true to turn the light on, false to turn it off
-		virtual void turnLightOn(s32 lightIndex, bool turnOn) _IRR_OVERRIDE_;
-
-		//! returns the maximal amount of dynamic lights the device can handle
-		virtual u32 getMaximalDynamicLightAmount() const _IRR_OVERRIDE_;
-
 		//! Sets the dynamic ambient light color. The default color is
 		//! (0,0,0,0) which means it is dark.
 		//! \param color: New color of the ambient light.

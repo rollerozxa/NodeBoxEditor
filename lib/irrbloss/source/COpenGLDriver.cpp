@@ -2688,30 +2688,6 @@ const wchar_t* COpenGLDriver::getName() const {
 	return Name.c_str();
 }
 
-//! deletes all dynamic lights there are
-void COpenGLDriver::deleteAllDynamicLights() {
-	for (s32 i=0; i<MaxLights; ++i)
-		glDisable(GL_LIGHT0 + i);
-
-	RequestedLights.clear();
-
-	CNullDriver::deleteAllDynamicLights();
-}
-
-//! adds a dynamic light
-s32 COpenGLDriver::addDynamicLight(const SLight& light) {
-	CNullDriver::addDynamicLight(light);
-
-	RequestedLights.push_back(RequestedLight(light));
-
-	u32 newLightIndex = RequestedLights.size() - 1;
-
-	// Try and assign a hardware light just now, but don't worry if I can't
-	assignHardwareLight(newLightIndex);
-
-	return (s32)newLightIndex;
-}
-
 void COpenGLDriver::assignHardwareLight(u32 lightIndex) {
 	setTransform(ETS_WORLD, core::matrix4());
 
@@ -2802,44 +2778,6 @@ void COpenGLDriver::assignHardwareLight(u32 lightIndex) {
 	glLightf(lidx, GL_QUADRATIC_ATTENUATION, light.Attenuation.Z);
 
 	glEnable(lidx);
-}
-
-//! Turns a dynamic light on or off
-//! \param lightIndex: the index returned by addDynamicLight
-//! \param turnOn: true to turn the light on, false to turn it off
-void COpenGLDriver::turnLightOn(s32 lightIndex, bool turnOn) {
-	if(lightIndex < 0 || lightIndex >= (s32)RequestedLights.size())
-		return;
-
-	RequestedLight & requestedLight = RequestedLights[lightIndex];
-
-	requestedLight.DesireToBeOn = turnOn;
-
-	if(turnOn) {
-		if(-1 == requestedLight.HardwareLightIndex)
-			assignHardwareLight(lightIndex);
-	}
-	else {
-		if(-1 != requestedLight.HardwareLightIndex) {
-			// It's currently assigned, so free up the hardware light
-			glDisable(requestedLight.HardwareLightIndex);
-			requestedLight.HardwareLightIndex = -1;
-
-			// Now let the first light that's waiting on a free hardware light grab it
-			for(u32 requested = 0; requested < RequestedLights.size(); ++requested)
-				if(RequestedLights[requested].DesireToBeOn
-					&&
-					-1 == RequestedLights[requested].HardwareLightIndex) {
-					assignHardwareLight(requested);
-					break;
-				}
-		}
-	}
-}
-
-//! returns the maximal amount of dynamic lights the device can handle
-u32 COpenGLDriver::getMaximalDynamicLightAmount() const {
-	return MaxLights;
 }
 
 //! Sets the dynamic ambient light color. The default color is

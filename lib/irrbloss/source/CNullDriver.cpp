@@ -801,50 +801,6 @@ void CNullDriver::drawStencilShadow(bool clearStencilBuffer,
 		video::SColor leftDownEdge, video::SColor rightDownEdge) {
 }
 
-//! deletes all dynamic lights there are
-void CNullDriver::deleteAllDynamicLights() {
-	Lights.set_used(0);
-}
-
-//! adds a dynamic light
-s32 CNullDriver::addDynamicLight(const SLight& light) {
-	Lights.push_back(light);
-	return Lights.size() - 1;
-}
-
-//! Turns a dynamic light on or off
-//! \param lightIndex: the index returned by addDynamicLight
-//! \param turnOn: true to turn the light on, false to turn it off
-void CNullDriver::turnLightOn(s32 lightIndex, bool turnOn) {
-	// Do nothing
-}
-
-//! returns the maximal amount of dynamic lights the device can handle
-u32 CNullDriver::getMaximalDynamicLightAmount() const {
-	return 0;
-}
-
-//! Returns current amount of dynamic lights set
-//! \return Current amount of dynamic lights set
-u32 CNullDriver::getDynamicLightCount() const {
-	return Lights.size();
-}
-
-//! Returns light data which was previously set by IVideoDriver::addDynamicLight().
-//! \param idx: Zero based index of the light. Must be greater than 0 and smaller
-//! than IVideoDriver()::getDynamicLightCount.
-//! \return Light data.
-const SLight& CNullDriver::getDynamicLight(u32 idx) const {
-	if ( idx < Lights.size() )
-		return Lights[idx];
-	else
-	{
-		_IRR_DEBUG_BREAK_IF(true)
-		static const SLight dummy;
-		return dummy;
-	}
-}
-
 //! Creates a boolean alpha channel of the texture based of an color key.
 void CNullDriver::makeColorKeyTexture(video::ITexture* texture,
 									video::SColor color,

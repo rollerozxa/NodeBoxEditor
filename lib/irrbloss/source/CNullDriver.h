@@ -247,22 +247,6 @@ namespace video {
 		//! very useful method for statistics.
 		virtual u32 getPrimitiveCountDrawn( u32 param = 0 ) const _IRR_OVERRIDE_;
 
-		//! deletes all dynamic lights there are
-		virtual void deleteAllDynamicLights() _IRR_OVERRIDE_;
-
-		//! adds a dynamic light, returning an index to the light
-		//! \param light: the light data to use to create the light
-		//! \return An index to the light, or -1 if an error occurs
-		virtual s32 addDynamicLight(const SLight& light) _IRR_OVERRIDE_;
-
-		//! Turns a dynamic light on or off
-		//! \param lightIndex: the index returned by addDynamicLight
-		//! \param turnOn: true to turn the light on, false to turn it off
-		virtual void turnLightOn(s32 lightIndex, bool turnOn) _IRR_OVERRIDE_;
-
-		//! returns the maximal amount of dynamic lights the device can handle
-		virtual u32 getMaximalDynamicLightAmount() const _IRR_OVERRIDE_;
-
 		//! \return Returns the name of the video driver.
 		virtual const wchar_t* getName() const _IRR_OVERRIDE_;
 
@@ -294,16 +278,6 @@ namespace video {
 			video::SColor rightUpEdge = video::SColor(0,0,0,0),
 			video::SColor leftDownEdge = video::SColor(0,0,0,0),
 			video::SColor rightDownEdge = video::SColor(0,0,0,0)) _IRR_OVERRIDE_;
-
-		//! Returns current amount of dynamic lights set
-		//! \return Current amount of dynamic lights set
-		virtual u32 getDynamicLightCount() const _IRR_OVERRIDE_;
-
-		//! Returns light data which was previously set with IVideDriver::addDynamicLight().
-		//! \param idx: Zero based index of the light. Must be greater than 0 and smaller
-		//! than IVideoDriver()::getDynamicLightCount.
-		//! \return Light data.
-		virtual const SLight& getDynamicLight(u32 idx) const _IRR_OVERRIDE_;
 
 		//! Removes a texture from the texture cache and deletes it, freeing lot of
 		//! memory.

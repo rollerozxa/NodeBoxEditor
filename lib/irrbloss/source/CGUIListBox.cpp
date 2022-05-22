@@ -31,8 +31,6 @@ CGUIListBox::CGUIListBox(IGUIEnvironment* environment, IGUIElement* parent,
 	setDebugName("CGUIListBox");
 	#endif
 
-	IGUISkin* skin = Environment->getSkin();
-
 	ScrollBar = new CGUIScrollBar(false, Environment, this, -1,
 		core::recti(0, 0, 1, 1),
 		!clip);

@@ -66,7 +66,6 @@ void CLightSceneNode::render() {
 		}
 	}
 
-	DriverLightIndex = driver->addDynamicLight(LightData);
 	setVisible(LightIsOn);
 }
 
@@ -95,7 +94,6 @@ void CLightSceneNode::setVisible(bool isVisible) {
 		return;
 
 	LightIsOn = isVisible;
-	driver->turnLightOn((u32)DriverLightIndex, LightIsOn);
 }
 
 //! returns the axis aligned bounding box of this node

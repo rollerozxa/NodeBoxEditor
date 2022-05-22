@@ -572,17 +572,7 @@ void CSceneManager::drawAll() {
 				LightList[light] = SortedLights[light].Node;
 		}
 
-		Driver->deleteAllDynamicLights();
-
 		Driver->setAmbientLight(AmbientLight);
-
-		u32 maxLights = LightList.size();
-
-		if (!LightManager)
-			maxLights = core::min_ ( Driver->getMaximalDynamicLightAmount(), maxLights);
-
-		for (i=0; i< maxLights; ++i)
-			LightList[i]->render();
 
 		if (LightManager)
 			LightManager->OnRenderPassPostRender(CurrentRenderPass);
