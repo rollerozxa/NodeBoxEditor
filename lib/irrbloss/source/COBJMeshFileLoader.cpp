@@ -233,13 +233,13 @@ IAnimatedMesh* COBJMeshFileLoader::createMesh(io::IReadFile* file) {
 				}
 
 				int vertLocation;
-				core::map<video::S3DVertex, int>::Node* n = currMtl->VertMap.find(v);
-				if (n) {
-					vertLocation = n->getValue();
+				auto n = currMtl->VertMap.find(v);
+				if (n != currMtl->VertMap.end()) {
+					vertLocation = n->second;
 				} else {
 					currMtl->Meshbuffer->Vertices.push_back(v);
 					vertLocation = currMtl->Meshbuffer->Vertices.size() -1;
-					currMtl->VertMap.insert(v, vertLocation);
+					currMtl->VertMap.emplace(v, vertLocation);
 				}
 
 				faceCorners.push_back(vertLocation);

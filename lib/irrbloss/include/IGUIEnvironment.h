@@ -39,13 +39,8 @@ class IGUIImage;
 class IGUICheckBox;
 class IGUIListBox;
 class IGUIImageList;
-class IGUIInOutFader;
 class IGUIStaticText;
 class IGUIEditBox;
-class IGUISpinBox;
-class IGUITabControl;
-class IGUITab;
-class IGUITable;
 class IGUIContextMenu;
 class IGUIComboBox;
 class IGUIToolBar;
@@ -369,61 +364,6 @@ public:
 	virtual IGUIEditBox* addEditBox(const wchar_t* text, const core::rect<s32>& rectangle,
 		bool border=true, IGUIElement* parent=0, s32 id=-1) = 0;
 
-	//! Adds a spin box.
-	/** An edit box with up and down buttons
-	\param text Text to be displayed. Can be altered after creation by setText().
-	\param rectangle Rectangle specifying the borders of the spin box.
-	\param border Set to true if the spin box should have a 3d border.
-	\param parent Parent item of the element, e.g. a window.
-	Set it to 0 to place the spin box directly in the environment.
-	\param id The ID of the element.
-	\return Pointer to the created spin box. Returns 0 if an error occurred.
-	This pointer should not be dropped. See IReferenceCounted::drop() for
-	more information. */
-	virtual IGUISpinBox* addSpinBox(const wchar_t* text, const core::rect<s32>& rectangle,
-		bool border=true,IGUIElement* parent=0, s32 id=-1) = 0;
-
-	//! Adds an element for fading in or out.
-	/** \param rectangle Rectangle specifying the borders of the fader.
-	If the pointer is NULL, the whole screen is used.
-	\param parent Parent item of the element, e.g. a window.
-	\param id An identifier for the fader.
-	\return Pointer to the created in-out-fader. Returns 0 if an error
-	occurred. This pointer should not be dropped. See
-	IReferenceCounted::drop() for more information. */
-	virtual IGUIInOutFader* addInOutFader(const core::rect<s32>* rectangle=0, IGUIElement* parent=0, s32 id=-1) = 0;
-
-	//! Adds a tab control to the environment.
-	/** \param rectangle Rectangle specifying the borders of the tab control.
-	\param parent Parent item of the element, e.g. a window.
-	Set it to 0 to place the tab control directly in the environment.
-	\param fillbackground Specifies if the background of the tab control
-	should be drawn.
-	\param border Specifies if a flat 3d border should be drawn. This is
-	usually not necessary unless you place the control directly into
-	the environment without a window as parent.
-	\param id An identifier for the tab control.
-	\return Pointer to the created tab control element. Returns 0 if an
-	error occurred. This pointer should not be dropped. See
-	IReferenceCounted::drop() for more information. */
-	virtual IGUITabControl* addTabControl(const core::rect<s32>& rectangle,
-		IGUIElement* parent=0, bool fillbackground=false,
-		bool border=true, s32 id=-1) = 0;
-
-	//! Adds tab to the environment.
-	/** You can use this element to group other elements. This is not used
-	for creating tabs on tab controls, please use IGUITabControl::addTab()
-	for this instead.
-	\param rectangle Rectangle specifying the borders of the tab.
-	\param parent Parent item of the element, e.g. a window.
-	Set it to 0 to place the tab directly in the environment.
-	\param id An identifier for the tab.
-	\return Pointer to the created tab. Returns 0 if an
-	error occurred. This pointer should not be dropped. See
-	IReferenceCounted::drop() for more information. */
-	virtual IGUITab* addTab(const core::rect<s32>& rectangle,
-		IGUIElement* parent=0, s32 id=-1) = 0;
-
 	//! Adds a context menu to the environment.
 	/** \param rectangle Rectangle specifying the borders of the menu.
 	Note that the menu is resizing itself based on what items you add.
@@ -468,18 +408,6 @@ public:
 	IReferenceCounted::drop() for more information. */
 	virtual IGUIComboBox* addComboBox(const core::rect<s32>& rectangle,
 		IGUIElement* parent=0, s32 id=-1) = 0;
-
-	//! Adds a table to the environment
-	/** \param rectangle Rectangle specifying the borders of the table.
-	\param parent Parent item of the element, e.g. a window. Set it to 0
-	to place the element directly in the environment.
-	\param id An identifier for the table.
-	\param drawBackground Flag whether the background should be drawn.
-	\return Pointer to the created table. Returns 0 if an error occurred.
-	This pointer should not be dropped. See IReferenceCounted::drop() for
-	more information. */
-	virtual IGUITable* addTable(const core::rect<s32>& rectangle,
-		IGUIElement* parent=0, s32 id=-1, bool drawBackground=false) =0;
 
 	//! Adds a GUI element by its name
 	/** Each factory is checked if it can create an element of the given

@@ -128,18 +128,6 @@ public:
 	virtual IGUIEditBox* addEditBox(const wchar_t* text, const core::rect<s32>& rectangle,
 		bool border=false, IGUIElement* parent=0, s32 id=-1) _IRR_OVERRIDE_;
 
-	//! Adds a spin box to the environment
-	virtual IGUISpinBox* addSpinBox(const wchar_t* text, const core::rect<s32>& rectangle,
-		bool border=false,IGUIElement* parent=0, s32 id=-1) _IRR_OVERRIDE_;
-
-	//! Adds a tab control to the environment.
-	virtual IGUITabControl* addTabControl(const core::rect<s32>& rectangle,
-		IGUIElement* parent=0, bool fillbackground=false, bool border=true, s32 id=-1) _IRR_OVERRIDE_;
-
-	//! Adds tab to the environment.
-	virtual IGUITab* addTab(const core::rect<s32>& rectangle,
-		IGUIElement* parent=0, s32 id=-1) _IRR_OVERRIDE_;
-
 	//! Adds a context menu to the environment.
 	virtual IGUIContextMenu* addContextMenu(const core::rect<s32>& rectangle,
 		IGUIElement* parent=0, s32 id=-1) _IRR_OVERRIDE_;
@@ -155,10 +143,6 @@ public:
 	virtual IGUIComboBox* addComboBox(const core::rect<s32>& rectangle,
 		IGUIElement* parent=0, s32 id=-1) _IRR_OVERRIDE_;
 
-	//! Adds a table element.
-	virtual IGUITable* addTable(const core::rect<s32>& rectangle,
-		IGUIElement* parent=0, s32 id=-1, bool drawBackground=false) _IRR_OVERRIDE_;
-
 	//! sets the focus to an element
 	virtual bool setFocus(IGUIElement* element) _IRR_OVERRIDE_;
 
@@ -173,9 +157,6 @@ public:
 
 	//! Returns the element last known to be under the mouse
 	virtual IGUIElement* getHovered() const _IRR_OVERRIDE_;
-
-	//! Adds an element for fading in or out.
-	virtual IGUIInOutFader* addInOutFader(const core::rect<s32>* rectangle=0, IGUIElement* parent=0, s32 id=-1) _IRR_OVERRIDE_;
 
 	//! Returns the root gui element.
 	virtual IGUIElement* getRootGUIElement() _IRR_OVERRIDE_;

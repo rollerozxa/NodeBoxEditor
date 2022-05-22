@@ -11,7 +11,6 @@
 #include "IGPUProgrammingServices.h"
 #include "irrArray.h"
 #include "irrString.h"
-#include "irrMap.h"
 #include "IMesh.h"
 #include "IMeshBuffer.h"
 #include "IMeshSceneNode.h"
@@ -20,6 +19,7 @@
 #include "SVertexIndex.h"
 #include "SLight.h"
 #include "SExposedVideoData.h"
+#include <list>
 
 #ifdef _MSC_VER
 #pragma warning( disable: 4996)
@@ -385,23 +385,27 @@ namespace video {
 		{
 			SHWBufferLink(const scene::IMeshBuffer *_MeshBuffer)
 				:MeshBuffer(_MeshBuffer),
-				ChangedID_Vertex(0),ChangedID_Index(0),LastUsed(0),
+				ChangedID_Vertex(0),ChangedID_Index(0),
 				Mapped_Vertex(scene::EHM_NEVER),Mapped_Index(scene::EHM_NEVER) {
-				if (MeshBuffer)
+				if (MeshBuffer) {
 					MeshBuffer->grab();
+					MeshBuffer->setHWBuffer(reinterpret_cast<void*>(this));
+				}
 			}
 
 			virtual ~SHWBufferLink() {
-				if (MeshBuffer)
+				if (MeshBuffer) {
+					MeshBuffer->setHWBuffer(NULL);
 					MeshBuffer->drop();
+				}
 			}
 
 			const scene::IMeshBuffer *MeshBuffer;
 			u32 ChangedID_Vertex;
 			u32 ChangedID_Index;
-			u32 LastUsed;
 			scene::E_HARDWARE_MAPPING Mapped_Vertex;
 			scene::E_HARDWARE_MAPPING Mapped_Index;
+			std::list<SHWBufferLink*>::iterator listPosition;
 		};
 
 		//! Gets hardware buffer link from a meshbuffer (may create or update buffer)
@@ -808,8 +812,7 @@ namespace video {
 		core::array<SLight> Lights;
 		core::array<SMaterialRenderer> MaterialRenderers;
 
-		//core::array<SHWBufferLink*> HWBufferLinks;
-		core::map< const scene::IMeshBuffer* , SHWBufferLink* > HWBufferMap;
+		std::list<SHWBufferLink*> HWBufferList;
 
 		io::IFileSystem* FileSystem;
 

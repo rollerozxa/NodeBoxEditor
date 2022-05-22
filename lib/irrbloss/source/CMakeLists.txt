@@ -149,17 +149,13 @@ add_library(IRRGUIOBJ OBJECT
 	CGUIEnvironment.cpp
 	CGUIFont.cpp
 	CGUIImage.cpp
-	CGUIInOutFader.cpp
 	CGUIListBox.cpp
 	CGUIMenu.cpp
 	CGUIMessageBox.cpp
 	CGUIModalScreen.cpp
 	CGUIScrollBar.cpp
-	CGUISpinBox.cpp
 	CGUISkin.cpp
 	CGUIStaticText.cpp
-	CGUITabControl.cpp
-	CGUITable.cpp
 	CGUIToolBar.cpp
 	CGUIWindow.cpp
 	CGUISpriteBank.cpp

@@ -21,16 +21,12 @@
 #include "CGUIImageList.h"
 #include "CGUIStaticText.h"
 #include "CGUIEditBox.h"
-#include "CGUISpinBox.h"
-#include "CGUIInOutFader.h"
 #include "CGUIMessageBox.h"
 #include "CGUIModalScreen.h"
-#include "CGUITabControl.h"
 #include "CGUIContextMenu.h"
 #include "CGUIComboBox.h"
 #include "CGUIMenu.h"
 #include "CGUIToolBar.h"
-#include "CGUITable.h"
 
 #include "IWriteFile.h"
 
@@ -705,13 +701,6 @@ IGUIScrollBar* CGUIEnvironment::addScrollBar(bool horizontal, const core::rect<s
 	return bar;
 }
 
-//! Adds a table to the environment
-IGUITable* CGUIEnvironment::addTable(const core::rect<s32>& rectangle, IGUIElement* parent, s32 id, bool drawBackground) {
-	CGUITable* b = new CGUITable(this, parent ? parent : this, id, rectangle, true, drawBackground, false);
-	b->drop();
-	return b;
-}
-
 //! Adds an image element.
 IGUIImage* CGUIEnvironment::addImage(video::ITexture* image, core::position2d<s32> pos,
 	bool useAlphaChannel, IGUIElement* parent, s32 id, const wchar_t* text) {
@@ -804,35 +793,6 @@ IGUIEditBox* CGUIEnvironment::addEditBox(const wchar_t* text,
 	return d;
 }
 
-//! Adds a spin box to the environment
-IGUISpinBox* CGUIEnvironment::addSpinBox(const wchar_t* text,
-					 const core::rect<s32> &rectangle,
-					 bool border,IGUIElement* parent, s32 id) {
-	IGUISpinBox* d = new CGUISpinBox(text, border,this,
-		parent ? parent : this, id, rectangle);
-
-	d->drop();
-	return d;
-}
-
-//! Adds a tab control to the environment.
-IGUITabControl* CGUIEnvironment::addTabControl(const core::rect<s32>& rectangle,
-	IGUIElement* parent, bool fillbackground, bool border, s32 id) {
-	IGUITabControl* t = new CGUITabControl(this, parent ? parent : this,
-		rectangle, fillbackground, border, id);
-	t->drop();
-	return t;
-}
-
-//! Adds tab to the environment.
-IGUITab* CGUIEnvironment::addTab(const core::rect<s32>& rectangle,
-	IGUIElement* parent, s32 id) {
-	IGUITab* t = new CGUITab(this, parent ? parent : this,
-		rectangle, id);
-	t->drop();
-	return t;
-}
-
 //! Adds a context menu to the environment.
 IGUIContextMenu* CGUIEnvironment::addContextMenu(const core::rect<s32>& rectangle,
 	IGUIElement* parent, s32 id) {
@@ -865,23 +825,6 @@ IGUIToolBar* CGUIEnvironment::addToolBar(IGUIElement* parent, s32 id) {
 	IGUIToolBar* b = new CGUIToolBar(this, parent, id, core::rect<s32>(0,0,10,10));
 	b->drop();
 	return b;
-}
-
-//! Adds an element for fading in or out.
-IGUIInOutFader* CGUIEnvironment::addInOutFader(const core::rect<s32>* rectangle, IGUIElement* parent, s32 id) {
-	core::rect<s32> rect;
-
-	if (rectangle)
-		rect = *rectangle;
-	else if (Driver)
-		rect = core::rect<s32>(core::dimension2di(Driver->getScreenSize()));
-
-	if (!parent)
-		parent = this;
-
-	IGUIInOutFader* fader = new CGUIInOutFader(this, parent, id, rect);
-	fader->drop();
-	return fader;
 }
 
 //! Adds a combo box to the environment.

@@ -32,9 +32,6 @@ enum EGUI_ELEMENT_TYPE {
 	//! An edit box (IGUIEditBox)
 	EGUIET_EDIT_BOX,
 
-	//! A in/out fader (IGUIInOutFader)
-	EGUIET_IN_OUT_FADER,
-
 	//! An image (IGUIImage)
 	EGUIET_IMAGE,
 
@@ -50,14 +47,8 @@ enum EGUI_ELEMENT_TYPE {
 	//! A scroll bar (IGUIScrollBar)
 	EGUIET_SCROLL_BAR,
 
-	//! A spin box (IGUISpinBox)
-	EGUIET_SPIN_BOX,
-
 	//! A static text (IGUIStaticText)
 	EGUIET_STATIC_TEXT,
-
-	//! A tab (IGUITab)
-	EGUIET_TAB,
 
 	//! A tab control
 	EGUIET_TAB_CONTROL,

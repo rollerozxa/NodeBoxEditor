@@ -21,6 +21,7 @@ struct SSkinMeshBuffer : public IMeshBuffer {
 		ChangedID_Vertex(1), ChangedID_Index(1), VertexType(vt),
 		PrimitiveType(EPT_TRIANGLES),
 		MappingHint_Vertex(EHM_NEVER), MappingHint_Index(EHM_NEVER),
+		HWBuffer(NULL),
 		BoundingBoxNeedsRecalculated(true) {
 		#ifdef _DEBUG
 		setDebugName("SSkinMeshBuffer");
@@ -359,6 +360,14 @@ struct SSkinMeshBuffer : public IMeshBuffer {
 
 	virtual u32 getChangedID_Index() const _IRR_OVERRIDE_ {return ChangedID_Index;}
 
+	virtual void setHWBuffer(void *ptr) const _IRR_OVERRIDE_ {
+		HWBuffer = ptr;
+	}
+
+	virtual void *getHWBuffer() const _IRR_OVERRIDE_ {
+		return HWBuffer;
+	}
+
 	//! Call this after changing the positions of any vertex.
 	void boundingBoxNeedsRecalculated(void) { BoundingBoxNeedsRecalculated = true; }
 
@@ -369,6 +378,8 @@ struct SSkinMeshBuffer : public IMeshBuffer {
 
 	u32 ChangedID_Vertex;
 	u32 ChangedID_Index;
+
+	mutable void *HWBuffer;
 
 	core::matrix4 Transformation;
 

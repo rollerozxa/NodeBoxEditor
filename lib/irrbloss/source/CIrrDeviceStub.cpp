@@ -13,14 +13,13 @@
 #include "CTimer.h"
 #include "CLogger.h"
 #include "irrString.h"
-#include "IRandomizer.h"
 
 namespace irr {
 //! constructor
 CIrrDeviceStub::CIrrDeviceStub(const SIrrlichtCreationParameters& params)
 : IrrlichtDevice(), VideoDriver(0), GUIEnvironment(0), SceneManager(0),
 	Timer(0), CursorControl(0), UserReceiver(params.EventReceiver),
-	Logger(0), Operator(0), Randomizer(0), FileSystem(0),
+	Logger(0), Operator(0), FileSystem(0),
 	InputReceivingSceneManager(0), VideoModeList(0), ContextManager(0),
 	CreationParams(params), Close(false) {
 	Timer = new CTimer(params.UsePerformanceTimer);
@@ -35,7 +34,6 @@ CIrrDeviceStub::CIrrDeviceStub(const SIrrlichtCreationParameters& params)
 	Logger->setLogLevel(CreationParams.LoggingLevel);
 
 	os::Printer::Logger = Logger;
-	Randomizer = createDefaultRandomizer();
 
 	FileSystem = io::createFileSystem();
 	VideoModeList = new video::CVideoModeList();
@@ -73,9 +71,6 @@ CIrrDeviceStub::~CIrrDeviceStub() {
 
 	if (Operator)
 		Operator->drop();
-
-	if (Randomizer)
-		Randomizer->drop();
 
 	CursorControl = 0;
 
@@ -230,55 +225,6 @@ ILogger* CIrrDeviceStub::getLogger() {
 //! Returns the operation system opertator object.
 IOSOperator* CIrrDeviceStub::getOSOperator() {
 	return Operator;
-}
-
-//! Provides access to the engine's currently set randomizer.
-IRandomizer* CIrrDeviceStub::getRandomizer() const {
-	return Randomizer;
-}
-
-//! Sets a new randomizer.
-void CIrrDeviceStub::setRandomizer(IRandomizer* r) {
-	if (r!=Randomizer) {
-		if (Randomizer)
-			Randomizer->drop();
-		Randomizer=r;
-		if (Randomizer)
-			Randomizer->grab();
-	}
-}
-
-namespace {
-	struct SDefaultRandomizer : public IRandomizer
-	{
-		virtual void reset(s32 value=0x0f0f0f0f) _IRR_OVERRIDE_
-		{
-			os::Randomizer::reset(value);
-		}
-
-		virtual s32 rand() const _IRR_OVERRIDE_
-		{
-			return os::Randomizer::rand();
-		}
-
-		virtual f32 frand() const _IRR_OVERRIDE_
-		{
-			return os::Randomizer::frand();
-		}
-
-		virtual s32 randMax() const _IRR_OVERRIDE_
-		{
-			return os::Randomizer::randMax();
-		}
-	};
-}
-
-//! Creates a new default randomizer.
-IRandomizer* CIrrDeviceStub::createDefaultRandomizer() const {
-	IRandomizer* r = new SDefaultRandomizer();
-	if (r)
-		r->reset();
-	return r;
 }
 
 //! Sets the input receiving scene manager.
