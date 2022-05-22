@@ -403,8 +403,8 @@ void CGUIScrollBar::refreshControls() {
 		}
 		if (sprites) {
 			UpButton->setSpriteBank(sprites);
-			UpButton->setSprite(EGBS_BUTTON_UP, skin->getIcon(EGDI_CURSOR_LEFT), CurrentIconColor);
-			UpButton->setSprite(EGBS_BUTTON_DOWN, skin->getIcon(EGDI_CURSOR_LEFT), CurrentIconColor);
+			UpButton->setSprite(EGBS_BUTTON_UP, 231, CurrentIconColor);
+			UpButton->setSprite(EGBS_BUTTON_DOWN, 231, CurrentIconColor);
 		}
 		UpButton->setRelativePosition(core::rect<s32>(0,0, w, h));
 		UpButton->setAlignment(EGUIA_UPPERLEFT, EGUIA_UPPERLEFT, EGUIA_UPPERLEFT, EGUIA_LOWERRIGHT);
@@ -415,8 +415,8 @@ void CGUIScrollBar::refreshControls() {
 		}
 		if (sprites) {
 			DownButton->setSpriteBank(sprites);
-			DownButton->setSprite(EGBS_BUTTON_UP, skin->getIcon(EGDI_CURSOR_RIGHT), CurrentIconColor);
-			DownButton->setSprite(EGBS_BUTTON_DOWN, skin->getIcon(EGDI_CURSOR_RIGHT), CurrentIconColor);
+			DownButton->setSprite(EGBS_BUTTON_UP, 232, CurrentIconColor);
+			DownButton->setSprite(EGBS_BUTTON_DOWN, 232, CurrentIconColor);
 		}
 		DownButton->setRelativePosition(core::rect<s32>(RelativeRect.getWidth()-w, 0, RelativeRect.getWidth(), h));
 		DownButton->setAlignment(EGUIA_LOWERRIGHT, EGUIA_LOWERRIGHT, EGUIA_UPPERLEFT, EGUIA_LOWERRIGHT);
@@ -430,8 +430,8 @@ void CGUIScrollBar::refreshControls() {
 		}
 		if (sprites) {
 			UpButton->setSpriteBank(sprites);
-			UpButton->setSprite(EGBS_BUTTON_UP, skin->getIcon(EGDI_CURSOR_UP), CurrentIconColor);
-			UpButton->setSprite(EGBS_BUTTON_DOWN, skin->getIcon(EGDI_CURSOR_UP), CurrentIconColor);
+			UpButton->setSprite(EGBS_BUTTON_UP, 229, CurrentIconColor);
+			UpButton->setSprite(EGBS_BUTTON_DOWN, 229, CurrentIconColor);
 		}
 		UpButton->setRelativePosition(core::rect<s32>(0,0, w, h));
 		UpButton->setAlignment(EGUIA_UPPERLEFT, EGUIA_LOWERRIGHT, EGUIA_UPPERLEFT, EGUIA_UPPERLEFT);
@@ -442,8 +442,8 @@ void CGUIScrollBar::refreshControls() {
 		}
 		if (sprites) {
 			DownButton->setSpriteBank(sprites);
-			DownButton->setSprite(EGBS_BUTTON_UP, skin->getIcon(EGDI_CURSOR_DOWN), CurrentIconColor);
-			DownButton->setSprite(EGBS_BUTTON_DOWN, skin->getIcon(EGDI_CURSOR_DOWN), CurrentIconColor);
+			DownButton->setSprite(EGBS_BUTTON_UP, 230, CurrentIconColor);
+			DownButton->setSprite(EGBS_BUTTON_DOWN, 230, CurrentIconColor);
 		}
 		DownButton->setRelativePosition(core::rect<s32>(0,RelativeRect.getHeight()-h, w, RelativeRect.getHeight()));
 		DownButton->setAlignment(EGUIA_UPPERLEFT, EGUIA_LOWERRIGHT, EGUIA_LOWERRIGHT, EGUIA_LOWERRIGHT);

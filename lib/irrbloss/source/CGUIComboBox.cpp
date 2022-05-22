@@ -34,8 +34,8 @@ CGUIComboBox::CGUIComboBox(IGUIEnvironment* environment, IGUIElement* parent,
 	ListButton = Environment->addButton(core::recti(0,0,1,1), this, -1, L"");
 	if (skin && skin->getSpriteBank()) {
 		ListButton->setSpriteBank(skin->getSpriteBank());
-		ListButton->setSprite(EGBS_BUTTON_UP, skin->getIcon(EGDI_CURSOR_DOWN), skin->getColor(EGDC_WINDOW_SYMBOL));
-		ListButton->setSprite(EGBS_BUTTON_DOWN, skin->getIcon(EGDI_CURSOR_DOWN), skin->getColor(EGDC_WINDOW_SYMBOL));
+		ListButton->setSprite(EGBS_BUTTON_UP, 230, skin->getColor(EGDC_WINDOW_SYMBOL));
+		ListButton->setSprite(EGBS_BUTTON_DOWN, 230, skin->getColor(EGDC_WINDOW_SYMBOL));
 	}
 	ListButton->setAlignment(EGUIA_LOWERRIGHT, EGUIA_LOWERRIGHT, EGUIA_UPPERLEFT, EGUIA_LOWERRIGHT);
 	ListButton->setSubElement(true);
@@ -49,7 +49,7 @@ CGUIComboBox::CGUIComboBox(IGUIEnvironment* environment, IGUIElement* parent,
 		SelectedText->setOverrideColor(skin->getColor(EGDC_BUTTON_TEXT));
 	SelectedText->enableOverrideColor(true);
 
-	updateListButtonWidth(skin ? skin->getSize(EGDS_SCROLLBAR_SIZE) : 15);
+	updateListButtonWidth(skin ? 14 : 15);
 
 	// this element can be tabbed to
 	setTabStop(true);
@@ -339,7 +339,7 @@ void CGUIComboBox::draw() {
 
 	IGUISkin* skin = Environment->getSkin();
 
-	updateListButtonWidth(skin->getSize(EGDS_SCROLLBAR_SIZE));
+	updateListButtonWidth(14);
 
 	// font changed while the listbox is open?
 	if ( ActiveFont != skin->getFont() && ListBox ) {
@@ -363,8 +363,8 @@ void CGUIComboBox::draw() {
 		SelectedText->setDrawBackground(false);
 		SelectedText->setOverrideColor(skin->getColor(EGDC_GRAY_TEXT));
 	}
-	ListButton->setSprite(EGBS_BUTTON_UP, skin->getIcon(EGDI_CURSOR_DOWN), skin->getColor(isEnabled() ? EGDC_WINDOW_SYMBOL : EGDC_GRAY_WINDOW_SYMBOL));
-	ListButton->setSprite(EGBS_BUTTON_DOWN, skin->getIcon(EGDI_CURSOR_DOWN), skin->getColor(isEnabled() ? EGDC_WINDOW_SYMBOL : EGDC_GRAY_WINDOW_SYMBOL));
+	ListButton->setSprite(EGBS_BUTTON_UP, 230, skin->getColor(isEnabled() ? EGDC_WINDOW_SYMBOL : EGDC_GRAY_WINDOW_SYMBOL));
+	ListButton->setSprite(EGBS_BUTTON_DOWN, 230, skin->getColor(isEnabled() ? EGDC_WINDOW_SYMBOL : EGDC_GRAY_WINDOW_SYMBOL));
 
 	core::rect<s32> frameRect(AbsoluteRect);
 

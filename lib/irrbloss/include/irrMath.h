@@ -239,16 +239,6 @@ namespace core
 		return	(maxMagnitude*factor + maxi) == (maxMagnitude*factor + mini); // MAD Wise
 	}
 
-	union FloatIntUnion32
-	{
-		FloatIntUnion32(float f1 = 0.0f) : f(f1) {}
-		// Portable sign-extraction
-		bool sign() const { return (i >> 31) != 0; }
-
-		irr::s32 i;
-		irr::f32 f;
-	};
-
 	//! returns if a equals zero, taking rounding errors into account
 	inline bool iszero(const f64 a, const f64 tolerance = ROUNDING_ERROR_f64) {
 		return fabs(a) <= tolerance;

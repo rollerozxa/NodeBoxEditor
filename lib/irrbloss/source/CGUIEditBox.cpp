@@ -1391,10 +1391,10 @@ void CGUIEditBox::calculateFrameRect() {
 	if (Environment)
 		skin = Environment->getSkin();
 	if (Border && skin) {
-		FrameRect.UpperLeftCorner.X += skin->getSize(EGDS_TEXT_DISTANCE_X)+1;
-		FrameRect.UpperLeftCorner.Y += skin->getSize(EGDS_TEXT_DISTANCE_Y)+1;
-		FrameRect.LowerRightCorner.X -= skin->getSize(EGDS_TEXT_DISTANCE_X)+1;
-		FrameRect.LowerRightCorner.Y -= skin->getSize(EGDS_TEXT_DISTANCE_Y)+1;
+		FrameRect.UpperLeftCorner.X += 3;
+		FrameRect.UpperLeftCorner.Y += 1;
+		FrameRect.LowerRightCorner.X -= 3;
+		FrameRect.LowerRightCorner.Y -= 1;
 	}
 }
 

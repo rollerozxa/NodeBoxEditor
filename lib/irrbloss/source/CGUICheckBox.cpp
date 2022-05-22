@@ -122,11 +122,11 @@ void CGUICheckBox::draw() {
 		// draw the border
 		if (Border) {
 			skin->draw3DSunkenPane(this, 0, true, false, frameRect, &AbsoluteClippingRect);
-			frameRect.UpperLeftCorner.X += skin->getSize(EGDS_TEXT_DISTANCE_X);
-			frameRect.LowerRightCorner.X -= skin->getSize(EGDS_TEXT_DISTANCE_X);
+			frameRect.UpperLeftCorner.X += 2;
+			frameRect.LowerRightCorner.X -= 2;
 		}
 
-		const s32 height = skin->getSize(EGDS_CHECK_BOX_WIDTH);
+		const s32 height = 18;
 
 		// the rectangle around the "checked" area.
 		core::rect<s32> checkRect(frameRect.UpperLeftCorner.X,

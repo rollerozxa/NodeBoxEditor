@@ -356,8 +356,8 @@ void CGUIEnvironment::OnPostRender( u32 time ) {
 
 		pos.UpperLeftCorner = LastHoveredMousePos;
 		core::dimension2du dim = getSkin()->getFont(EGDF_TOOLTIP)->getDimension(HoveredNoSubelement->getToolTipText().c_str());
-		dim.Width += getSkin()->getSize(EGDS_TEXT_DISTANCE_X)*2;
-		dim.Height += getSkin()->getSize(EGDS_TEXT_DISTANCE_Y)*2;
+		dim.Width += 4;
+		dim.Height += 0;
 
 		pos.UpperLeftCorner.Y -= dim.Height+1;
 		pos.LowerRightCorner.Y = pos.UpperLeftCorner.Y + dim.Height-1;

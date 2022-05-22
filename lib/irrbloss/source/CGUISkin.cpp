@@ -20,17 +20,17 @@ CGUISkin::CGUISkin(EGUI_SKIN_TYPE type, video::IVideoDriver* driver)
 	setDebugName("CGUISkin");
 	#endif
 
-	Colors[EGDC_3D_DARK_SHADOW]     = video::SColor(101,50,50,50);
-	Colors[EGDC_3D_SHADOW]          = video::SColor(101,130,130,130);
-	Colors[EGDC_3D_FACE]            = video::SColor(101,210,210,210);
-	Colors[EGDC_3D_HIGH_LIGHT]      = video::SColor(101,255,255,255);
-	Colors[EGDC_3D_LIGHT]           = video::SColor(101,210,210,210);
-	Colors[EGDC_ACTIVE_BORDER]      = video::SColor(101,16,14,115);
+	Colors[EGDC_3D_DARK_SHADOW]     = video::SColor(255,50,50,50);
+	Colors[EGDC_3D_SHADOW]          = video::SColor(255,130,130,130);
+	Colors[EGDC_3D_FACE]            = video::SColor(255,190,190,190);
+	Colors[EGDC_3D_HIGH_LIGHT]      = video::SColor(255,255,255,255);
+	Colors[EGDC_3D_LIGHT]           = video::SColor(255,210,210,210);
+	Colors[EGDC_ACTIVE_BORDER]      = video::SColor(255,0,107,25);
 	Colors[EGDC_ACTIVE_CAPTION]     = video::SColor(255,255,255,255);
 	Colors[EGDC_APP_WORKSPACE]      = video::SColor(101,100,100,100);
 	Colors[EGDC_BUTTON_TEXT]        = video::SColor(240,10,10,10);
 	Colors[EGDC_GRAY_TEXT]          = video::SColor(240,130,130,130);
-	Colors[EGDC_HIGH_LIGHT]         = video::SColor(101,8,36,107);
+	Colors[EGDC_HIGH_LIGHT]         = video::SColor(255,0,107,25);
 	Colors[EGDC_HIGH_LIGHT_TEXT]    = video::SColor(240,255,255,255);
 	Colors[EGDC_INACTIVE_BORDER]    = video::SColor(101,165,165,165);
 	Colors[EGDC_INACTIVE_CAPTION]   = video::SColor(255,30,30,30);
@@ -40,48 +40,11 @@ CGUISkin::CGUISkin(EGUI_SKIN_TYPE type, video::IVideoDriver* driver)
 	Colors[EGDC_WINDOW]             = video::SColor(101,255,255,255);
 	Colors[EGDC_WINDOW_SYMBOL]      = video::SColor(200,10,10,10);
 	Colors[EGDC_ICON]               = video::SColor(200,255,255,255);
-	Colors[EGDC_ICON_HIGH_LIGHT]    = video::SColor(200,8,36,107);
+	Colors[EGDC_ICON_HIGH_LIGHT]    = video::SColor(200,8,107,36);
 	Colors[EGDC_GRAY_WINDOW_SYMBOL] = video::SColor(240,100,100,100);
 	Colors[EGDC_EDITABLE] 			= video::SColor(255,255,255,255);
 	Colors[EGDC_GRAY_EDITABLE]		= video::SColor(255,120,120,120);
 	Colors[EGDC_FOCUSED_EDITABLE]	= video::SColor(255,240,240,255);
-
-	Sizes[EGDS_SCROLLBAR_SIZE] = 14;
-	Sizes[EGDS_MENU_HEIGHT] = 30;
-	Sizes[EGDS_WINDOW_BUTTON_WIDTH] = 15;
-	Sizes[EGDS_CHECK_BOX_WIDTH] = 18;
-	Sizes[EGDS_MESSAGE_BOX_WIDTH] = 500;
-	Sizes[EGDS_MESSAGE_BOX_HEIGHT] = 200;
-	Sizes[EGDS_BUTTON_WIDTH] = 80;
-	Sizes[EGDS_BUTTON_HEIGHT] = 30;
-
-	Sizes[EGDS_TEXT_DISTANCE_X] = 2;
-	Sizes[EGDS_TEXT_DISTANCE_Y] = 0;
-
-	Sizes[EGDS_TITLEBARTEXT_DISTANCE_X] = 2;
-	Sizes[EGDS_TITLEBARTEXT_DISTANCE_Y] = 0;
-
-	Sizes[EGDS_MESSAGE_BOX_GAP_SPACE] = 15;
-	Sizes[EGDS_MESSAGE_BOX_MIN_TEXT_WIDTH] = 0;
-	Sizes[EGDS_MESSAGE_BOX_MAX_TEXT_WIDTH] = 500;
-	Sizes[EGDS_MESSAGE_BOX_MIN_TEXT_HEIGHT] = 0;
-	Sizes[EGDS_MESSAGE_BOX_MAX_TEXT_HEIGHT] = 99999;
-
-	Sizes[EGDS_BUTTON_PRESSED_IMAGE_OFFSET_X] = 1;
-	Sizes[EGDS_BUTTON_PRESSED_IMAGE_OFFSET_Y] = 1;
-	Sizes[EGDS_BUTTON_PRESSED_TEXT_OFFSET_X] = 0;
-	Sizes[EGDS_BUTTON_PRESSED_TEXT_OFFSET_Y] = 2;
-	Sizes[EGDS_BUTTON_PRESSED_SPRITE_OFFSET_X] = 0;
-	Sizes[EGDS_BUTTON_PRESSED_SPRITE_OFFSET_Y] = 0;
-
-	Texts[EGDT_MSG_BOX_OK] = L"OK";
-	Texts[EGDT_MSG_BOX_CANCEL] = L"Cancel";
-	Texts[EGDT_MSG_BOX_YES] = L"Yes";
-	Texts[EGDT_MSG_BOX_NO] = L"No";
-	Texts[EGDT_WINDOW_CLOSE] = L"Close";
-	Texts[EGDT_WINDOW_RESTORE] = L"Restore";
-	Texts[EGDT_WINDOW_MINIMIZE] = L"Minimize";
-	Texts[EGDT_WINDOW_MAXIMIZE] = L"Maximize";
 
 	Icons[EGDI_WINDOW_MAXIMIZE] = 225;
 	Icons[EGDI_WINDOW_RESTORE] = 226;
@@ -137,20 +100,6 @@ void CGUISkin::setColor(EGUI_DEFAULT_COLOR which, video::SColor newColor) {
 		Colors[which] = newColor;
 }
 
-//! returns size for the given size type
-s32 CGUISkin::getSize(EGUI_DEFAULT_SIZE size) const {
-	if ((u32)size < EGDS_COUNT)
-		return Sizes[size];
-	else
-		return 0;
-}
-
-//! sets a default size
-void CGUISkin::setSize(EGUI_DEFAULT_SIZE which, s32 size) {
-	if ((u32)which < EGDS_COUNT)
-		Sizes[which] = size;
-}
-
 //! returns the default font
 IGUIFont* CGUISkin::getFont(EGUI_DEFAULT_FONT which) const {
 	if (((u32)which < EGDF_COUNT) && Fonts[which])
@@ -187,36 +136,6 @@ void CGUISkin::setSpriteBank(IGUISpriteBank* bank) {
 		SpriteBank->drop();
 
 	SpriteBank = bank;
-}
-
-//! Returns a default icon
-u32 CGUISkin::getIcon(EGUI_DEFAULT_ICON icon) const {
-	if ((u32)icon < EGDI_COUNT)
-		return Icons[icon];
-	else
-		return 0;
-}
-
-//! Sets a default icon
-void CGUISkin::setIcon(EGUI_DEFAULT_ICON icon, u32 index) {
-	if ((u32)icon < EGDI_COUNT)
-		Icons[icon] = index;
-}
-
-//! Returns a default text. For example for Message box button captions:
-//! "OK", "Cancel", "Yes", "No" and so on.
-const wchar_t* CGUISkin::getDefaultText(EGUI_DEFAULT_TEXT text) const {
-	if ((u32)text < EGDT_COUNT)
-		return Texts[text].c_str();
-	else
-		return Texts[0].c_str();
-}
-
-//! Sets a default text. For example for Message box button captions:
-//! "OK", "Cancel", "Yes", "No" and so on.
-void CGUISkin::setDefaultText(EGUI_DEFAULT_TEXT which, const wchar_t* newText) {
-	if ((u32)which < EGDT_COUNT)
-		Texts[which] = newText;
 }
 
 //! draws a standard 3d button pane
@@ -455,7 +374,7 @@ core::rect<s32> CGUISkin::draw3DWindowBackground(IGUIElement* element,
 	rect.UpperLeftCorner.X += 2;
 	rect.UpperLeftCorner.Y += 2;
 	rect.LowerRightCorner.X -= 2;
-	rect.LowerRightCorner.Y = rect.UpperLeftCorner.Y + getSize(EGDS_WINDOW_BUTTON_WIDTH) + 2;
+	rect.LowerRightCorner.Y = rect.UpperLeftCorner.Y + 17;
 
 	if (drawTitleBar ) {
 		if (checkClientArea) {
@@ -655,7 +574,7 @@ void CGUISkin::draw3DTabBody(IGUIElement* element, bool border, bool background,
 	core::rect<s32> tr = rect;
 
 	if ( tabHeight == -1 )
-		tabHeight = getSize(gui::EGDS_BUTTON_HEIGHT);
+		tabHeight = 30;
 
 	// draw border.
 	if (border) {
@@ -749,4 +668,3 @@ void CGUISkin::draw2DRectangle(IGUIElement* element,
 } // end namespace irr
 
 #endif // _IRR_COMPILE_WITH_GUI_
-

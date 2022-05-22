@@ -33,12 +33,6 @@ namespace gui {
 		//! sets a default color
 		virtual void setColor(EGUI_DEFAULT_COLOR which, video::SColor newColor) _IRR_OVERRIDE_;
 
-		//! returns size for the given size type
-		virtual s32 getSize(EGUI_DEFAULT_SIZE size) const _IRR_OVERRIDE_;
-
-		//! sets a default size
-		virtual void setSize(EGUI_DEFAULT_SIZE which, s32 size) _IRR_OVERRIDE_;
-
 		//! returns the default font
 		virtual IGUIFont* getFont(EGUI_DEFAULT_FONT which=EGDF_DEFAULT) const _IRR_OVERRIDE_;
 
@@ -50,27 +44,6 @@ namespace gui {
 
 		//! gets the sprite bank used for drawing icons
 		virtual IGUISpriteBank* getSpriteBank() const _IRR_OVERRIDE_;
-
-		//! Returns a default icon
-		/** Returns the sprite index within the sprite bank */
-		virtual u32 getIcon(EGUI_DEFAULT_ICON icon) const _IRR_OVERRIDE_;
-
-		//! Sets a default icon
-		/** Sets the sprite index used for drawing icons like arrows,
-		close buttons and ticks in checkboxes
-		\param icon: Enum specifying which icon to change
-		\param index: The sprite index used to draw this icon */
-		virtual void setIcon(EGUI_DEFAULT_ICON icon, u32 index) _IRR_OVERRIDE_;
-
-		//! Returns a default text.
-		/** For example for Message box button captions:
-		"OK", "Cancel", "Yes", "No" and so on. */
-		virtual const wchar_t* getDefaultText(EGUI_DEFAULT_TEXT text) const _IRR_OVERRIDE_;
-
-		//! Sets a default text.
-		/** For example for Message box button captions:
-		"OK", "Cancel", "Yes", "No" and so on. */
-		virtual void setDefaultText(EGUI_DEFAULT_TEXT which, const wchar_t* newText) _IRR_OVERRIDE_;
 
 		//! draws a standard 3d button pane
 		/** Used for drawing for example buttons in normal state.
@@ -217,11 +190,9 @@ namespace gui {
 	private:
 
 		video::SColor Colors[EGDC_COUNT];
-		s32 Sizes[EGDS_COUNT];
 		u32 Icons[EGDI_COUNT];
 		IGUIFont* Fonts[EGDF_COUNT];
 		IGUISpriteBank* SpriteBank;
-		core::stringw Texts[EGDT_COUNT];
 		video::IVideoDriver* Driver;
 
 		EGUI_SKIN_TYPE Type;
@@ -234,5 +205,4 @@ namespace gui {
 #endif // _IRR_COMPILE_WITH_GUI_
 
 #endif
-
 

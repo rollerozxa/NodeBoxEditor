@@ -178,15 +178,13 @@ void CGUIMenu::recalculateSize() {
 	if (!font) {
 		if (Parent && skin)
 			RelativeRect = core::rect<s32>(clientRect.UpperLeftCorner.X, clientRect.UpperLeftCorner.Y,
-					clientRect.LowerRightCorner.X, clientRect.UpperLeftCorner.Y+skin->getSize(EGDS_MENU_HEIGHT));
+					clientRect.LowerRightCorner.X, clientRect.UpperLeftCorner.Y+30);
 		return;
 	}
 
 	core::rect<s32> rect;
 	rect.UpperLeftCorner = clientRect.UpperLeftCorner;
 	s32 height = font->getDimension(L"A").Height + 5;
-	//if (skin && height < skin->getSize ( EGDS_MENU_HEIGHT ))
-	//	height = skin->getSize(EGDS_MENU_HEIGHT);
 	s32 width = rect.UpperLeftCorner.X;
 	s32 i;
 

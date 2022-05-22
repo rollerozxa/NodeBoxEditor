@@ -67,7 +67,7 @@ void CGUIStaticText::draw() {
 
 	if (Border) {
 		skin->draw3DSunkenPane(this, 0, true, false, frameRect, &AbsoluteClippingRect);
-		frameRect.UpperLeftCorner.X += skin->getSize(EGDS_TEXT_DISTANCE_X);
+		frameRect.UpperLeftCorner.X += 2;
 	}
 
 	// draw the text
@@ -85,7 +85,7 @@ void CGUIStaticText::draw() {
 						font->getDimension(Text.c_str()).Width;
 				}
 
-				font->draw(Text.c_str(), frameRect, 
+				font->draw(Text.c_str(), frameRect,
 					getActiveColor(),
 					HAlign == EGUIA_CENTER, VAlign == EGUIA_CENTER, (RestrainTextInside ? &AbsoluteClippingRect : NULL));
 			} else {
@@ -270,7 +270,7 @@ void CGUIStaticText::breakText() {
 	s32 length = 0;
 	s32 elWidth = RelativeRect.getWidth();
 	if (Border)
-		elWidth -= 2*skin->getSize(EGDS_TEXT_DISTANCE_X);
+		elWidth -= 4;
 	wchar_t c;
 
 	// We have to deal with right-to-left and left-to-right differently

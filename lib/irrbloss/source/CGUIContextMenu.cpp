@@ -505,7 +505,7 @@ void CGUIContextMenu::draw() {
 				core::rect<s32> r = rect;
 				r.UpperLeftCorner.X = r.LowerRightCorner.X - 15;
 
-				sprites->draw2DSprite(skin->getIcon(EGDI_CURSOR_RIGHT),
+				sprites->draw2DSprite(232,
 					r.getCenter(), clip, skin->getColor(c),
 					(i == HighLighted) ? ChangeTime : 0,
 					(i == HighLighted) ? os::Timer::getTime() : 0,
@@ -517,7 +517,7 @@ void CGUIContextMenu::draw() {
 				core::rect<s32> r = rect;
 				r.LowerRightCorner.X = r.UpperLeftCorner.X - 15;
 				r.UpperLeftCorner.X = r.LowerRightCorner.X + 15;
-				sprites->draw2DSprite(skin->getIcon(EGDI_CHECK_BOX_CHECKED),
+				sprites->draw2DSprite(233,
 					r.getCenter(), clip, skin->getColor(c),
 					(i == HighLighted) ? ChangeTime : 0,
 					(i == HighLighted) ? os::Timer::getTime() : 0,

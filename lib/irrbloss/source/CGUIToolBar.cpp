@@ -35,12 +35,12 @@ CGUIToolBar::CGUIToolBar(IGUIEnvironment* environment, IGUIElement* parent, s32 
 		core::list<IGUIElement*>::ConstIterator it = children.begin();
 		for (; it != children.end(); ++it) {
 			const IGUIElement* e = *it;
-			if (	e->hasType(EGUIET_CONTEXT_MENU) 
-				||	e->hasType(EGUIET_MENU) 
+			if (	e->hasType(EGUIET_CONTEXT_MENU)
+				||	e->hasType(EGUIET_MENU)
 				||	e->hasType(EGUIET_TOOL_BAR)  ) {
 				core::rect<s32> r = e->getAbsolutePosition();
 				if (r.UpperLeftCorner.X == 0 && r.UpperLeftCorner.Y <= y &&
-					r.LowerRightCorner.X == parentwidth 
+					r.LowerRightCorner.X == parentwidth
 					&& parentheight > r.LowerRightCorner.Y 	)
 					y = r.LowerRightCorner.Y;
 			} else {
@@ -52,7 +52,7 @@ CGUIToolBar::CGUIToolBar(IGUIEnvironment* environment, IGUIElement* parent, s32 
 	core::rect<s32> rr;
 	rr.UpperLeftCorner.X = 0;
 	rr.UpperLeftCorner.Y = y;
-	s32 height = Environment->getSkin()->getSize ( EGDS_MENU_HEIGHT );
+	s32 height = 30;
 
 	/*IGUISkin* skin = Environment->getSkin();
 	IGUIFont* font = skin->getFont();

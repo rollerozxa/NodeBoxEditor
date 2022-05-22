@@ -42,7 +42,7 @@ CGUIListBox::CGUIListBox(IGUIEnvironment* environment, IGUIElement* parent,
 	ScrollBar->setVisible(false);
 	ScrollBar->setPos(0);
 
-	updateScrollBarSize(skin->getSize(EGDS_SCROLLBAR_SIZE));
+	updateScrollBarSize(14);
 
 	setNotClipped(!clip);
 
@@ -430,7 +430,7 @@ void CGUIListBox::draw() {
 	recalculateItemHeight(); // if the font changed
 
 	IGUISkin* skin = Environment->getSkin();
-	updateScrollBarSize(skin->getSize(EGDS_SCROLLBAR_SIZE));
+	updateScrollBarSize(14);
 
 	core::rect<s32>* clipRect = 0;
 

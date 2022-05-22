@@ -31,19 +31,19 @@ CGUIWindow::CGUIWindow(IGUIEnvironment* environment, IGUIElement* parent, s32 id
 
 	s32 buttonw = 15;
 	if (skin) {
-		buttonw = skin->getSize(EGDS_WINDOW_BUTTON_WIDTH);
+		buttonw = 15;
 	}
 	s32 posx = RelativeRect.getWidth() - buttonw - 4;
 
 	CloseButton = Environment->addButton(core::rect<s32>(posx, 3, posx + buttonw, 3 + buttonw), this, -1,
-		L"", skin ? skin->getDefaultText(EGDT_WINDOW_CLOSE) : L"Close" );
+		L"", L"Close" );
 	CloseButton->setSubElement(true);
 	CloseButton->setTabStop(false);
 	CloseButton->setAlignment(EGUIA_LOWERRIGHT, EGUIA_LOWERRIGHT, EGUIA_UPPERLEFT, EGUIA_UPPERLEFT);
 	posx -= buttonw + 2;
 
 	RestoreButton = Environment->addButton(core::rect<s32>(posx, 3, posx + buttonw, 3 + buttonw), this, -1,
-		L"", skin ? skin->getDefaultText(EGDT_WINDOW_RESTORE) : L"Restore" );
+		L"", L"Restore" );
 	RestoreButton->setVisible(false);
 	RestoreButton->setSubElement(true);
 	RestoreButton->setTabStop(false);
@@ -51,7 +51,7 @@ CGUIWindow::CGUIWindow(IGUIEnvironment* environment, IGUIElement* parent, s32 id
 	posx -= buttonw + 2;
 
 	MinButton = Environment->addButton(core::rect<s32>(posx, 3, posx + buttonw, 3 + buttonw), this, -1,
-		L"", skin ? skin->getDefaultText(EGDT_WINDOW_MINIMIZE) : L"Minimize" );
+		L"", L"Minimize" );
 	MinButton->setVisible(false);
 	MinButton->setSubElement(true);
 	MinButton->setTabStop(false);
@@ -97,16 +97,16 @@ void CGUIWindow::refreshSprites() {
 
 	if (sprites) {
 		CloseButton->setSpriteBank(sprites);
-		CloseButton->setSprite(EGBS_BUTTON_UP, skin->getIcon(EGDI_WINDOW_CLOSE), CurrentIconColor);
-		CloseButton->setSprite(EGBS_BUTTON_DOWN, skin->getIcon(EGDI_WINDOW_CLOSE), CurrentIconColor);
+		CloseButton->setSprite(EGBS_BUTTON_UP, 227, CurrentIconColor);
+		CloseButton->setSprite(EGBS_BUTTON_DOWN, 227, CurrentIconColor);
 
 		RestoreButton->setSpriteBank(sprites);
-		RestoreButton->setSprite(EGBS_BUTTON_UP, skin->getIcon(EGDI_WINDOW_RESTORE), CurrentIconColor);
-		RestoreButton->setSprite(EGBS_BUTTON_DOWN, skin->getIcon(EGDI_WINDOW_RESTORE), CurrentIconColor);
+		RestoreButton->setSprite(EGBS_BUTTON_UP, 226, CurrentIconColor);
+		RestoreButton->setSprite(EGBS_BUTTON_DOWN, 226, CurrentIconColor);
 
 		MinButton->setSpriteBank(sprites);
-		MinButton->setSprite(EGBS_BUTTON_UP, skin->getIcon(EGDI_WINDOW_MINIMIZE), CurrentIconColor);
-		MinButton->setSprite(EGBS_BUTTON_DOWN, skin->getIcon(EGDI_WINDOW_MINIMIZE), CurrentIconColor);
+		MinButton->setSprite(EGBS_BUTTON_UP, 228, CurrentIconColor);
+		MinButton->setSprite(EGBS_BUTTON_DOWN, 228, CurrentIconColor);
 	}
 }
 
@@ -220,9 +220,9 @@ void CGUIWindow::draw() {
 					AbsoluteRect, &AbsoluteClippingRect);
 
 			if (DrawTitlebar && Text.size()) {
-				rect.UpperLeftCorner.X += skin->getSize(EGDS_TITLEBARTEXT_DISTANCE_X);
-				rect.UpperLeftCorner.Y += skin->getSize(EGDS_TITLEBARTEXT_DISTANCE_Y);
-				rect.LowerRightCorner.X -= skin->getSize(EGDS_WINDOW_BUTTON_WIDTH) + 5;
+				rect.UpperLeftCorner.X += 2;
+				rect.UpperLeftCorner.Y += 0;
+				rect.LowerRightCorner.X -= 20;
 
 				IGUIFont* font = skin->getFont(EGDF_WINDOW);
 				if (font) {

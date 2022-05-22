@@ -231,8 +231,8 @@ void CGUIButton::draw() {
 			// Create a pressed-down effect by moving the image when it looks identical to the unpressed state image
 			EGUI_BUTTON_IMAGE_STATE unpressedState = getImageState(false);
 			if ( unpressedState == imageState || ButtonImages[(u32)imageState] == ButtonImages[(u32)unpressedState] ) {
-				pos.X += skin->getSize(EGDS_BUTTON_PRESSED_IMAGE_OFFSET_X);
-				pos.Y += skin->getSize(EGDS_BUTTON_PRESSED_IMAGE_OFFSET_Y);
+				pos.X += 1;
+				pos.Y += 1;
 			}
 		}
 
@@ -245,8 +245,8 @@ void CGUIButton::draw() {
 	if (SpriteBank) {
 		core::position2di pos(buttonCenter);
 		if ( Pressed ) {
-			pos.X += skin->getSize(EGDS_BUTTON_PRESSED_SPRITE_OFFSET_X);
-			pos.Y += skin->getSize(EGDS_BUTTON_PRESSED_SPRITE_OFFSET_Y);
+			pos.X += 0;
+			pos.Y += 0;
 		}
 
 		if (isEnabled()) {
@@ -272,8 +272,8 @@ void CGUIButton::draw() {
 
 		core::rect<s32> rect = AbsoluteRect;
 		if (Pressed) {
-			rect.UpperLeftCorner.X += skin->getSize(EGDS_BUTTON_PRESSED_TEXT_OFFSET_X);
-			rect.UpperLeftCorner.Y += skin->getSize(EGDS_BUTTON_PRESSED_TEXT_OFFSET_Y);
+			rect.UpperLeftCorner.X += 0;
+			rect.UpperLeftCorner.Y += 2;
 		}
 
 		if (font)

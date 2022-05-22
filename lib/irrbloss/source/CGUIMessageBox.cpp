@@ -103,18 +103,18 @@ void CGUIMessageBox::refreshControls() {
 
 	const IGUISkin* skin = Environment->getSkin();
 
-	const s32 buttonHeight   = skin->getSize(EGDS_BUTTON_HEIGHT);
-	const s32 buttonWidth    = skin->getSize(EGDS_BUTTON_WIDTH);
-	const s32 titleHeight    = skin->getSize(EGDS_WINDOW_BUTTON_WIDTH)+2;	// titlebar has no own constant
-	const s32 buttonDistance = skin->getSize(EGDS_WINDOW_BUTTON_WIDTH);
-	const s32 borderWidth 	 = skin->getSize(EGDS_MESSAGE_BOX_GAP_SPACE);
+	const s32 buttonHeight   = 30;
+	const s32 buttonWidth    = 80;
+	const s32 titleHeight    = 17;	// titlebar has no own constant
+	const s32 buttonDistance = 15;
+	const s32 borderWidth 	 = 15;
 
 	// add the static text for the message
 	core::rect<s32> staticRect;
 	staticRect.UpperLeftCorner.X = borderWidth;
 	staticRect.UpperLeftCorner.Y = titleHeight + borderWidth;
-	staticRect.LowerRightCorner.X = staticRect.UpperLeftCorner.X + skin->getSize(EGDS_MESSAGE_BOX_MAX_TEXT_WIDTH);
-	staticRect.LowerRightCorner.Y = staticRect.UpperLeftCorner.Y + skin->getSize(EGDS_MESSAGE_BOX_MAX_TEXT_HEIGHT);
+	staticRect.LowerRightCorner.X = staticRect.UpperLeftCorner.X + 500;
+	staticRect.LowerRightCorner.Y = staticRect.UpperLeftCorner.Y + 99999;
 	if (!StaticText) {
 		StaticText = Environment->addStaticText(MessageText.c_str(), staticRect, false, false, this);
 
@@ -130,13 +130,13 @@ void CGUIMessageBox::refreshControls() {
 	s32 textWidth = StaticText->getTextWidth() + 6;	// +6 because the static itself needs that
 	const s32 iconHeight = IconTexture ? IconTexture->getOriginalSize().Height : 0;
 
-	if ( textWidth < skin->getSize(EGDS_MESSAGE_BOX_MIN_TEXT_WIDTH) )
-		textWidth = skin->getSize(EGDS_MESSAGE_BOX_MIN_TEXT_WIDTH) + 6;
+	if ( textWidth < 0 )
+		textWidth = 6;
 	// no neeed to check for max because it couldn't get larger due to statictextbox.
-	if ( textHeight < skin->getSize(EGDS_MESSAGE_BOX_MIN_TEXT_HEIGHT) )
-		textHeight = skin->getSize(EGDS_MESSAGE_BOX_MIN_TEXT_HEIGHT);
-	if ( textHeight > skin->getSize(EGDS_MESSAGE_BOX_MAX_TEXT_HEIGHT) )
-		textHeight = skin->getSize(EGDS_MESSAGE_BOX_MAX_TEXT_HEIGHT);
+	if (textHeight < 0)
+		textHeight = 0;
+	if (textHeight > 99999)
+		textHeight = 99999;
 
 	// content is text + icons + borders (but not titlebar)
 	s32 contentHeight = textHeight > iconHeight ? textHeight : iconHeight;
@@ -218,16 +218,16 @@ void CGUIMessageBox::refreshControls() {
 	btnRect.LowerRightCorner.X = btnRect.UpperLeftCorner.X + buttonWidth;
 
 	IGUIElement* focusMe = 0;
-	setButton(OkButton, (Flags & EMBF_OK) != 0, btnRect, skin->getDefaultText(EGDT_MSG_BOX_OK), focusMe);
+	setButton(OkButton, (Flags & EMBF_OK) != 0, btnRect, L"Okay, sure", focusMe);
 	if ( Flags & EMBF_OK )
 		btnRect += core::position2d<s32>(buttonWidth + buttonDistance, 0);
-	setButton(CancelButton, (Flags & EMBF_CANCEL) != 0, btnRect, skin->getDefaultText(EGDT_MSG_BOX_CANCEL), focusMe);
+	setButton(CancelButton, (Flags & EMBF_CANCEL) != 0, btnRect, L"Cancel", focusMe);
 	if ( Flags & EMBF_CANCEL )
 		btnRect += core::position2d<s32>(buttonWidth + buttonDistance, 0);
-	setButton(YesButton, (Flags & EMBF_YES) != 0, btnRect, skin->getDefaultText(EGDT_MSG_BOX_YES), focusMe);
+	setButton(YesButton, (Flags & EMBF_YES) != 0, btnRect, L"Yes", focusMe);
 	if ( Flags & EMBF_YES )
 		btnRect += core::position2d<s32>(buttonWidth + buttonDistance, 0);
-	setButton(NoButton, (Flags & EMBF_NO) != 0, btnRect, skin->getDefaultText(EGDT_MSG_BOX_NO), focusMe);
+	setButton(NoButton, (Flags & EMBF_NO) != 0, btnRect, L"No", focusMe);
 
 	if (Environment->hasFocus(this) && focusMe)
 		Environment->setFocus(focusMe);

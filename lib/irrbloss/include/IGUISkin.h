@@ -129,129 +129,6 @@ namespace gui
 		0,
 	};
 
-	//! Enumeration for default sizes.
-	enum EGUI_DEFAULT_SIZE
-	{
-		//! default with / height of scrollbar. Also width of drop-down button in comboboxes.
-		EGDS_SCROLLBAR_SIZE = 0,
-		//! height of menu
-		EGDS_MENU_HEIGHT,
-		//! width and height of a window titlebar button (like minimize/maximize/close buttons). The titlebar height is also calculated from that.
-		EGDS_WINDOW_BUTTON_WIDTH,
-		//! width of a checkbox check
-		EGDS_CHECK_BOX_WIDTH,
-		//! \deprecated This may be removed by Irrlicht 1.9
-		EGDS_MESSAGE_BOX_WIDTH,
-		//! \deprecated This may be removed by Irrlicht 1.9
-		EGDS_MESSAGE_BOX_HEIGHT,
-		//! width of a default button
-		EGDS_BUTTON_WIDTH,
-		//! height of a default button (OK and cancel buttons)
-		EGDS_BUTTON_HEIGHT,
-		//! distance for text from background
-		EGDS_TEXT_DISTANCE_X,
-		//! distance for text from background
-		EGDS_TEXT_DISTANCE_Y,
-		//! distance for text in the title bar, from the left of the window rect
-		EGDS_TITLEBARTEXT_DISTANCE_X,
-		//! distance for text in the title bar, from the top of the window rect
-		EGDS_TITLEBARTEXT_DISTANCE_Y,
-		//! free space in a messagebox between borders and contents on all sides
-		EGDS_MESSAGE_BOX_GAP_SPACE,
-		//! minimal space to reserve for messagebox text-width
-		EGDS_MESSAGE_BOX_MIN_TEXT_WIDTH,
-		//! maximal space to reserve for messagebox text-width
-		EGDS_MESSAGE_BOX_MAX_TEXT_WIDTH,
-		//! minimal space to reserve for messagebox text-height
-		EGDS_MESSAGE_BOX_MIN_TEXT_HEIGHT,
-		//! maximal space to reserve for messagebox text-height
-		EGDS_MESSAGE_BOX_MAX_TEXT_HEIGHT,
-		//! pixels to move an unscaled button image to the right when a button is pressed and the unpressed image looks identical
-		EGDS_BUTTON_PRESSED_IMAGE_OFFSET_X,
-		//! pixels to move an unscaled button image down when a button is pressed  and the unpressed image looks identical
-		EGDS_BUTTON_PRESSED_IMAGE_OFFSET_Y,
-		//! pixels to move the button text to the right when a button is pressed
-		EGDS_BUTTON_PRESSED_TEXT_OFFSET_X,
-		//! pixels to move the button text down when a button is pressed
-		EGDS_BUTTON_PRESSED_TEXT_OFFSET_Y,
-		//! pixels to move an unscaled button sprite to the right when a button is pressed
-		EGDS_BUTTON_PRESSED_SPRITE_OFFSET_X,
-		//! pixels to move an unscaled button sprite down when a button is pressed
-		EGDS_BUTTON_PRESSED_SPRITE_OFFSET_Y,
-
-		//! this value is not used, it only specifies the amount of default sizes
-		//! available.
-		EGDS_COUNT
-	};
-
-
-	//! Names for default skin sizes
-	const c8* const GUISkinSizeNames[EGDS_COUNT+1] =
-	{
-		"ScrollBarSize",
-		"MenuHeight",
-		"WindowButtonWidth",
-		"CheckBoxWidth",
-		"MessageBoxWidth",
-		"MessageBoxHeight",
-		"ButtonWidth",
-		"ButtonHeight",
-		"TextDistanceX",
-		"TextDistanceY",
-		"TitleBarTextX",
-		"TitleBarTextY",
-		"MessageBoxGapSpace",
-		"MessageBoxMinTextWidth",
-		"MessageBoxMaxTextWidth",
-		"MessageBoxMinTextHeight",
-		"MessageBoxMaxTextHeight",
-		"ButtonPressedImageOffsetX",
-		"ButtonPressedImageOffsetY",
-		"ButtonPressedTextOffsetX",
-		"ButtonPressedTextOffsetY",
-		"ButtonPressedSpriteOffsetX",
-		"ButtonPressedSpriteOffsetY",
-		0
-	};
-
-
-	enum EGUI_DEFAULT_TEXT
-	{
-		//! Text for the OK button on a message box
-		EGDT_MSG_BOX_OK = 0,
-		//! Text for the Cancel button on a message box
-		EGDT_MSG_BOX_CANCEL,
-		//! Text for the Yes button on a message box
-		EGDT_MSG_BOX_YES,
-		//! Text for the No button on a message box
-		EGDT_MSG_BOX_NO,
-		//! Tooltip text for window close button
-		EGDT_WINDOW_CLOSE,
-		//! Tooltip text for window maximize button
-		EGDT_WINDOW_MAXIMIZE,
-		//! Tooltip text for window minimize button
-		EGDT_WINDOW_MINIMIZE,
-		//! Tooltip text for window restore button
-		EGDT_WINDOW_RESTORE,
-
-		//! this value is not used, it only specifies the number of default texts
-		EGDT_COUNT
-	};
-
-	//! Names for default skin sizes
-	const c8* const GUISkinTextNames[EGDT_COUNT+1] =
-	{
-		"MessageBoxOkay",
-		"MessageBoxCancel",
-		"MessageBoxYes",
-		"MessageBoxNo",
-		"WindowButtonClose",
-		"WindowButtonMaximize",
-		"WindowButtonMinimize",
-		"WindowButtonRestore",
-		0
-	};
-
 	//! Customizable symbols for GUI
 	enum EGUI_DEFAULT_ICON
 	{
@@ -374,22 +251,6 @@ namespace gui
 		//! sets a default color
 		virtual void setColor(EGUI_DEFAULT_COLOR which, video::SColor newColor) = 0;
 
-		//! returns size for the given size type
-		virtual s32 getSize(EGUI_DEFAULT_SIZE size) const = 0;
-
-		//! Returns a default text.
-		/** For example for Message box button captions:
-		"OK", "Cancel", "Yes", "No" and so on. */
-		virtual const wchar_t* getDefaultText(EGUI_DEFAULT_TEXT text) const = 0;
-
-		//! Sets a default text.
-		/** For example for Message box button captions:
-		"OK", "Cancel", "Yes", "No" and so on. */
-		virtual void setDefaultText(EGUI_DEFAULT_TEXT which, const wchar_t* newText) = 0;
-
-		//! sets a default size
-		virtual void setSize(EGUI_DEFAULT_SIZE which, s32 size) = 0;
-
 		//! returns the default font
 		virtual IGUIFont* getFont(EGUI_DEFAULT_FONT which=EGDF_DEFAULT) const = 0;
 
@@ -401,17 +262,6 @@ namespace gui
 
 		//! sets the sprite bank
 		virtual void setSpriteBank(IGUISpriteBank* bank) = 0;
-
-		//! Returns a default icon
-		/** Returns the sprite index within the sprite bank */
-		virtual u32 getIcon(EGUI_DEFAULT_ICON icon) const = 0;
-
-		//! Sets a default icon
-		/** Sets the sprite index used for drawing icons like arrows,
-		close buttons and ticks in checkboxes
-		\param icon: Enum specifying which icon to change
-		\param index: The sprite index used to draw this icon */
-		virtual void setIcon(EGUI_DEFAULT_ICON icon, u32 index) = 0;
 
 		//! draws a standard 3d button pane
 		/** Used for drawing for example buttons in normal state.
@@ -560,4 +410,3 @@ namespace gui
 } // end namespace irr
 
 #endif
-
