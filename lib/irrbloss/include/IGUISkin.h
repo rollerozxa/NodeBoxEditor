@@ -350,31 +350,6 @@ namespace gui
 			const core::rect<s32>& rect,
 			const core::rect<s32>* clip=0) = 0;
 
-		//! draws a tab button
-		/** Used for drawing for tab buttons on top of tabs.
-		\param element: Pointer to the element which wishes to draw this. This parameter
-		is usually not used by IGUISkin, but can be used for example by more complex
-		implementations to find out how to draw the part exactly.
-		\param active: Specifies if the tab is currently active.
-		\param rect: Defining area where to draw.
-		\param clip: Clip area.
-		\param alignment Alignment of GUI element. */
-		virtual void draw3DTabButton(IGUIElement* element, bool active,
-			const core::rect<s32>& rect, const core::rect<s32>* clip=0, gui::EGUI_ALIGNMENT alignment=EGUIA_UPPERLEFT) = 0;
-
-		//! draws a tab control body
-		/** \param element: Pointer to the element which wishes to draw this. This parameter
-		is usually not used by IGUISkin, but can be used for example by more complex
-		implementations to find out how to draw the part exactly.
-		\param border: Specifies if the border should be drawn.
-		\param background: Specifies if the background should be drawn.
-		\param rect: Defining area where to draw.
-		\param clip: Clip area.
-		\param tabHeight Height of tab.
-		\param alignment Alignment of GUI element. */
-		virtual void draw3DTabBody(IGUIElement* element, bool border, bool background,
-			const core::rect<s32>& rect, const core::rect<s32>* clip=0, s32 tabHeight=-1, gui::EGUI_ALIGNMENT alignment=EGUIA_UPPERLEFT ) = 0;
-
 		//! draws an icon, usually from the skin's sprite bank
 		/** \param element: Pointer to the element which wishes to draw this icon.
 		This parameter is usually not used by IGUISkin, but can be used for example

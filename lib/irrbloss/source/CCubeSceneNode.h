@@ -52,14 +52,6 @@ namespace scene {
 		//! Returns the current mesh
 		virtual IMesh* getMesh(void) _IRR_OVERRIDE_ { return Mesh; }
 
-		//! Sets if the scene node should not copy the materials of the mesh but use them in a read only style.
-		/* In this way it is possible to change the materials a mesh causing all mesh scene nodes
-		referencing this mesh to change too. */
-		virtual void setReadOnlyMaterials(bool readonly) _IRR_OVERRIDE_ {}
-
-		//! Returns if the scene node should not copy the materials of the mesh but use them in a read only style
-		virtual bool isReadOnlyMaterials() const _IRR_OVERRIDE_ { return false; }
-
 		//! Removes a child from this scene node.
 		//! Implemented here, to be able to remove the shadow properly, if there is one,
 		//! or to remove attached child.

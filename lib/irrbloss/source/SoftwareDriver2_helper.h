@@ -178,15 +178,6 @@ inline u16 PixelBlend16 ( const u16 c2, const u16 c1, const u16 alpha ) {
 	return (u16)(rb | xg);
 }
 
-/*
-	Pixel = c0 * (c1/31). c0 Alpha retain
-*/
-inline u16 PixelMul16 ( const u16 c0, const u16 c1) {
-	return (u16)((( ( (c0 & 0x7C00) * (c1 & 0x7C00) ) & 0x3E000000 ) >> 15 ) |
-			(( ( (c0 & 0x03E0) * (c1 & 0x03E0) ) & 0x000F8000 ) >> 10 ) |
-			(( ( (c0 & 0x001F) * (c1 & 0x001F) ) & 0x000003E0 ) >> 5 ) |
-			(c0 & 0x8000));
-}
 
 /*
 	Pixel = c0 * (c1/31).
@@ -199,16 +190,6 @@ inline u16 PixelMul16_2 ( u16 c0, u16 c1) {
 }
 
 /*
-	Pixel = c0 * (c1/255). c0 Alpha Retain
-*/
-REALINLINE u32 PixelMul32 ( const u32 c0, const u32 c1) {
-	return	(c0 & 0xFF000000) |
-			(( ( (c0 & 0x00FF0000) >> 12 ) * ( (c1 & 0x00FF0000) >> 12 ) ) & 0x00FF0000 ) |
-			(( ( (c0 & 0x0000FF00) * (c1 & 0x0000FF00) ) >> 16 ) & 0x0000FF00 ) |
-			(( ( (c0 & 0x000000FF) * (c1 & 0x000000FF) ) >> 8  ) & 0x000000FF);
-}
-
-/*
 	Pixel = c0 * (c1/255).
 */
 REALINLINE u32 PixelMul32_2 ( const u32 c0, const u32 c1) {
@@ -218,27 +199,9 @@ REALINLINE u32 PixelMul32_2 ( const u32 c0, const u32 c1) {
 			(( ( (c0 & 0x000000FF) * (c1 & 0x000000FF) ) >> 8  ) & 0x000000FF);
 }
 
-/*
-	Pixel = clamp ( c0 + c1, 0, 255 )
-*/
-REALINLINE u32 PixelAdd32 ( const u32 c2, const u32 c1) {
-	u32 sum = ( c2 & 0x00FFFFFF )  + ( c1 & 0x00FFFFFF );
-	u32 low_bits = ( c2 ^ c1 ) & 0x00010101;
-	s32 carries  = ( sum - low_bits ) & 0x01010100;
-	u32 modulo = sum - carries;
-	u32 clamp = carries - ( carries >> 8 );
-	return modulo | clamp;
-}
-
 // 1 - Bit Alpha Blending
 inline u16 PixelBlend16 ( const u16 c2, const u16 c1 ) {
 	u16 mask = ((c1 & 0x8000) >> 15 ) + 0x7fff;
-	return (c2 & mask ) | ( c1 & ~mask );
-}
-
-// 1 - Bit Alpha Blending 16Bit SIMD
-inline u32 PixelBlend16_simd ( const u32 c2, const u32 c1 ) {
-	u32 mask = ((c1 & 0x80008000) >> 15 ) + 0x7fff7fff;
 	return (c2 & mask ) | ( c1 & ~mask );
 }
 

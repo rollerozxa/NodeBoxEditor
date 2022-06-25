@@ -114,7 +114,6 @@
 #include "ITriangleSelector.h"
 #include "IVertexBuffer.h"
 #include "IVideoDriver.h"
-#include "IVideoModeList.h"
 #include "IWriteFile.h"
 #include "ILightManager.h"
 #include "Keycodes.h"

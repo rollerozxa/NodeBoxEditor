@@ -113,11 +113,6 @@ namespace video {
 				const void* indexList, u32 primitiveCount,
 				E_VERTEX_TYPE vType, scene::E_PRIMITIVE_TYPE pType, E_INDEX_TYPE iType) _IRR_OVERRIDE_;
 
-		//! draws a vertex primitive list in 2d
-		virtual void draw2DVertexPrimitiveList(const void* vertices, u32 vertexCount,
-				const void* indexList, u32 primitiveCount,
-				E_VERTEX_TYPE vType, scene::E_PRIMITIVE_TYPE pType, E_INDEX_TYPE iType) _IRR_OVERRIDE_;
-
 		//! queries the features of the driver, returns true if feature is available
 		virtual bool queryFeature(E_VIDEO_DRIVER_FEATURE feature) const _IRR_OVERRIDE_
 		{
@@ -208,11 +203,6 @@ namespace video {
 		//! (0,0,0,0) which means it is dark.
 		//! \param color: New color of the ambient light.
 		virtual void setAmbientLight(const SColorf& color) _IRR_OVERRIDE_;
-
-		//! Draws a shadow volume into the stencil buffer. To draw a stencil shadow, do
-		//! this: First, draw all geometry. Then use this method, to draw the shadow
-		//! volume. Then, use IVideoDriver::drawStencilShadow() to visualize the shadow.
-		virtual void drawStencilShadowVolume(const core::array<core::vector3df>& triangles, bool zfail, u32 debugDataVisible=0) _IRR_OVERRIDE_;
 
 		//! Fills the stencil shadow with color. After the shadow volume has been drawn
 		//! into the stencil buffer using IVideoDriver::drawStencilShadowVolume(), use this
@@ -320,10 +310,6 @@ namespace video {
 		virtual ITexture* addRenderTargetTexture(const core::dimension2d<u32>& size,
 				const io::path& name, const ECOLOR_FORMAT format = ECF_UNKNOWN) _IRR_OVERRIDE_;
 
-		//! Creates a render target texture for a cubemap
-		ITexture* addRenderTargetTextureCubemap(const irr::u32 sideLen,
-				const io::path& name, const ECOLOR_FORMAT format) _IRR_OVERRIDE_;
-
 		virtual bool setRenderTargetEx(IRenderTarget* target, u16 clearFlag, SColor clearColor = SColor(255,0,0,0),
 			f32 clearDepth = 1.f, u8 clearStencil = 0) _IRR_OVERRIDE_;
 
@@ -361,9 +347,6 @@ namespace video {
 		//! Removes a texture from the texture cache and deletes it, freeing lot of memory.
 		virtual void removeTexture(ITexture* texture) _IRR_OVERRIDE_;
 
-		//! Check if the driver supports creating textures with the given color format
-		virtual bool queryTextureFormat(ECOLOR_FORMAT format) const _IRR_OVERRIDE_;
-
 		//! Used by some SceneNodes to check if a material should be rendered in the transparent render pass
 		virtual bool needsTransparentRenderPass(const irr::video::SMaterial& material) const _IRR_OVERRIDE_;
 
@@ -372,9 +355,6 @@ namespace video {
 
 		//! Convert E_BLEND_FACTOR to OpenGL equivalent
 		GLenum getGLBlend(E_BLEND_FACTOR factor) const;
-
-		//! Get ZBuffer bits.
-		GLenum getZBufferBits() const;
 
 		bool getColorFormatParameters(ECOLOR_FORMAT format, GLint& internalFormat, GLenum& pixelFormat,
 			GLenum& pixelType, void(**converter)(const void*, s32, void*)) const;
@@ -418,11 +398,6 @@ namespace video {
 		void setRenderStates2DMode(bool alpha, bool texture, bool alphaChannel);
 
 		void createMaterialRenderers();
-
-		//! Assign a hardware light to the specified requested light, if any
-		//! free hardware lights exist.
-		//! \param[in] lightIndex: the index of the requesting light
-		void assignHardwareLight(u32 lightIndex);
 
 		//! helper function for render setup.
 		void getColorBuffer(const void* vertices, u32 vertexCount, E_VERTEX_TYPE vType);

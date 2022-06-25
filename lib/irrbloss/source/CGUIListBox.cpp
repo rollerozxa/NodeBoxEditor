@@ -3,8 +3,6 @@
 // For conditions of distribution and use, see copyright notice in irrlicht.h
 
 #include "CGUIListBox.h"
-#ifdef _IRR_COMPILE_WITH_GUI_
-
 #include "CGUIListBox.h"
 #include "IGUISkin.h"
 #include "IGUIEnvironment.h"
@@ -630,15 +628,6 @@ s32 CGUIListBox::insertItem(u32 index, const wchar_t* text, s32 icon) {
 	return index;
 }
 
-void CGUIListBox::swapItems(u32 index1, u32 index2) {
-	if ( index1 >= Items.size() || index2 >= Items.size() )
-		return;
-
-	ListItem dummmy = Items[index1];
-	Items[index1] = Items[index2];
-	Items[index2] = dummmy;
-}
-
 void CGUIListBox::setItemOverrideColor(u32 index, video::SColor color) {
 	for ( u32 c=0; c < EGUI_LBC_COUNT; ++c ) {
 		Items[index].OverrideColors[c].Use = true;
@@ -652,19 +641,6 @@ void CGUIListBox::setItemOverrideColor(u32 index, EGUI_LISTBOX_COLOR colorType, 
 
 	Items[index].OverrideColors[colorType].Use = true;
 	Items[index].OverrideColors[colorType].Color = color;
-}
-
-void CGUIListBox::clearItemOverrideColor(u32 index) {
-	for (u32 c=0; c < (u32)EGUI_LBC_COUNT; ++c ) {
-		Items[index].OverrideColors[c].Use = false;
-	}
-}
-
-void CGUIListBox::clearItemOverrideColor(u32 index, EGUI_LISTBOX_COLOR colorType) {
-	if ( index >= Items.size() || colorType < 0 || colorType >= EGUI_LBC_COUNT )
-		return;
-
-	Items[index].OverrideColors[colorType].Use = false;
 }
 
 bool CGUIListBox::hasItemOverrideColor(u32 index, EGUI_LISTBOX_COLOR colorType) const {
@@ -718,6 +694,3 @@ IGUIScrollBar* CGUIListBox::getVerticalScrollBar() const {
 
 } // end namespace gui
 } // end namespace irr
-
-#endif // _IRR_COMPILE_WITH_GUI_
-

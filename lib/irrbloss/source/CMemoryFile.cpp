@@ -140,11 +140,6 @@ IReadFile* createMemoryReadFile(const void* memory, long size, const io::path& f
 	return file;
 }
 
-IWriteFile* createMemoryWriteFile(void* memory, long size, const io::path& fileName, bool deleteMemoryWhenDropped) {
-	CMemoryWriteFile* file = new CMemoryWriteFile(memory, size, fileName, deleteMemoryWhenDropped);
-	return file;
-}
-
 } // end namespace io
 } // end namespace irr
 

@@ -38,9 +38,6 @@ public:
 
 	//! Recalculates tangents, requires a tangent mesh
 	virtual void recalculateTangents(IMesh* mesh, bool recalculateNormals=false, bool smooth=false, bool angleWeighted=false) const _IRR_OVERRIDE_;
-
-	//! Creates a copy of the mesh, which will only consist of S3DVertexTangents vertices.
-	virtual IMesh* createMeshWithTangents(IMesh* mesh, bool recalculateNormals=false, bool smooth=false, bool angleWeighted=false, bool recalculateTangents=true) const _IRR_OVERRIDE_;
 };
 
 } // end namespace scene

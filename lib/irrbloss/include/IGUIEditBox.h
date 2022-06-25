@@ -112,15 +112,6 @@ namespace gui
 		/** \return true if automatic scrolling is enabled, false if not */
 		virtual bool isAutoScrollEnabled() const = 0;
 
-		//! Sets whether the edit box is a password box. Setting this to true will
-		/** disable MultiLine, WordWrap and the ability to copy with ctrl+c or ctrl+x
-		\param passwordBox: true to enable password, false to disable
-		\param passwordChar: the character that is displayed instead of letters */
-		virtual void setPasswordBox(bool passwordBox, wchar_t passwordChar = L'*') = 0;
-
-		//! Returns true if the edit box is currently a password box.
-		virtual bool isPasswordBox() const = 0;
-
 		//! Gets the size area of the text in the edit box
 		/** \return The size in pixels of the text */
 		virtual core::dimension2du getTextDimension() = 0;

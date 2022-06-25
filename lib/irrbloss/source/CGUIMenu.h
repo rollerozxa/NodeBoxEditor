@@ -6,8 +6,6 @@
 #define __C_GUI_MENU_H_INCLUDED__
 
 #include "IrrCompileConfig.h"
-#ifdef _IRR_COMPILE_WITH_GUI_
-
 #include "CGUIContextMenu.h"
 
 namespace irr {
@@ -47,5 +45,3 @@ namespace gui
 
 
 #endif //  __C_GUI_MENU_H_INCLUDED__
-#endif // _IRR_COMPILE_WITH_GUI_
-

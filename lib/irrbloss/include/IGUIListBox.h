@@ -98,12 +98,6 @@ namespace gui
 		//! set all item colors of specified type at given index to color
 		virtual void setItemOverrideColor(u32 index, EGUI_LISTBOX_COLOR colorType, video::SColor color) = 0;
 
-		//! clear all item colors at index
-		virtual void clearItemOverrideColor(u32 index) = 0;
-
-		//! clear item color at index for given colortype
-		virtual void clearItemOverrideColor(u32 index, EGUI_LISTBOX_COLOR colorType) = 0;
-
 		//! has the item at index its color overwritten?
 		virtual bool hasItemOverrideColor(u32 index, EGUI_LISTBOX_COLOR colorType) const = 0;
 
@@ -119,9 +113,6 @@ namespace gui
 		//! Insert the item at the given index
 		/** \return The index on success or -1 on failure. */
 		virtual s32 insertItem(u32 index, const wchar_t* text, s32 icon) = 0;
-
-		//! Swap the items at the given indices
-		virtual void swapItems(u32 index1, u32 index2) = 0;
 
 		//! set global itemHeight
 		virtual void setItemHeight( s32 height ) = 0;

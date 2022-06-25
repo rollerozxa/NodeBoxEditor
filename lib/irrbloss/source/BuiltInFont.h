@@ -6,7 +6,6 @@
 #define __BUILD_IN_FONT_H_INCLUDED__
 
 #include "IrrCompileConfig.h"
-#ifdef _IRR_COMPILE_WITH_GUI_
 
 namespace irr {
 namespace gui {
@@ -115,7 +114,5 @@ const u8 BuiltInFontData[] = {
 	const u32 BuiltInFontDataSize = sizeof(BuiltInFontData);
 } // end namespace gui
 } // end namespace irr
-
-#endif // _IRR_COMPILE_WITH_GUI_
 
 #endif

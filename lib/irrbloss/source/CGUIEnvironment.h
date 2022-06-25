@@ -6,8 +6,6 @@
 #define __C_GUI_ENVIRONMENT_H_INCLUDED__
 
 #include "IrrCompileConfig.h"
-#ifdef _IRR_COMPILE_WITH_GUI_
-
 #include "IGUIEnvironment.h"
 #include "IGUIElement.h"
 #include "irrArray.h"
@@ -73,9 +71,6 @@ public:
 
 	//! add an externally loaded font
 	virtual IGUIFont* addFont(const io::path& name, IGUIFont* font) _IRR_OVERRIDE_;
-
-	//! remove loaded font
-	virtual void removeFont(IGUIFont* font) _IRR_OVERRIDE_;
 
 	//! returns default font
 	virtual IGUIFont* getBuiltInFont() const _IRR_OVERRIDE_;
@@ -240,8 +235,4 @@ private:
 } // end namespace gui
 } // end namespace irr
 
-#endif // _IRR_COMPILE_WITH_GUI_
-
 #endif // __C_GUI_ENVIRONMENT_H_INCLUDED__
-
-

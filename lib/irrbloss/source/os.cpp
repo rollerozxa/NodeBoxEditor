@@ -73,7 +73,7 @@ namespace os {
 	static BOOL MultiCore = FALSE;
 
 	void Timer::initTimer(bool usePerformanceTimer) {
-#if !defined(_WIN32_WCE) && !defined (_IRR_XBOX_PLATFORM_)
+#if !defined(_WIN32_WCE)
 		// workaround for hires timer on multiple core systems, bios bugs result in bad hires timers.
 		SYSTEM_INFO sysinfo;
 		GetSystemInfo(&sysinfo);
@@ -88,7 +88,7 @@ namespace os {
 
 	u32 Timer::getRealTime() {
 		if (HighPerformanceTimerSupport) {
-#if !defined(_WIN32_WCE) && !defined (_IRR_XBOX_PLATFORM_)
+#if !defined(_WIN32_WCE)
 			// Avoid potential timing inaccuracies across multiple cores by
 			// temporarily setting the affinity of this process to one core.
 			DWORD_PTR affinityMask=0;
@@ -98,7 +98,7 @@ namespace os {
 			LARGE_INTEGER nTime;
 			BOOL queriedOK = QueryPerformanceCounter(&nTime);
 
-#if !defined(_WIN32_WCE)  && !defined (_IRR_XBOX_PLATFORM_)
+#if !defined(_WIN32_WCE)
 			// Restore the true affinity.
 			if(MultiCore)
 				(void)SetThreadAffinityMask(GetCurrentThread(), affinityMask);

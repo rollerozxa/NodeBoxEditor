@@ -11,7 +11,6 @@
 
 #include "CIrrDeviceStub.h"
 #include "IrrlichtDevice.h"
-#include "IImagePresenter.h"
 #include "ICursorControl.h"
 #include "os.h"
 
@@ -34,7 +33,7 @@
 
 namespace irr {
 
-	class CIrrDeviceLinux : public CIrrDeviceStub, public video::IImagePresenter
+	class CIrrDeviceLinux : public CIrrDeviceStub
 	{
 	public:
 
@@ -63,14 +62,8 @@ namespace irr {
 		//! returns if window has focus.
 		virtual bool isWindowFocused() const _IRR_OVERRIDE_;
 
-		//! returns if window is minimized.
-		virtual bool isWindowMinimized() const _IRR_OVERRIDE_;
-
 		//! returns color format of the window.
 		virtual video::ECOLOR_FORMAT getColorFormat() const _IRR_OVERRIDE_;
-
-		//! presents a surface in the client area
-		virtual bool present(video::IImage* surface, void* windowId=0, core::rect<s32>* src=0 ) _IRR_OVERRIDE_;
 
 		//! notifies the device that it should close itself
 		virtual void closeDevice() _IRR_OVERRIDE_;
@@ -81,23 +74,8 @@ namespace irr {
 		//! Resize the render window.
 		virtual void setWindowSize(const irr::core::dimension2d<u32>& size) _IRR_OVERRIDE_;
 
-		//! Minimizes the window.
-		virtual void minimizeWindow() _IRR_OVERRIDE_;
-
-		//! Maximizes the window.
-		virtual void maximizeWindow() _IRR_OVERRIDE_;
-
-		//! Restores the window size.
-		virtual void restoreWindow() _IRR_OVERRIDE_;
-
 		//! Get the position of this window on screen
 		virtual core::position2di getWindowPosition() _IRR_OVERRIDE_;
-
-		//! Set the current Gamma Value for the Display
-		virtual bool setGammaRamp( f32 red, f32 green, f32 blue, f32 brightness, f32 contrast ) _IRR_OVERRIDE_;
-
-		//! Get the current Gamma Value for the Display
-		virtual bool getGammaRamp( f32 &red, f32 &green, f32 &blue, f32 &brightness, f32 &contrast ) _IRR_OVERRIDE_;
 
 		//! gets text from the clipboard
 		//! \return Returns 0 if no string is in there.
@@ -107,23 +85,11 @@ namespace irr {
 		//! This sets the clipboard selection and _not_ the primary selection which you have on X on the middle mouse button.
 		virtual void copyToClipboard(const c8* text) const;
 
-		//! Remove all messages pending in the system message loop
-		virtual void clearSystemMessages() _IRR_OVERRIDE_;
-
 		//! Get the device type
 		virtual E_DEVICE_TYPE getType() const _IRR_OVERRIDE_
 		{
 				return EIDT_X11;
 		}
-
-#ifdef _IRR_COMPILE_WITH_X11_
-		// convert an Irrlicht texture to a X11 cursor
-		Cursor TextureToCursor(irr::video::ITexture * tex, const core::rect<s32>& sourceRect, const core::position2d<s32> &hotspot);
-		Cursor TextureToMonochromeCursor(irr::video::ITexture * tex, const core::rect<s32>& sourceRect, const core::position2d<s32> &hotspot);
-#ifdef _IRR_LINUX_XCURSOR_
-		Cursor TextureToARGBCursor(irr::video::ITexture * tex, const core::rect<s32>& sourceRect, const core::position2d<s32> &hotspot);
-#endif
-#endif
 
 	private:
 
@@ -273,12 +239,6 @@ namespace irr {
 			{
 				return ActiveIcon;
 			}
-
-			//! Add a custom sprite as cursor icon.
-			virtual gui::ECURSOR_ICON addIcon(const gui::SCursorSprite& icon) _IRR_OVERRIDE_;
-
-			//! replace the given cursor icon.
-			virtual void changeIcon(gui::ECURSOR_ICON iconId, const gui::SCursorSprite& icon) _IRR_OVERRIDE_;
 
 			//! Return a system-specific size which is supported for cursors. Larger icons will fail, smaller icons might work.
 			virtual core::dimension2di getSupportedIconSize() const _IRR_OVERRIDE_;

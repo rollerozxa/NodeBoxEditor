@@ -70,13 +70,6 @@ public:
 	/** \return The current light type. */
 	virtual video::E_LIGHT_TYPE getLightType() const _IRR_OVERRIDE_;
 
-	//! Sets whether this light casts shadows.
-	/** Enabling this flag won't automatically cast shadows, the meshes
-	will still need shadow scene nodes attached. But one can enable or
-	disable distinct lights for shadow casting for performance reasons.
-	\param shadow True if this light shall cast shadows. */
-	virtual void enableCastShadow(bool shadow=true) _IRR_OVERRIDE_;
-
 	//! Check whether this light casts shadows.
 	/** \return True if light would cast shadows, else false. */
 	virtual bool getCastShadow() const _IRR_OVERRIDE_;

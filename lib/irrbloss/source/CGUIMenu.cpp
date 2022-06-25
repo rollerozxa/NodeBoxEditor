@@ -3,8 +3,6 @@
 // For conditions of distribution and use, see copyright notice in irrlicht.h
 
 #include "CGUIMenu.h"
-#ifdef _IRR_COMPILE_WITH_GUI_
-
 #include "IGUISkin.h"
 #include "IGUIEnvironment.h"
 #include "IVideoDriver.h"
@@ -243,6 +241,3 @@ void CGUIMenu::updateAbsolutePosition() {
 
 } // end namespace
 } // end namespace
-
-#endif // _IRR_COMPILE_WITH_GUI_
-

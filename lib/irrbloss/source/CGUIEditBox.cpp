@@ -3,8 +3,6 @@
 // For conditions of distribution and use, see copyright notice in irrlicht.h
 
 #include "CGUIEditBox.h"
-#ifdef _IRR_COMPILE_WITH_GUI_
-
 #include "IGUISkin.h"
 #include "IGUIEnvironment.h"
 #include "IGUIFont.h"
@@ -34,8 +32,7 @@ CGUIEditBox::CGUIEditBox(const wchar_t* text, bool border,
 	Border(border), Background(true), OverrideColorEnabled(false), MarkBegin(0), MarkEnd(0),
 	OverrideColor(video::SColor(101,255,255,255)), OverrideFont(0), LastBreakFont(0),
 	Operator(0), BlinkStartTime(0), CursorBlinkTime(350), CursorChar(L"_"), CursorPos(0), HScrollPos(0), VScrollPos(0), Max(0),
-	WordWrap(false), MultiLine(false), AutoScroll(true), PasswordBox(false),
-	PasswordChar(L'*'), HAlign(EGUIA_UPPERLEFT), VAlign(EGUIA_CENTER),
+	WordWrap(false), MultiLine(false), AutoScroll(true), HAlign(EGUIA_UPPERLEFT), VAlign(EGUIA_CENTER),
 	CurrentTextRect(0,0,1,1), FrameRect(rectangle) {
 	#ifdef _DEBUG
 	setDebugName("CGUIEditBox");
@@ -170,20 +167,6 @@ bool CGUIEditBox::isMultiLineEnabled() const {
 	return MultiLine;
 }
 
-void CGUIEditBox::setPasswordBox(bool passwordBox, wchar_t passwordChar) {
-	PasswordBox = passwordBox;
-	if (PasswordBox) {
-		PasswordChar = passwordChar;
-		setMultiLine(false);
-		setWordWrap(false);
-		BrokenText.clear();
-	}
-}
-
-bool CGUIEditBox::isPasswordBox() const {
-	return PasswordBox;
-}
-
 //! Sets text justification
 void CGUIEditBox::setTextAlignment(EGUI_ALIGNMENT horizontal, EGUI_ALIGNMENT vertical) {
 	HAlign = horizontal;
@@ -248,7 +231,7 @@ bool CGUIEditBox::processKey(const SEvent& event) {
 			break;
 		case KEY_KEY_C:
 			// copy to clipboard
-			if (!PasswordBox && Operator && MarkBegin != MarkEnd) {
+			if (Operator && MarkBegin != MarkEnd) {
 				const s32 realmbgn = MarkBegin < MarkEnd ? MarkBegin : MarkEnd;
 				const s32 realmend = MarkBegin < MarkEnd ? MarkEnd : MarkBegin;
 
@@ -259,7 +242,7 @@ bool CGUIEditBox::processKey(const SEvent& event) {
 			break;
 		case KEY_KEY_X:
 			// cut to the clipboard
-			if (!PasswordBox && Operator && MarkBegin != MarkEnd) {
+			if (Operator && MarkBegin != MarkEnd) {
 				const s32 realmbgn = MarkBegin < MarkEnd ? MarkBegin : MarkEnd;
 				const s32 realmend = MarkBegin < MarkEnd ? MarkEnd : MarkBegin;
 
@@ -707,7 +690,7 @@ void CGUIEditBox::draw() {
 		core::stringw s, s2;
 
 		// get mark position
-		const bool ml = (!PasswordBox && (WordWrap || MultiLine));
+		const bool ml = (WordWrap || MultiLine);
 		const s32 realmbgn = MarkBegin < MarkEnd ? MarkBegin : MarkEnd;
 		const s32 realmend = MarkBegin < MarkEnd ? MarkEnd : MarkBegin;
 		const s32 hlineStart = ml ? getLineFromPos(realmbgn) : 0;
@@ -735,23 +718,8 @@ void CGUIEditBox::draw() {
 					continue;
 
 				// get current line
-				if (PasswordBox) {
-					if (BrokenText.size() != 1) {
-						BrokenText.clear();
-						BrokenText.push_back(core::stringw());
-					}
-					if (BrokenText[0].size() != Text.size()) {
-						BrokenText[0] = Text;
-						for (u32 q = 0; q < Text.size(); ++q) {
-							BrokenText[0] [q] = PasswordChar;
-						}
-					}
-					txtLine = &BrokenText[0];
-					startPos = 0;
-				} else {
-					txtLine = ml ? &BrokenText[i] : &Text;
-					startPos = ml ? BrokenTextPositions[i] : 0;
-				}
+				txtLine = ml ? &BrokenText[i] : &Text;
+				startPos = ml ? BrokenTextPositions[i] : 0;
 
 				// draw normal text
 				font->draw(txtLine->c_str(), CurrentTextRect,
@@ -1427,6 +1395,4 @@ bool CGUIEditBox::acceptsIME() {
 
 } // end namespace gui
 } // end namespace irr
-
-#endif // _IRR_COMPILE_WITH_GUI_
 

@@ -705,48 +705,6 @@ void CIrrDeviceWin32::setWindowCaption(const wchar_t* text) {
 			SMTO_ABORTIFHUNG, 2000, &dwResult);
 }
 
-//! presents a surface in the client area
-bool CIrrDeviceWin32::present(video::IImage* image, void* windowId, core::rect<s32>* src) {
-	HWND hwnd = HWnd;
-	if ( windowId )
-		hwnd = reinterpret_cast<HWND>(windowId);
-
-	HDC dc = GetDC(hwnd);
-
-	if ( dc ) {
-		RECT rect;
-		GetClientRect(hwnd, &rect);
-		const void* memory = (const void *)image->getData();
-
-		BITMAPV4HEADER bi;
-		ZeroMemory (&bi, sizeof(bi));
-		bi.bV4Size = sizeof(BITMAPINFOHEADER);
-		bi.bV4BitCount = (WORD)image->getBitsPerPixel();
-		bi.bV4Planes = 1;
-		bi.bV4Width = image->getDimension().Width;
-		bi.bV4Height = -((s32)image->getDimension().Height);
-		bi.bV4V4Compression = BI_BITFIELDS;
-		bi.bV4AlphaMask = image->getAlphaMask();
-		bi.bV4RedMask = image->getRedMask();
-		bi.bV4GreenMask = image->getGreenMask();
-		bi.bV4BlueMask = image->getBlueMask();
-
-		if ( src ) {
-			StretchDIBits(dc, 0,0, rect.right, rect.bottom,
-					src->UpperLeftCorner.X, src->UpperLeftCorner.Y,
-					src->getWidth(), src->getHeight(),
-					memory, (const BITMAPINFO*)(&bi), DIB_RGB_COLORS, SRCCOPY);
-		} else {
-			StretchDIBits(dc, 0,0, rect.right, rect.bottom,
-					0, 0, image->getDimension().Width, image->getDimension().Height,
-					memory, (const BITMAPINFO*)(&bi), DIB_RGB_COLORS, SRCCOPY);
-		}
-
-		ReleaseDC(hwnd, dc);
-	}
-	return true;
-}
-
 //! notifies the device that it should close itself
 void CIrrDeviceWin32::closeDevice() {
 	if (!ExternalWindow) {
@@ -770,16 +728,6 @@ bool CIrrDeviceWin32::isWindowActive() const {
 //! returns if window has focus
 bool CIrrDeviceWin32::isWindowFocused() const {
 	bool ret = (GetFocus() == HWnd);
-	return ret;
-}
-
-//! returns if window is minimized
-bool CIrrDeviceWin32::isWindowMinimized() const {
-	WINDOWPLACEMENT plc;
-	plc.length=sizeof(WINDOWPLACEMENT);
-	bool ret=false;
-	if (GetWindowPlacement(HWnd,&plc))
-		ret = plc.showCmd == SW_SHOWMINIMIZED;
 	return ret;
 }
 
@@ -1069,33 +1017,6 @@ void CIrrDeviceWin32::setResizable(bool resize) {
 	static_cast<CCursorControl*>(CursorControl)->updateBorderSize(CreationParams.Fullscreen, resize);
 }
 
-//! Minimizes the window.
-void CIrrDeviceWin32::minimizeWindow() {
-	WINDOWPLACEMENT wndpl;
-	wndpl.length = sizeof(WINDOWPLACEMENT);
-	GetWindowPlacement(HWnd, &wndpl);
-	wndpl.showCmd = SW_SHOWMINNOACTIVE;
-	SetWindowPlacement(HWnd, &wndpl);
-}
-
-//! Maximizes the window.
-void CIrrDeviceWin32::maximizeWindow() {
-	WINDOWPLACEMENT wndpl;
-	wndpl.length = sizeof(WINDOWPLACEMENT);
-	GetWindowPlacement(HWnd, &wndpl);
-	wndpl.showCmd = SW_SHOWMAXIMIZED;
-	SetWindowPlacement(HWnd, &wndpl);
-}
-
-//! Restores the window to its original size.
-void CIrrDeviceWin32::restoreWindow() {
-	WINDOWPLACEMENT wndpl;
-	wndpl.length = sizeof(WINDOWPLACEMENT);
-	GetWindowPlacement(HWnd, &wndpl);
-	wndpl.showCmd = SW_SHOWNORMAL;
-	SetWindowPlacement(HWnd, &wndpl);
-}
-
 core::position2di CIrrDeviceWin32::getWindowPosition() {
 	WINDOWPLACEMENT wndpl;
 	wndpl.length = sizeof(WINDOWPLACEMENT);
@@ -1107,42 +1028,6 @@ core::position2di CIrrDeviceWin32::getWindowPosition() {
 		os::Printer::log("Failed to retrieve window location", ELL_ERROR);
 		return core::position2di(-1, -1);
 	}
-}
-
-//! Set the current Gamma Value for the Display
-bool CIrrDeviceWin32::setGammaRamp( f32 red, f32 green, f32 blue, f32 brightness, f32 contrast ) {
-	bool r;
-	u16 ramp[3][256];
-
-	calculateGammaRamp( ramp[0], red, brightness, contrast );
-	calculateGammaRamp( ramp[1], green, brightness, contrast );
-	calculateGammaRamp( ramp[2], blue, brightness, contrast );
-
-	HDC dc = GetDC(0);
-	r = SetDeviceGammaRamp ( dc, ramp ) == TRUE;
-	ReleaseDC(HWnd, dc);
-	return r;
-}
-
-//! Get the current Gamma Value for the Display
-bool CIrrDeviceWin32::getGammaRamp( f32 &red, f32 &green, f32 &blue, f32 &brightness, f32 &contrast ) {
-	bool r;
-	u16 ramp[3][256];
-
-	HDC dc = GetDC(0);
-	r = GetDeviceGammaRamp ( dc, ramp ) == TRUE;
-	ReleaseDC(HWnd, dc);
-
-	if (r) {
-		calculateGammaFromRamp(red, ramp[0]);
-		calculateGammaFromRamp(green, ramp[1]);
-		calculateGammaFromRamp(blue, ramp[2]);
-	}
-
-	brightness = 0.f;
-	contrast = 0.f;
-
-	return r;
 }
 
 //! Process system events
@@ -1168,43 +1053,6 @@ void CIrrDeviceWin32::handleSystemMessages() {
 	}
 }
 
-//! Remove all messages pending in the system message loop
-void CIrrDeviceWin32::clearSystemMessages() {
-	MSG msg;
-	while (PeekMessage(&msg, NULL, WM_KEYFIRST, WM_KEYLAST, PM_REMOVE)) {}
-	while (PeekMessage(&msg, NULL, WM_MOUSEFIRST, WM_MOUSELAST, PM_REMOVE)) {}
-}
-
-// shows last error in a messagebox to help internal debugging.
-void CIrrDeviceWin32::ReportLastWinApiError() {
-	// (based on code from ovidiucucu from http://www.codeguru.com/forum/showthread.php?t=318721)
-	LPCTSTR pszCaption = __TEXT("Windows SDK Error Report");
-	DWORD dwError = GetLastError();
-
-	if(NOERROR == dwError) {
-		MessageBox(NULL, __TEXT("No error"), pszCaption, MB_OK);
-	} else {
-		const DWORD dwFormatControl = FORMAT_MESSAGE_ALLOCATE_BUFFER |
-										FORMAT_MESSAGE_IGNORE_INSERTS |
-										FORMAT_MESSAGE_FROM_SYSTEM;
-
-		LPVOID pTextBuffer = NULL;
-		DWORD dwCount = FormatMessage(dwFormatControl,
-										NULL,
-										dwError,
-										0,
-										(LPTSTR) &pTextBuffer,
-										0,
-										NULL);
-		if(0 != dwCount) {
-			MessageBox(NULL, (LPCTSTR)pTextBuffer, pszCaption, MB_OK|MB_ICONERROR);
-			LocalFree(pTextBuffer);
-		} else {
-			MessageBox(NULL, __TEXT("Unknown error"), pszCaption, MB_OK|MB_ICONERROR);
-		}
-	}
-}
-
 // Same function Windows offers in VersionHelpers.h, but we can't use that as it's not available in older sdk's (minimum is SDK 8.1)
 bool CIrrDeviceWin32::isWindowsVistaOrGreater() {
 #if (_WIN32_WINNT >= 0x0500)
@@ -1221,74 +1069,6 @@ bool CIrrDeviceWin32::isWindowsVistaOrGreater() {
 #else
 	return false;
 #endif
-}
-
-// Convert an Irrlicht texture to a Windows cursor
-// Based on http://www.codeguru.com/cpp/w-p/win32/cursors/article.php/c4529/
-HCURSOR CIrrDeviceWin32::TextureToCursor(HWND hwnd, irr::video::ITexture * tex, const core::rect<s32>& sourceRect, const core::position2d<s32> &hotspot) {
-	//
-	// create the bitmaps needed for cursors from the texture
-
-	HDC dc = GetDC(hwnd);
-	HDC andDc = CreateCompatibleDC(dc);
-	HDC xorDc = CreateCompatibleDC(dc);
-	HBITMAP andBitmap = CreateCompatibleBitmap(dc, sourceRect.getWidth(), sourceRect.getHeight());
-	HBITMAP xorBitmap = CreateCompatibleBitmap(dc, sourceRect.getWidth(), sourceRect.getHeight());
-
-	HBITMAP oldAndBitmap = (HBITMAP)SelectObject(andDc, andBitmap);
-	HBITMAP oldXorBitmap = (HBITMAP)SelectObject(xorDc, xorBitmap);
-
-	video::ECOLOR_FORMAT format = tex->getColorFormat();
-	u32 bytesPerPixel = video::IImage::getBitsPerPixelFromFormat(format) / 8;
-	u32 bytesLeftGap = sourceRect.UpperLeftCorner.X * bytesPerPixel;
-	u32 bytesRightGap = tex->getPitch() - sourceRect.LowerRightCorner.X * bytesPerPixel;
-	const u8* data = (const u8*)tex->lock(video::ETLM_READ_ONLY, 0);
-	data += sourceRect.UpperLeftCorner.Y*tex->getPitch();
-	for ( s32 y = 0; y < sourceRect.getHeight(); ++y ) {
-		data += bytesLeftGap;
-		for ( s32 x = 0; x < sourceRect.getWidth(); ++x ) {
-			video::SColor pixelCol;
-			pixelCol.setData((const void*)data, format);
-			data += bytesPerPixel;
-
-			if ( pixelCol.getAlpha() == 0 )	// transparent
-			{
-				SetPixel(andDc, x, y, RGB(255,255,255));
-				SetPixel(xorDc, x, y, RGB(0,0,0));
-			}
-			else	// color
-			{
-				SetPixel(andDc, x, y, RGB(0,0,0));
-				SetPixel(xorDc, x, y, RGB(pixelCol.getRed(), pixelCol.getGreen(), pixelCol.getBlue()));
-			}
-		}
-		data += bytesRightGap;
-	}
-	tex->unlock();
-
-	SelectObject(andDc, oldAndBitmap);
-	SelectObject(xorDc, oldXorBitmap);
-
-	DeleteDC(xorDc);
-	DeleteDC(andDc);
-
-	ReleaseDC(hwnd, dc);
-
-	// create the cursor
-
-	ICONINFO iconinfo;
-	iconinfo.fIcon = false;	// type is cursor not icon
-	iconinfo.xHotspot = hotspot.X;
-	iconinfo.yHotspot = hotspot.Y;
-	iconinfo.hbmMask = andBitmap;
-	iconinfo.hbmColor = xorBitmap;
-
-	HCURSOR cursor = CreateIconIndirect(&iconinfo);
-
-	DeleteObject(andBitmap);
-	DeleteObject(xorBitmap);
-
-	return cursor;
 }
 
 CIrrDeviceWin32::CCursorControl::CCursorControl(CIrrDeviceWin32* device, const core::dimension2d<u32>& wsize, HWND hwnd, bool fullscreen)
@@ -1348,51 +1128,6 @@ void CIrrDeviceWin32::CCursorControl::setActiveIcon(gui::ECURSOR_ICON iconId) {
 	ActiveIconStartTime = Device->getTimer()->getRealTime();
 	if ( Cursors[ActiveIcon].Frames.size() )
 		SetCursor( Cursors[ActiveIcon].Frames[0].IconHW );
-}
-
-//! Add a custom sprite as cursor icon.
-gui::ECURSOR_ICON CIrrDeviceWin32::CCursorControl::addIcon(const gui::SCursorSprite& icon) {
-	if ( icon.SpriteId >= 0 ) {
-		CursorW32 cW32;
-		cW32.FrameTime = icon.SpriteBank->getSprites()[icon.SpriteId].frameTime;
-
-		for ( u32 i=0; i < icon.SpriteBank->getSprites()[icon.SpriteId].Frames.size(); ++i ) {
-			irr::u32 texId = icon.SpriteBank->getSprites()[icon.SpriteId].Frames[i].textureNumber;
-			irr::u32 rectId = icon.SpriteBank->getSprites()[icon.SpriteId].Frames[i].rectNumber;
-			irr::core::rect<s32> rectIcon = icon.SpriteBank->getPositions()[rectId];
-
-			HCURSOR hc = Device->TextureToCursor(HWnd, icon.SpriteBank->getTexture(texId), rectIcon, icon.HotSpot);
-			cW32.Frames.push_back( CursorFrameW32(hc) );
-		}
-
-		Cursors.push_back( cW32 );
-		return (gui::ECURSOR_ICON)(Cursors.size() - 1);
-	}
-	return gui::ECI_NORMAL;
-}
-
-//! replace the given cursor icon.
-void CIrrDeviceWin32::CCursorControl::changeIcon(gui::ECURSOR_ICON iconId, const gui::SCursorSprite& icon) {
-	if ( iconId >= (s32)Cursors.size() )
-		return;
-
-	for ( u32 i=0; i < Cursors[iconId].Frames.size(); ++i )
-		DestroyCursor(Cursors[iconId].Frames[i].IconHW);
-
-	if ( icon.SpriteId >= 0 ) {
-		CursorW32 cW32;
-		cW32.FrameTime = icon.SpriteBank->getSprites()[icon.SpriteId].frameTime;
-		for ( u32 i=0; i < icon.SpriteBank->getSprites()[icon.SpriteId].Frames.size(); ++i ) {
-			irr::u32 texId = icon.SpriteBank->getSprites()[icon.SpriteId].Frames[i].textureNumber;
-			irr::u32 rectId = icon.SpriteBank->getSprites()[icon.SpriteId].Frames[i].rectNumber;
-			irr::core::rect<s32> rectIcon = icon.SpriteBank->getPositions()[rectId];
-
-			HCURSOR hc = Device->TextureToCursor(HWnd, icon.SpriteBank->getTexture(texId), rectIcon, icon.HotSpot);
-			cW32.Frames.push_back( CursorFrameW32(hc) );
-		}
-
-		Cursors[iconId] = cW32;
-	}
 }
 
 //! Return a system-specific size which is supported for cursors. Larger icons will fail, smaller icons might work.

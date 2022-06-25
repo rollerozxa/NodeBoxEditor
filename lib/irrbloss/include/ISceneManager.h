@@ -116,10 +116,6 @@ namespace scene {
 	children won't be visible, too. In this way, it is for example easily
 	possible to attach a light to a moving car or to place a walking
 	character on a moving platform on a moving ship.
-	The SceneManager is also able to load 3d mesh files of different
-	formats. Take a look at getMesh() to find out what formats are
-	supported. If these formats are not enough, use
-	addExternalMeshLoader() to add new formats to the engine.
 	*/
 	class ISceneManager : public virtual IReferenceCounted
 	{
@@ -143,8 +139,6 @@ namespace scene {
 		 *  </TR>
 		 *  </TABLE>
 		 *
-		 * If you would like to implement and add your own file format loader to Irrlicht,
-		 * see addExternalMeshLoader().
 		 * \param filename: Filename of the mesh to load.
 		 * \param alternativeCacheName: In case you want to have the mesh under another name in the cache (to create real copies)
 		 * \return Null if failed, otherwise pointer to the mesh.
@@ -403,25 +397,6 @@ namespace scene {
 			ISceneNode* node, s32 minimalPolysPerNode=32) {
 			return createOctreeTriangleSelector(mesh, node, minimalPolysPerNode);
 		}
-
-		//! Creates a meta triangle selector.
-		/** A meta triangle selector is nothing more than a
-		collection of one or more triangle selectors providing together
-		the interface of one triangle selector. In this way,
-		collision tests can be done with different triangle soups in one pass.
-		\return The selector, or null if not successful.
-		If you no longer need the selector, you should call ITriangleSelector::drop().
-		See IReferenceCounted::drop() for more information. */
-		virtual IMetaTriangleSelector* createMetaTriangleSelector() = 0;
-
-		//! Adds an external mesh loader for extending the engine with new file formats.
-		/** If you want the engine to be extended with
-		file formats it currently is not able to load (e.g. .cob), just implement
-		the IMeshLoader interface in your loading class and add it with this method.
-		Using this method it is also possible to override built-in mesh loaders with
-		newer or updated versions without the need to recompile the engine.
-		\param externalLoader: Implementation of a new mesh loader. */
-		virtual void addExternalMeshLoader(IMeshLoader* externalLoader) = 0;
 
 		//! Returns the number of mesh loaders supported by Irrlicht at this time
 		virtual u32 getMeshLoaderCount() const = 0;

@@ -65,47 +65,12 @@ namespace irr {
 		CLIPCODE_RIGHT	=	8
 	};
 
-inline u32 GetClipCode( const AbsRectangle &r, const core::position2d<s32> &p ) {
-	u32 code = CLIPCODE_EMPTY;
-
-	if ( p.X < r.x0 )
-		code = CLIPCODE_LEFT;
-	else
-	if ( p.X > r.x1 )
-		code = CLIPCODE_RIGHT;
-
-	if ( p.Y < r.y0 )
-		code |= CLIPCODE_TOP;
-	else
-	if ( p.Y > r.y1 )
-		code |= CLIPCODE_BOTTOM;
-
-	return code;
-}
-
-/*
-*/
-inline void GetClip(AbsRectangle &clipping, video::IImage * t) {
-	clipping.x0 = 0;
-	clipping.y0 = 0;
-	clipping.x1 = t->getDimension().Width - 1;
-	clipping.y1 = t->getDimension().Height - 1;
-}
-
 /*
 	return alpha in [0;256] Granularity from 32-Bit ARGB
 	add highbit alpha ( alpha > 127 ? + 1 )
 */
 static inline u32 extractAlpha(const u32 c) {
 	return ( c >> 24 ) + ( c >> 31 );
-}
-
-/*
-	return alpha in [0;255] Granularity and 32-Bit ARGB
-	add highbit alpha ( alpha > 127 ? + 1 )
-*/
-static inline u32 packAlpha(const u32 c) {
-	return (c > 127 ? c - 1 : c) << 24;
 }
 
 /*!

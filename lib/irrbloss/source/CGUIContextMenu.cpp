@@ -3,9 +3,6 @@
 // For conditions of distribution and use, see copyright notice in irrlicht.h
 
 #include "CGUIContextMenu.h"
-
-#ifdef _IRR_COMPILE_WITH_GUI_
-
 #include "IReferenceCounted.h"
 #include "IGUISkin.h"
 #include "IGUIEnvironment.h"
@@ -213,16 +210,6 @@ void CGUIContextMenu::removeItem(u32 idx) {
 	}
 
 	Items.erase(idx);
-	recalculateSize();
-}
-
-//! Removes all menu items
-void CGUIContextMenu::removeAllItems() {
-	for (u32 i=0; i<Items.size(); ++i)
-		if (Items[i].SubMenu)
-			Items[i].SubMenu->drop();
-
-	Items.clear();
 	recalculateSize();
 }
 
@@ -657,6 +644,4 @@ void CGUIContextMenu::closeAllSubMenus() {
 
 } // end namespace
 } // end namespace
-
-#endif // _IRR_COMPILE_WITH_GUI_
 

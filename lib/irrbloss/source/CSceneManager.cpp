@@ -508,8 +508,6 @@ void CSceneManager::drawAll() {
 	Driver->setTransform ( video::ETS_WORLD, core::IdentityMatrix );
 	for (i=video::ETS_COUNT-1; i>=video::ETS_TEXTURE_0; --i)
 		Driver->setTransform ( (video::E_TRANSFORMATION_STATE)i, core::IdentityMatrix );
-	// TODO: This should not use an attribute here but a real parameter when necessary (too slow!)
-	//Driver->setAllowZWriteOnTransparent(Parameters->getAttributeAsBool(ALLOW_ZWRITE_ON_TRANSPARENT));
 
 	// do animations and other stuff.
 	OnAnimate(os::Timer::getTime());
@@ -731,15 +729,6 @@ video::SColor CSceneManager::getShadowColor() const {
 	return ShadowColor;
 }
 
-//! Adds an external mesh loader.
-void CSceneManager::addExternalMeshLoader(IMeshLoader* externalLoader) {
-	if (!externalLoader)
-		return;
-
-	externalLoader->grab();
-	MeshLoaderList.push_back(externalLoader);
-}
-
 //! Returns the number of mesh loaders supported by Irrlicht at this time
 u32 CSceneManager::getMeshLoaderCount() const {
 	return MeshLoaderList.size();
@@ -778,11 +767,6 @@ ITriangleSelector* CSceneManager::createOctreeTriangleSelector(IMeshBuffer* mesh
 		return 0;
 
 	return new COctreeTriangleSelector(meshBuffer, materialIndex, node, minimalPolysPerNode);
-}
-
-//! Creates a meta triangle selector.
-IMetaTriangleSelector* CSceneManager::createMetaTriangleSelector() {
-	return new CMetaTriangleSelector();
 }
 
 //! Adds a scene node to the deletion queue.

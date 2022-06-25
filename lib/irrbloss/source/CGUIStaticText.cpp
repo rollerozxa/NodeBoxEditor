@@ -3,8 +3,6 @@
 // For conditions of distribution and use, see copyright notice in irrlicht.h
 
 #include "CGUIStaticText.h"
-#ifdef _IRR_COMPILE_WITH_GUI_
-
 #include "IGUISkin.h"
 #include "IGUIEnvironment.h"
 #include "IGUIFont.h"
@@ -256,7 +254,6 @@ void CGUIStaticText::breakText() {
 
 	BrokenText.clear();
 
-	IGUISkin* skin = Environment->getSkin();
 	IGUIFont* font = getActiveFont();
 	if (!font)
 		return;
@@ -490,6 +487,4 @@ s32 CGUIStaticText::getTextWidth() const {
 
 } // end namespace gui
 } // end namespace irr
-
-#endif // _IRR_COMPILE_WITH_GUI_
 

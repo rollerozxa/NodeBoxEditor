@@ -6,8 +6,6 @@
 #define __C_GUI_SKIN_H_INCLUDED__
 
 #include "IrrCompileConfig.h"
-#ifdef _IRR_COMPILE_WITH_GUI_
-
 #include "IGUISkin.h"
 #include "irrString.h"
 
@@ -131,30 +129,6 @@ namespace gui {
 				const core::rect<s32>& rect,
 				const core::rect<s32>* clip=0) _IRR_OVERRIDE_;
 
-		//! draws a tab button
-		/** Used for drawing for tab buttons on top of tabs.
-		\param element: Pointer to the element which wishes to draw this. This parameter
-		is usually not used by ISkin, but can be used for example by more complex
-		implementations to find out how to draw the part exactly.
-		\param active: Specifies if the tab is currently active.
-		\param rect: Defining area where to draw.
-		\param clip: Clip area.	*/
-		virtual void draw3DTabButton(IGUIElement* element, bool active,
-			const core::rect<s32>& rect, const core::rect<s32>* clip=0,
-			EGUI_ALIGNMENT alignment=EGUIA_UPPERLEFT) _IRR_OVERRIDE_;
-
-		//! draws a tab control body
-		/** \param element: Pointer to the element which wishes to draw this. This parameter
-		is usually not used by ISkin, but can be used for example by more complex
-		implementations to find out how to draw the part exactly.
-		\param border: Specifies if the border should be drawn.
-		\param background: Specifies if the background should be drawn.
-		\param rect: Defining area where to draw.
-		\param clip: Clip area.	*/
-		virtual void draw3DTabBody(IGUIElement* element, bool border, bool background,
-			const core::rect<s32>& rect, const core::rect<s32>* clip=0, s32 tabHeight=-1,
-			EGUI_ALIGNMENT alignment=EGUIA_UPPERLEFT) _IRR_OVERRIDE_;
-
 		//! draws an icon, usually from the skin's sprite bank
 		/** \param element: Pointer to the element which wishes to draw this icon.
 		This parameter is usually not used by IGUISkin, but can be used for example
@@ -201,8 +175,6 @@ namespace gui {
 
 } // end namespace gui
 } // end namespace irr
-
-#endif // _IRR_COMPILE_WITH_GUI_
 
 #endif
 

@@ -17,10 +17,6 @@ namespace scene {
 	class IAnimatedMesh;
 
 //! Class which is able to load an animated mesh from a file.
-/** If you want Irrlicht be able to load meshes of
-currently unsupported file formats (e.g. .cob), then implement
-this and add your new Meshloader with
-ISceneManager::addExternalMeshLoader() to the engine. */
 class IMeshLoader : public virtual IReferenceCounted {
 public:
 

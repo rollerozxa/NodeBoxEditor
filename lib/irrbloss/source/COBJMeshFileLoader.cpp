@@ -314,20 +314,6 @@ IAnimatedMesh* COBJMeshFileLoader::createMesh(io::IReadFile* file) {
 	return animMesh;
 }
 
-//! Read RGB color
-const c8* COBJMeshFileLoader::readColor(const c8* bufPtr, video::SColor& color, const c8* const bufEnd) {
-	const u32 COLOR_BUFFER_LENGTH = 16;
-	c8 colStr[COLOR_BUFFER_LENGTH];
-
-	bufPtr = goAndCopyNextWord(colStr, bufPtr, COLOR_BUFFER_LENGTH, bufEnd);
-	color.setRed((s32)(core::fast_atof(colStr) * 255.0f));
-	bufPtr = goAndCopyNextWord(colStr,   bufPtr, COLOR_BUFFER_LENGTH, bufEnd);
-	color.setGreen((s32)(core::fast_atof(colStr) * 255.0f));
-	bufPtr = goAndCopyNextWord(colStr,   bufPtr, COLOR_BUFFER_LENGTH, bufEnd);
-	color.setBlue((s32)(core::fast_atof(colStr) * 255.0f));
-	return bufPtr;
-}
-
 //! Read 3d vector of floats
 const c8* COBJMeshFileLoader::readVec3(const c8* bufPtr, core::vector3df& vec, const c8* const bufEnd) {
 	const u32 WORD_BUFFER_LENGTH = 256;
@@ -351,16 +337,6 @@ const c8* COBJMeshFileLoader::readUV(const c8* bufPtr, core::vector2df& vec, con
 	vec.X=core::fast_atof(wordBuffer);
 	bufPtr = goAndCopyNextWord(wordBuffer, bufPtr, WORD_BUFFER_LENGTH, bufEnd);
 	vec.Y=1-core::fast_atof(wordBuffer); // change handedness
-	return bufPtr;
-}
-
-//! Read boolean value represented as 'on' or 'off'
-const c8* COBJMeshFileLoader::readBool(const c8* bufPtr, bool& tf, const c8* const bufEnd) {
-	const u32 BUFFER_LENGTH = 8;
-	c8 tfStr[BUFFER_LENGTH];
-
-	bufPtr = goAndCopyNextWord(tfStr, bufPtr, BUFFER_LENGTH, bufEnd);
-	tf = strcmp(tfStr, "off") != 0;
 	return bufPtr;
 }
 

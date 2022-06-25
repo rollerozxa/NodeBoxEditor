@@ -6,8 +6,6 @@
 #define __C_GUI_CONTEXT_MENU_H_INCLUDED__
 
 #include "IrrCompileConfig.h"
-#ifdef _IRR_COMPILE_WITH_GUI_
-
 #include "IGUIContextMenu.h"
 #include "irrString.h"
 #include "irrArray.h"
@@ -73,9 +71,6 @@ namespace gui
 
 		//! Removes a menu item
 		virtual void removeItem(u32 idx) _IRR_OVERRIDE_;
-
-		//! Removes all menu items
-		virtual void removeAllItems() _IRR_OVERRIDE_;
 
 		//! called if an event happened.
 		virtual bool OnEvent(const SEvent& event) _IRR_OVERRIDE_;
@@ -160,8 +155,6 @@ namespace gui
 
 } // end namespace gui
 } // end namespace irr
-
-#endif // _IRR_COMPILE_WITH_GUI_
 
 #endif // __C_GUI_CONTEXT_MENU_H_INCLUDED__
 

@@ -86,24 +86,6 @@ public:
 		Root = new OctreeNode(NodeCount, 0, meshes, indexChunks, minimalPolysPerNode);
 	}
 
-	//! returns all ids of polygons partially or fully enclosed
-	//! by this bounding box.
-	void calculatePolys(const core::aabbox3d<f32>& box) {
-		for (u32 i=0; i!=IndexDataCount; ++i)
-			IndexData[i].CurrentSize = 0;
-
-		Root->getPolys(box, IndexData, 0);
-	}
-
-	//! returns all ids of polygons partially or fully enclosed
-	//! by a view frustum.
-	void calculatePolys(const scene::SViewFrustum& frustum) {
-		for (u32 i=0; i!=IndexDataCount; ++i)
-			IndexData[i].CurrentSize = 0;
-
-		Root->getPolys(frustum, IndexData, 0);
-	}
-
 	const SIndexData* getIndexData() const
 	{
 		return IndexData;

@@ -203,18 +203,6 @@ void CMeshSceneNode::copyMaterials() {
 	}
 }
 
-//! Sets if the scene node should not copy the materials of the mesh but use them in a read only style.
-/* In this way it is possible to change the materials a mesh causing all mesh scene nodes
-referencing this mesh to change too. */
-void CMeshSceneNode::setReadOnlyMaterials(bool readonly) {
-	ReadOnlyMaterials = readonly;
-}
-
-//! Returns if the scene node should not copy the materials of the mesh but use them in a read only style
-bool CMeshSceneNode::isReadOnlyMaterials() const {
-	return ReadOnlyMaterials;
-}
-
 //! Creates a clone of this scene node and its children.
 ISceneNode* CMeshSceneNode::clone(ISceneNode* newParent, ISceneManager* newManager) {
 	if (!newParent)

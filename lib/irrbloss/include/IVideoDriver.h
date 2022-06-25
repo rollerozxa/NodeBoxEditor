@@ -278,11 +278,6 @@ namespace video {
 		/** \return Amount of textures currently loaded */
 		virtual u32 getTextureCount() const = 0;
 
-		//! Renames a texture
-		/** \param texture Pointer to the texture to rename.
-		\param newName New name for the texture. This should be a unique name. */
-		virtual void renameTexture(ITexture* texture, const io::path& newName) = 0;
-
 		//! Creates an empty texture of specified size.
 		/** \param size: Size of the texture.
 		\param name A name for the texture. Later calls to
@@ -324,30 +319,6 @@ namespace video {
 		information. */
 		virtual ITexture* addTexture(const io::path& name, IImage* image) = 0;
 
-		//! Creates a cubemap texture from loaded IImages.
-		/** \param name A name for the texture. Later calls of getTexture() with this name will return this texture.
-		The name can _not_ be empty.
-		\param imagePosX Image (positive X) the texture is created from.
-		\param imageNegX Image (negative X) the texture is created from.
-		\param imagePosY Image (positive Y) the texture is created from.
-		\param imageNegY Image (negative Y) the texture is created from.
-		\param imagePosZ Image (positive Z) the texture is created from.
-		\param imageNegZ Image (negative Z) the texture is created from.
-		\return Pointer to the newly created texture. This pointer should not be dropped. See IReferenceCounted::drop() for more information. */
-		virtual ITexture* addTextureCubemap(const io::path& name, IImage* imagePosX, IImage* imageNegX, IImage* imagePosY,
-			IImage* imageNegY, IImage* imagePosZ, IImage* imageNegZ) = 0;
-
-		//! Creates an empty cubemap texture of specified size.
-		/** \param sideLen diameter of one side of the cube
-		\param name A name for the texture. Later calls of
-		getTexture() with this name will return this texture.
-		The name can _not_ be empty.
-		\param format Desired color format of the texture. Please note
-		that the driver may choose to create the texture in another
-		color format.
-		\return Pointer to the newly created texture. 	*/
-		virtual ITexture* addTextureCubemap(const irr::u32 sideLen, const io::path& name, ECOLOR_FORMAT format = ECF_A8R8G8B8) = 0;
-
 		//! Adds a new render target texture to the texture cache.
 		/** \param size Size of the texture, in pixels. Width and
 		height should be a power of two (e.g. 64, 128, 256, 512, ...)
@@ -362,18 +333,6 @@ namespace video {
 		You may want to remove it from driver texture cache with removeTexture if you no longer need it.
 		*/
 		virtual ITexture* addRenderTargetTexture(const core::dimension2d<u32>& size,
-				const io::path& name = "rt", const ECOLOR_FORMAT format = ECF_UNKNOWN) =0;
-
-		//! Adds a new render target texture with 6 sides for a cubemap map to the texture cache.
-		/** NOTE: Only supported on D3D9 so far.
-		\param sideLen Length of one cubemap side.
-		\param name A name for the texture. Later calls of getTexture() with this name will return this texture.
-		The name can _not_ be empty.
-		\param format The color format of the render target. Floating point formats are supported.
-		\return Pointer to the created texture or 0 if the texture
-		could not be created. This pointer should not be dropped. See
-		IReferenceCounted::drop() for more information. */
-		virtual ITexture* addRenderTargetTextureCubemap(const irr::u32 sideLen,
 				const io::path& name = "rt", const ECOLOR_FORMAT format = ECF_UNKNOWN) =0;
 
 		//! Removes a texture from the texture cache and deletes it.
@@ -446,44 +405,6 @@ namespace video {
 
 		//! Remove all render targets.
 		virtual void removeAllRenderTargets() = 0;
-
-		//! Sets a boolean alpha channel on the texture based on a color key.
-		/** This makes the texture fully transparent at the texels where
-		this color key can be found when using for example draw2DImage
-		with useAlphachannel==true.  The alpha of other texels is not modified.
-		\param texture Texture whose alpha channel is modified.
-		\param color Color key color. Every texel with this color will
-		become fully transparent as described above. Please note that the
-		colors of a texture may be converted when loading it, so the
-		color values may not be exactly the same in the engine and for
-		example in picture edit programs. To avoid this problem, you
-		could use the makeColorKeyTexture method, which takes the
-		position of a pixel instead a color value.
-		\param zeroTexels \deprecated If set to true, then any texels that match
-		the color key will have their color, as well as their alpha, set to zero
-		(i.e. black). This behavior matches the legacy (buggy) behavior prior
-		to release 1.5 and is provided for backwards compatibility only.
-		This parameter may be removed by Irrlicht 1.9. */
-		virtual void makeColorKeyTexture(video::ITexture* texture,
-						video::SColor color,
-						bool zeroTexels = false) const =0;
-
-		//! Sets a boolean alpha channel on the texture based on the color at a position.
-		/** This makes the texture fully transparent at the texels where
-		the color key can be found when using for example draw2DImage
-		with useAlphachannel==true.  The alpha of other texels is not modified.
-		\param texture Texture whose alpha channel is modified.
-		\param colorKeyPixelPos Position of a pixel with the color key
-		color. Every texel with this color will become fully transparent as
-		described above.
-		\param zeroTexels \deprecated If set to true, then any texels that match
-		the color key will have their color, as well as their alpha, set to zero
-		(i.e. black). This behavior matches the legacy (buggy) behavior prior
-		to release 1.5 and is provided for backwards compatibility only.
-		This parameter may be removed by Irrlicht 1.9. */
-		virtual void makeColorKeyTexture(video::ITexture* texture,
-				core::position2d<s32> colorKeyPixelPos,
-				bool zeroTexels = false) const =0;
 
 		//! Set a render target.
 		/** This will only work if the driver supports the
@@ -576,32 +497,6 @@ namespace video {
 		\param pType Primitive type, e.g. scene::EPT_TRIANGLE_FAN for a triangle fan.
 		\param iType Index type, e.g. video::EIT_16BIT for 16bit indices. */
 		virtual void drawVertexPrimitiveList(const void* vertices, u32 vertexCount,
-				const void* indexList, u32 primCount,
-				E_VERTEX_TYPE vType=EVT_STANDARD,
-				scene::E_PRIMITIVE_TYPE pType=scene::EPT_TRIANGLES,
-				E_INDEX_TYPE iType=EIT_16BIT) =0;
-
-		//! Draws a vertex primitive list in 2d
-		/** Compared to the general (3d) version of this method, this
-		one sets up a 2d render mode, and uses only x and y of vectors.
-		Note that, depending on the index type, some vertices might be
-		not accessible through the index list. The limit is at 65535
-		vertices for 16bit indices. Please note that currently not all
-		primitives are available for all drivers, and some might be
-		emulated via triangle renders. This function is not available
-		for the sw drivers.
-		\param vertices Pointer to array of vertices.
-		\param vertexCount Amount of vertices in the array.
-		\param indexList Pointer to array of indices. These define the
-		vertices used for each primitive. Depending on the pType,
-		indices are interpreted as single objects (for point like
-		primitives), pairs (for lines), triplets (for triangles), or
-		quads.
-		\param primCount Amount of Primitives
-		\param vType Vertex type, e.g. video::EVT_STANDARD for S3DVertex.
-		\param pType Primitive type, e.g. scene::EPT_TRIANGLE_FAN for a triangle fan.
-		\param iType Index type, e.g. video::EIT_16BIT for 16bit indices. */
-		virtual void draw2DVertexPrimitiveList(const void* vertices, u32 vertexCount,
 				const void* indexList, u32 primCount,
 				E_VERTEX_TYPE vType=EVT_STANDARD,
 				scene::E_PRIMITIVE_TYPE pType=scene::EPT_TRIANGLES,
@@ -708,23 +603,6 @@ namespace video {
 		\param color Color of the line. */
 		virtual void draw3DLine(const core::vector3df& start,
 			const core::vector3df& end, SColor color = SColor(255,255,255,255)) =0;
-
-		//! Draws a 3d triangle.
-		/** This method calls drawVertexPrimitiveList for some triangles.
-		This method works with all drivers because it simply calls
-		drawVertexPrimitiveList, but it is hence not very fast.
-		Note that the triangle is drawn using the current
-		transformation matrix and material. So if you need to draw it
-		independently of the current transformation, use
-		\code
-		driver->setMaterial(someMaterial);
-		driver->setTransform(video::ETS_WORLD, core::IdentityMatrix);
-		\endcode
-		for some properly set up material before drawing the triangle.
-		\param triangle The triangle to draw.
-		\param color Color of the line. */
-		virtual void draw3DTriangle(const core::triangle3df& triangle,
-			SColor color = SColor(255,255,255,255)) =0;
 
 		//! Draws a 3d axis aligned box.
 		/** This method simply calls draw3DLine for the edges of the
@@ -869,13 +747,6 @@ namespace video {
 				SColor colorLeftDown, SColor colorRightDown,
 				const core::rect<s32>* clip =0) =0;
 
-		//! Draws the outline of a 2D rectangle.
-		/** \param pos Position of the rectangle.
-		\param color Color of the rectangle to draw. The alpha component
-		specifies how transparent the rectangle outline will be. */
-		virtual void draw2DRectangleOutline(const core::recti& pos,
-				SColor color=SColor(255,255,255,255)) =0;
-
 		//! Draws a 2d line.
 		/** In theory both start and end will be included in coloring.
 		BUG: Currently d3d ignores the last pixel
@@ -894,40 +765,6 @@ namespace video {
 		\param y The y-position of the pixel.
 		\param color Color of the pixel to draw. */
 		virtual void drawPixel(u32 x, u32 y, const SColor& color) =0;
-
-		//! Draws a non filled concyclic regular 2d polygon.
-		/** This method can be used to draw circles, but also
-		triangles, tetragons, pentagons, hexagons, heptagons, octagons,
-		enneagons, decagons, hendecagons, dodecagon, triskaidecagons,
-		etc. I think you'll got it now. And all this by simply
-		specifying the vertex count. Welcome to the wonders of
-		geometry.
-		\param center Position of center of circle (pixels).
-		\param radius Radius of circle in pixels.
-		\param color Color of the circle.
-		\param vertexCount Amount of vertices of the polygon. Specify 2
-		to draw a line, 3 to draw a triangle, 4 for tetragons and a lot
-		(>10) for nearly a circle. */
-		virtual void draw2DPolygon(core::position2d<s32> center,
-				f32 radius,
-				video::SColor color=SColor(100,255,255,255),
-				s32 vertexCount=10) =0;
-
-		//! Draws a shadow volume into the stencil buffer.
-		/** To draw a stencil shadow, do this: First, draw all geometry.
-		Then use this method, to draw the shadow volume. Then, use
-		IVideoDriver::drawStencilShadow() to visualize the shadow.
-		Please note that the code for the opengl version of the method
-		is based on free code sent in by Philipp Dortmann, lots of
-		thanks go to him!
-		\param triangles Array of 3d vectors, specifying the shadow
-		volume.
-		\param zfail If set to true, zfail method is used, otherwise
-		zpass.
-		\param debugDataVisible The debug data that is enabled for this
-		shadow node
-		*/
-		virtual void drawStencilShadowVolume(const core::array<core::vector3df>& triangles, bool zfail=true, u32 debugDataVisible=0) =0;
 
 		//! Fills the stencil shadow with color.
 		/** After the shadow volume has been drawn into the stencil
@@ -1026,24 +863,6 @@ namespace video {
 		//! Gets name of this video driver.
 		/** \return Returns the name of the video driver. */
 		virtual const wchar_t* getName() const =0;
-
-		//! Adds an external image loader to the engine.
-		/** This is useful if the Irrlicht Engine should be able to load
-		textures of currently unsupported file formats (e.g. gif). The
-		IImageLoader only needs to be implemented for loading this file
-		format. A pointer to the implementation can be passed to the
-		engine using this method.
-		\param loader Pointer to the external loader created. */
-		virtual void addExternalImageLoader(IImageLoader* loader) =0;
-
-		//! Adds an external image writer to the engine.
-		/** This is useful if the Irrlicht Engine should be able to
-		write textures of currently unsupported file formats (e.g
-		.gif). The IImageWriter only needs to be implemented for
-		writing this file format. A pointer to the implementation can
-		be passed to the engine using this method.
-		\param writer: Pointer to the external writer created. */
-		virtual void addExternalImageWriter(IImageWriter* writer) =0;
 
 		//! Returns the maximum amount of primitives
 		/** (mostly vertices) which the device is able to render with
@@ -1147,28 +966,6 @@ namespace video {
 		\return True on successful write. */
 		virtual bool writeImageToFile(IImage* image, io::IWriteFile* file, u32 param =0) =0;
 
-		//! Creates a software image from a byte array.
-		/** No hardware texture will be created for this image. This
-		method is useful for example if you want to read a heightmap
-		for a terrain renderer.
-		\param format Desired color format of the texture
-		\param size Desired size of the image
-		\param data A byte array with pixel color information
-		\param ownForeignMemory If true, the image will use the data
-		pointer directly and own it afterward. If false, the memory
-		will by copied internally.
-		WARNING: Setting this to 'true' will not work across dll boundaries.
-		So unless you link Irrlicht statically you should keep this to 'false'.
-		The parameter is mainly for internal usage.
-		\param deleteMemory Whether the memory is deallocated upon
-		destruction.
-		\return The created image.
-		If you no longer need the image, you should call IImage::drop().
-		See IReferenceCounted::drop() for more information. */
-		virtual IImage* createImageFromData(ECOLOR_FORMAT format,
-			const core::dimension2d<u32>& size, void *data, bool ownForeignMemory = false,
-			bool deleteMemory = true) = 0;
-
 		//! Creates an empty software image.
 		/**
 		\param format Desired color format of the image.
@@ -1269,16 +1066,6 @@ namespace video {
 		addMaterialRenderer().
 		\param name: New name of the material renderer. */
 		virtual void setMaterialRendererName(s32 idx, const c8* name) =0;
-
-		//! Swap the material renderers used for certain id's
-		/** Swap the IMaterialRenderers responsible for rendering specific
-		 material-id's. This means every SMaterial using a MaterialType
-		 with one of the indices involved here will now render differently.
-		 \param idx1 First material index to swap. It must already exist or nothing happens.
-		 \param idx2 Second material index to swap. It must already exist or nothing happens.
-		 \param swapNames When true the renderer names also swap
-		                  When false the names will stay at the original index */
-		virtual void swapMaterialRenderers(u32 idx1, u32 idx2, bool swapNames=true) = 0;
 
 		//! Returns driver and operating system specific data about the IVideoDriver.
 		/** This method should only be used if the engine should be
@@ -1404,30 +1191,8 @@ namespace video {
 		//! Get the global ambient light currently used by the driver
 		virtual const SColorf& getAmbientLight() const = 0;
 
-		//! Only used by the engine internally.
-		/** Passes the global material flag AllowZWriteOnTransparent.
-		\param flag Default behavior is to disable ZWrite, i.e. false. */
-		virtual void setAllowZWriteOnTransparent(bool flag) =0;
-
 		//! Get the maximum texture size supported.
 		virtual core::dimension2du getMaxTextureSize() const =0;
-
-		//! Color conversion convenience function
-		/** Convert an image (as array of pixels) from source to destination
-		array, thereby converting the color format. The pixel size is
-		determined by the color formats.
-		\param sP Pointer to source
-		\param sF Color format of source
-		\param sN Number of pixels to convert, both array must be large enough
-		\param dP Pointer to destination
-		\param dF Color format of destination
-		*/
-		virtual void convertColor(const void* sP, ECOLOR_FORMAT sF, s32 sN,
-				void* dP, ECOLOR_FORMAT dF) const =0;
-
-		//! Check if the driver supports creating textures with the given color format
-		/**	\return True if the format is available, false if not. */
-		virtual bool queryTextureFormat(ECOLOR_FORMAT format) const = 0;
 
 		//! Used by some SceneNodes to check if a material should be rendered in the transparent render pass
 		virtual bool needsTransparentRenderPass(const irr::video::SMaterial& material) const = 0;

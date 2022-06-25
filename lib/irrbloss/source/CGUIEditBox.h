@@ -6,8 +6,6 @@
 #define __C_GUI_EDIT_BOX_H_INCLUDED__
 
 #include "IrrCompileConfig.h"
-#ifdef _IRR_COMPILE_WITH_GUI_
-
 #include "IGUIEditBox.h"
 #include "irrArray.h"
 #include "IOSOperator.h"
@@ -126,15 +124,6 @@ namespace gui
 		//! Get the cursor blinktime
 		virtual irr::u32 getCursorBlinkTime() const _IRR_OVERRIDE_;
 
-		//! Sets whether the edit box is a password box. Setting this to true will
-		/** disable MultiLine, WordWrap and the ability to copy with ctrl+c or ctrl+x
-		\param passwordBox: true to enable password, false to disable
-		\param passwordChar: the character that is displayed instead of letters */
-		virtual void setPasswordBox(bool passwordBox, wchar_t passwordChar = L'*') _IRR_OVERRIDE_;
-
-		//! Returns true if the edit box is currently a password box.
-		virtual bool isPasswordBox() const _IRR_OVERRIDE_;
-
 		//! Updates the absolute position, splits text if required
 		virtual void updateAbsolutePosition() _IRR_OVERRIDE_;
 
@@ -186,8 +175,7 @@ namespace gui
 		s32 HScrollPos, VScrollPos; // scroll position in characters
 		u32 Max;
 
-		bool WordWrap, MultiLine, AutoScroll, PasswordBox;
-		wchar_t PasswordChar;
+		bool WordWrap, MultiLine, AutoScroll;
 		EGUI_ALIGNMENT HAlign, VAlign;
 
 		core::array< core::stringw > BrokenText;
@@ -200,6 +188,5 @@ namespace gui
 } // end namespace gui
 } // end namespace irr
 
-#endif // _IRR_COMPILE_WITH_GUI_
 #endif // __C_GUI_EDIT_BOX_H_INCLUDED__
 

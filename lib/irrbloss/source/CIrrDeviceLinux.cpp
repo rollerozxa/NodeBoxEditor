@@ -35,10 +35,6 @@
 #include "CGLXManager.h"
 #endif
 
-#ifdef _IRR_LINUX_XCURSOR_
-#include <X11/Xcursor/Xcursor.h>
-#endif
-
 namespace irr {
 	namespace video
 	{
@@ -214,33 +210,6 @@ bool CIrrDeviceLinux::switchToFullscreen() {
 
 	return true;
 }
-
-#if defined(_IRR_COMPILE_WITH_X11_)
-void IrrPrintXGrabError(int grabResult, const c8 * grabCommand ) {
-	if ( grabResult == GrabSuccess ) {
-//		os::Printer::log(grabCommand, ": GrabSuccess", ELL_INFORMATION);
-		return;
-	}
-
-	switch ( grabResult ) {
-		case AlreadyGrabbed:
-			os::Printer::log(grabCommand, ": AlreadyGrabbed", ELL_WARNING);
-			break;
-		case GrabNotViewable:
-			os::Printer::log(grabCommand, ": GrabNotViewable", ELL_WARNING);
-			break;
-		case GrabFrozen:
-			os::Printer::log(grabCommand, ": GrabFrozen", ELL_WARNING);
-			break;
-		case GrabInvalidTime:
-			os::Printer::log(grabCommand, ": GrabInvalidTime", ELL_WARNING);
-			break;
-		default:
-			os::Printer::log(grabCommand, ": grab failed with unknown problem", ELL_WARNING);
-			break;
-	}
-}
-#endif
 
 bool CIrrDeviceLinux::createWindow() {
 #ifdef _IRR_COMPILE_WITH_X11_
@@ -910,56 +879,6 @@ void CIrrDeviceLinux::setWindowCaption(const wchar_t* text) {
 #endif
 }
 
-//! presents a surface in the client area
-bool CIrrDeviceLinux::present(video::IImage* image, void* windowId, core::rect<s32>* srcRect) {
-#ifdef _IRR_COMPILE_WITH_X11_
-	// this is only necessary for software drivers.
-	if (!SoftwareImage)
-		return true;
-
-	// thx to Nadav, who send me some clues of how to display the image
-	// to the X Server.
-
-	const u32 destwidth = SoftwareImage->width;
-	const u32 minWidth = core::min_(image->getDimension().Width, destwidth);
-	const u32 destPitch = SoftwareImage->bytes_per_line;
-
-	video::ECOLOR_FORMAT destColor;
-	switch (SoftwareImage->bits_per_pixel) {
-		case 16:
-			if (SoftwareImage->depth==16)
-				destColor = video::ECF_R5G6B5;
-			else
-				destColor = video::ECF_A1R5G5B5;
-		break;
-		case 24: destColor = video::ECF_R8G8B8; break;
-		case 32: destColor = video::ECF_A8R8G8B8; break;
-		default:
-			os::Printer::log("Unsupported screen depth.");
-			return false;
-	}
-
-	u8* srcdata = reinterpret_cast<u8*>(image->getData());
-	u8* destData = reinterpret_cast<u8*>(SoftwareImage->data);
-
-	const u32 destheight = SoftwareImage->height;
-	const u32 srcheight = core::min_(image->getDimension().Height, destheight);
-	const u32 srcPitch = image->getPitch();
-	for (u32 y=0; y!=srcheight; ++y) {
-		video::CColorConverter::convert_viaFormat(srcdata,image->getColorFormat(), minWidth, destData, destColor);
-		srcdata+=srcPitch;
-		destData+=destPitch;
-	}
-
-	GC gc = DefaultGC(XDisplay, DefaultScreen(XDisplay));
-	Window myWindow=XWindow;
-	if (windowId)
-		myWindow = reinterpret_cast<Window>(windowId);
-	XPutImage(XDisplay, myWindow, gc, SoftwareImage, 0, 0, 0, 0, destwidth, destheight);
-#endif
-	return true;
-}
-
 //! notifies the device that it should close itself
 void CIrrDeviceLinux::closeDevice() {
 	Close = true;
@@ -973,11 +892,6 @@ bool CIrrDeviceLinux::isWindowActive() const {
 //! returns if window has focus.
 bool CIrrDeviceLinux::isWindowFocused() const {
 	return WindowHasFocus;
-}
-
-//! returns if window is minimized.
-bool CIrrDeviceLinux::isWindowMinimized() const {
-	return WindowMinimized;
 }
 
 //! returns color format of the window.
@@ -1025,58 +939,6 @@ void CIrrDeviceLinux::setWindowSize(const irr::core::dimension2d<u32>& size) {
 #endif // #ifdef _IRR_COMPILE_WITH_X11_
 }
 
-//! Minimize window
-void CIrrDeviceLinux::minimizeWindow() {
-#ifdef _IRR_COMPILE_WITH_X11_
-	XIconifyWindow(XDisplay, XWindow, Screennr);
-#endif
-}
-
-//! Maximize window
-void CIrrDeviceLinux::maximizeWindow() {
-#ifdef _IRR_COMPILE_WITH_X11_
-	// Maximize is not implemented in bare X, it's a WM construct.
-	if (HasNetWM) {
-		XEvent ev = {0};
-
-		ev.type = ClientMessage;
-		ev.xclient.window = XWindow;
-		ev.xclient.message_type = X_ATOM_NETWM_STATE;
-		ev.xclient.format = 32;
-		ev.xclient.data.l[0] = 1; // _NET_WM_STATE_ADD
-		ev.xclient.data.l[1] = X_ATOM_NETWM_MAXIMIZE_VERT;
-		ev.xclient.data.l[2] = X_ATOM_NETWM_MAXIMIZE_HORZ;
-
-		XSendEvent(XDisplay, DefaultRootWindow(XDisplay), false,
-				SubstructureNotifyMask|SubstructureRedirectMask, &ev);
-	}
-
-	XMapWindow(XDisplay, XWindow);
-#endif
-}
-
-//! Restore original window size
-void CIrrDeviceLinux::restoreWindow() {
-#ifdef _IRR_COMPILE_WITH_X11_
-	// Maximize is not implemented in bare X, it's a WM construct.
-	if (HasNetWM) {
-		XEvent ev = {0};
-
-		ev.type = ClientMessage;
-		ev.xclient.window = XWindow;
-		ev.xclient.message_type = X_ATOM_NETWM_STATE;
-		ev.xclient.format = 32;
-		ev.xclient.data.l[0] = 0; // _NET_WM_STATE_REMOVE
-		ev.xclient.data.l[1] = X_ATOM_NETWM_MAXIMIZE_VERT;
-		ev.xclient.data.l[2] = X_ATOM_NETWM_MAXIMIZE_HORZ;
-
-		XSendEvent(XDisplay, DefaultRootWindow(XDisplay), false,
-				SubstructureNotifyMask|SubstructureRedirectMask, &ev);
-	}
-
-	XMapWindow(XDisplay, XWindow);
-#endif
-}
 
 core::position2di CIrrDeviceLinux::getWindowPosition() {
 	int wx = 0, wy = 0;
@@ -1291,84 +1153,6 @@ void CIrrDeviceLinux::createKeyMap() {
 #endif
 }
 
-//! Set the current Gamma Value for the Display
-bool CIrrDeviceLinux::setGammaRamp( f32 red, f32 green, f32 blue, f32 brightness, f32 contrast ) {
-	#if defined(_IRR_LINUX_X11_VIDMODE_) || defined(_IRR_LINUX_X11_RANDR_)
-	s32 eventbase, errorbase;
-	#ifdef _IRR_LINUX_X11_VIDMODE_
-	if (XF86VidModeQueryExtension(XDisplay, &eventbase, &errorbase)) {
-		XF86VidModeGamma gamma;
-		gamma.red=red;
-		gamma.green=green;
-		gamma.blue=blue;
-		XF86VidModeSetGamma(XDisplay, Screennr, &gamma);
-		return true;
-	}
-	#endif
-	#if defined(_IRR_LINUX_X11_VIDMODE_) && defined(_IRR_LINUX_X11_RANDR_)
-	else
-	#endif
-	#ifdef _IRR_LINUX_X11_RANDR_
-	if (XRRQueryExtension(XDisplay, &eventbase, &errorbase)) {
-		XRRQueryVersion(XDisplay, &eventbase, &errorbase); // major, minor
-		if (eventbase>=1 && errorbase>1) {
-		#if (RANDR_MAJOR>1 || RANDR_MINOR>1)
-			XRRCrtcGamma *gamma = XRRGetCrtcGamma(XDisplay, Screennr);
-			if (gamma) {
-				*gamma->red=(u16)red;
-				*gamma->green=(u16)green;
-				*gamma->blue=(u16)blue;
-				XRRSetCrtcGamma(XDisplay, Screennr, gamma);
-				XRRFreeGamma(gamma);
-				return true;
-			}
-		#endif
-		}
-	}
-	#endif
-	#endif
-	return false;
-}
-
-//! Get the current Gamma Value for the Display
-bool CIrrDeviceLinux::getGammaRamp( f32 &red, f32 &green, f32 &blue, f32 &brightness, f32 &contrast ) {
-	brightness = 0.f;
-	contrast = 0.f;
-	#if defined(_IRR_LINUX_X11_VIDMODE_) || defined(_IRR_LINUX_X11_RANDR_)
-	s32 eventbase, errorbase;
-	#ifdef _IRR_LINUX_X11_VIDMODE_
-	if (XF86VidModeQueryExtension(XDisplay, &eventbase, &errorbase)) {
-		XF86VidModeGamma gamma;
-		XF86VidModeGetGamma(XDisplay, Screennr, &gamma);
-		red = gamma.red;
-		green = gamma.green;
-		blue = gamma.blue;
-		return true;
-	}
-	#endif
-	#if defined(_IRR_LINUX_X11_VIDMODE_) && defined(_IRR_LINUX_X11_RANDR_)
-	else
-	#endif
-	#ifdef _IRR_LINUX_X11_RANDR_
-	if (XRRQueryExtension(XDisplay, &eventbase, &errorbase)) {
-		XRRQueryVersion(XDisplay, &eventbase, &errorbase); // major, minor
-		if (eventbase>=1 && errorbase>1) {
-		#if (RANDR_MAJOR>1 || RANDR_MINOR>1)
-			XRRCrtcGamma *gamma = XRRGetCrtcGamma(XDisplay, Screennr);
-			if (gamma) {
-				red = *gamma->red;
-				green = *gamma->green;
-				blue= *gamma->blue;
-				XRRFreeGamma(gamma);
-				return true;
-			}
-		#endif
-		}
-	}
-	#endif
-	#endif
-	return false;
-}
 
 //! gets text from the clipboard
 //! \return Returns 0 if no string is in there.
@@ -1439,25 +1223,6 @@ Bool PredicateIsEventType(Display *display, XEvent *event, XPointer arg) {
 }
 #endif //_IRR_COMPILE_WITH_X11_
 
-//! Remove all messages pending in the system message loop
-void CIrrDeviceLinux::clearSystemMessages() {
-#ifdef _IRR_COMPILE_WITH_X11_
-	if (CreationParams.DriverType != video::EDT_NULL) {
-		XEvent event;
-		int usrArg = ButtonPress;
-		while ( XCheckIfEvent(XDisplay, &event, PredicateIsEventType, XPointer(&usrArg)) == True ) {}
-		usrArg = ButtonRelease;
-		while ( XCheckIfEvent(XDisplay, &event, PredicateIsEventType, XPointer(&usrArg)) == True ) {}
-		usrArg = MotionNotify;
-		while ( XCheckIfEvent(XDisplay, &event, PredicateIsEventType, XPointer(&usrArg)) == True ) {}
-		usrArg = KeyRelease;
-		while ( XCheckIfEvent(XDisplay, &event, PredicateIsEventType, XPointer(&usrArg)) == True ) {}
-		usrArg = KeyPress;
-		while ( XCheckIfEvent(XDisplay, &event, PredicateIsEventType, XPointer(&usrArg)) == True ) {}
-	}
-#endif //_IRR_COMPILE_WITH_X11_
-}
-
 void CIrrDeviceLinux::initXAtoms() {
 #ifdef _IRR_COMPILE_WITH_X11_
 	X_ATOM_CLIPBOARD = XInternAtom(XDisplay, "CLIPBOARD", False);
@@ -1503,137 +1268,6 @@ void CIrrDeviceLinux::initXInput2() {
 	XISelectEvents(XDisplay, XWindow, &eventMask, 1);
 #endif
 }
-
-#ifdef _IRR_COMPILE_WITH_X11_
-
-Cursor CIrrDeviceLinux::TextureToMonochromeCursor(irr::video::ITexture * tex, const core::rect<s32>& sourceRect, const core::position2d<s32> &hotspot) {
-	XImage * sourceImage = XCreateImage(XDisplay, VisualInfo->visual,
-										1, // depth,
-										ZPixmap,	// XYBitmap (depth=1), ZPixmap(depth=x)
-										0, 0, sourceRect.getWidth(), sourceRect.getHeight(),
-										32, // bitmap_pad,
-										0// bytes_per_line (0 means continuos in memory)
-										);
-	sourceImage->data = new char[sourceImage->height * sourceImage->bytes_per_line];
-	XImage * maskImage = XCreateImage(XDisplay, VisualInfo->visual,
-										1, // depth,
-										ZPixmap,
-										0, 0, sourceRect.getWidth(), sourceRect.getHeight(),
-										32, // bitmap_pad,
-										0 // bytes_per_line
-										);
-	maskImage->data = new char[maskImage->height * maskImage->bytes_per_line];
-
-	// write texture into XImage
-	video::ECOLOR_FORMAT format = tex->getColorFormat();
-	u32 bytesPerPixel = video::IImage::getBitsPerPixelFromFormat(format) / 8;
-	u32 bytesLeftGap = sourceRect.UpperLeftCorner.X * bytesPerPixel;
-	u32 bytesRightGap = tex->getPitch() - sourceRect.LowerRightCorner.X * bytesPerPixel;
-	const u8* data = (const u8*)tex->lock(video::ETLM_READ_ONLY, 0);
-	data += sourceRect.UpperLeftCorner.Y*tex->getPitch();
-	for ( s32 y = 0; y < sourceRect.getHeight(); ++y ) {
-		data += bytesLeftGap;
-		for ( s32 x = 0; x < sourceRect.getWidth(); ++x ) {
-			video::SColor pixelCol;
-			pixelCol.setData((const void*)data, format);
-			data += bytesPerPixel;
-
-			if ( pixelCol.getAlpha() == 0 )	// transparent
-			{
-				XPutPixel(maskImage, x, y, 0);
-				XPutPixel(sourceImage, x, y, 0);
-			}
-			else	// color
-			{
-				if ( pixelCol.getAverage() >= 127 )
-					XPutPixel(sourceImage, x, y, 1);
-				else
-					XPutPixel(sourceImage, x, y, 0);
-				XPutPixel(maskImage, x, y, 1);
-			}
-		}
-		data += bytesRightGap;
-	}
-	tex->unlock();
-
-	Pixmap sourcePixmap = XCreatePixmap(XDisplay, XWindow, sourceImage->width, sourceImage->height, sourceImage->depth);
-	Pixmap maskPixmap = XCreatePixmap(XDisplay, XWindow, maskImage->width, maskImage->height, maskImage->depth);
-
-	XGCValues values;
-	values.foreground = 1;
-	values.background = 1;
-	GC gc = XCreateGC( XDisplay, sourcePixmap, GCForeground | GCBackground, &values );
-
-	XPutImage(XDisplay, sourcePixmap, gc, sourceImage, 0, 0, 0, 0, sourceImage->width, sourceImage->height);
-	XPutImage(XDisplay, maskPixmap, gc, maskImage, 0, 0, 0, 0, maskImage->width, maskImage->height);
-
-	XFreeGC(XDisplay, gc);
-	XDestroyImage(sourceImage);
-	XDestroyImage(maskImage);
-
-	Cursor cursorResult = 0;
-	XColor foreground, background;
-	foreground.red = 65535;
-	foreground.green = 65535;
-	foreground.blue = 65535;
-	foreground.flags = DoRed | DoGreen | DoBlue;
-	background.red = 0;
-	background.green = 0;
-	background.blue = 0;
-	background.flags = DoRed | DoGreen | DoBlue;
-
-	cursorResult = XCreatePixmapCursor(XDisplay, sourcePixmap, maskPixmap, &foreground, &background, hotspot.X, hotspot.Y);
-
-	XFreePixmap(XDisplay, sourcePixmap);
-	XFreePixmap(XDisplay, maskPixmap);
-
-	return cursorResult;
-}
-
-#ifdef _IRR_LINUX_XCURSOR_
-Cursor CIrrDeviceLinux::TextureToARGBCursor(irr::video::ITexture * tex, const core::rect<s32>& sourceRect, const core::position2d<s32> &hotspot) {
-	XcursorImage * image = XcursorImageCreate (sourceRect.getWidth(), sourceRect.getHeight());
-	image->xhot = hotspot.X;
-	image->yhot = hotspot.Y;
-
-	// write texture into XcursorImage
-	video::ECOLOR_FORMAT format = tex->getColorFormat();
-	u32 bytesPerPixel = video::IImage::getBitsPerPixelFromFormat(format) / 8;
-	u32 bytesLeftGap = sourceRect.UpperLeftCorner.X * bytesPerPixel;
-	u32 bytesRightGap = tex->getPitch() - sourceRect.LowerRightCorner.X * bytesPerPixel;
-	XcursorPixel* target = image->pixels;
-	const u8* data = (const u8*)tex->lock(video::ETLM_READ_ONLY, 0);
-	data += sourceRect.UpperLeftCorner.Y*tex->getPitch();
-	for ( s32 y = 0; y < sourceRect.getHeight(); ++y ) {
-		data += bytesLeftGap;
-		for ( s32 x = 0; x < sourceRect.getWidth(); ++x ) {
-			video::SColor pixelCol;
-			pixelCol.setData((const void*)data, format);
-			data += bytesPerPixel;
-
-			*target = (XcursorPixel)pixelCol.color;
-			++target;
-		}
-		data += bytesRightGap;
-	}
-	tex->unlock();
-
-	Cursor cursorResult=XcursorImageLoadCursor(XDisplay, image);
-
-	XcursorImageDestroy(image);
-
-	return cursorResult;
-}
-#endif // #ifdef _IRR_LINUX_XCURSOR_
-
-Cursor CIrrDeviceLinux::TextureToCursor(irr::video::ITexture * tex, const core::rect<s32>& sourceRect, const core::position2d<s32> &hotspot) {
-#ifdef _IRR_LINUX_XCURSOR_
-	return TextureToARGBCursor( tex, sourceRect, hotspot );
-#else
-	return TextureToMonochromeCursor( tex, sourceRect, hotspot );
-#endif
-}
-#endif	// _IRR_COMPILE_WITH_X11_
 
 CIrrDeviceLinux::CCursorControl::CCursorControl(CIrrDeviceLinux* dev, bool null)
 	: Device(dev)
@@ -1730,52 +1364,6 @@ void CIrrDeviceLinux::CCursorControl::setActiveIcon(gui::ECURSOR_ICON iconId) {
 #endif
 }
 
-//! Add a custom sprite as cursor icon.
-gui::ECURSOR_ICON CIrrDeviceLinux::CCursorControl::addIcon(const gui::SCursorSprite& icon) {
-#ifdef _IRR_COMPILE_WITH_X11_
-	if ( icon.SpriteId >= 0 ) {
-		CursorX11 cX11;
-		cX11.FrameTime = icon.SpriteBank->getSprites()[icon.SpriteId].frameTime;
-		for ( u32 i=0; i < icon.SpriteBank->getSprites()[icon.SpriteId].Frames.size(); ++i ) {
-			irr::u32 texId = icon.SpriteBank->getSprites()[icon.SpriteId].Frames[i].textureNumber;
-			irr::u32 rectId = icon.SpriteBank->getSprites()[icon.SpriteId].Frames[i].rectNumber;
-			irr::core::rect<s32> rectIcon = icon.SpriteBank->getPositions()[rectId];
-			Cursor cursor = Device->TextureToCursor(icon.SpriteBank->getTexture(texId), rectIcon, icon.HotSpot);
-			cX11.Frames.push_back( CursorFrameX11(cursor) );
-		}
-
-		Cursors.push_back( cX11 );
-
-		return (gui::ECURSOR_ICON)(Cursors.size() - 1);
-	}
-#endif
-	return gui::ECI_NORMAL;
-}
-
-//! replace the given cursor icon.
-void CIrrDeviceLinux::CCursorControl::changeIcon(gui::ECURSOR_ICON iconId, const gui::SCursorSprite& icon) {
-#ifdef _IRR_COMPILE_WITH_X11_
-	if ( iconId >= (s32)Cursors.size() )
-		return;
-
-	for ( u32 i=0; i < Cursors[iconId].Frames.size(); ++i )
-		XFreeCursor(Device->XDisplay, Cursors[iconId].Frames[i].IconHW);
-
-	if ( icon.SpriteId >= 0 ) {
-		CursorX11 cX11;
-		cX11.FrameTime = icon.SpriteBank->getSprites()[icon.SpriteId].frameTime;
-		for ( u32 i=0; i < icon.SpriteBank->getSprites()[icon.SpriteId].Frames.size(); ++i ) {
-			irr::u32 texId = icon.SpriteBank->getSprites()[icon.SpriteId].Frames[i].textureNumber;
-			irr::u32 rectId = icon.SpriteBank->getSprites()[icon.SpriteId].Frames[i].rectNumber;
-			irr::core::rect<s32> rectIcon = icon.SpriteBank->getPositions()[rectId];
-			Cursor cursor = Device->TextureToCursor(icon.SpriteBank->getTexture(texId), rectIcon, icon.HotSpot);
-			cX11.Frames.push_back( CursorFrameX11(cursor) );
-		}
-
-		Cursors[iconId] = cX11;
-	}
-#endif
-}
 
 irr::core::dimension2di CIrrDeviceLinux::CCursorControl::getSupportedIconSize() const {
 	// this returns the closest match that is smaller or same size, so we just pass a value which should be large enough for cursors
@@ -1789,4 +1377,3 @@ irr::core::dimension2di CIrrDeviceLinux::CCursorControl::getSupportedIconSize() 
 } // end namespace
 
 #endif // _IRR_COMPILE_WITH_X11_DEVICE_
-

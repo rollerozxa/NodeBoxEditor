@@ -47,21 +47,6 @@ public:
 	*/
 	virtual IReadFile* createMemoryReadFile(const void* memory, s32 len, const path& fileName, bool deleteMemoryWhenDropped=false) =0;
 
-	//! Creates an IWriteFile interface for accessing memory like a file.
-	/** This allows you to use a pointer to memory where an IWriteFile is requested.
-		You are responsible for allocating enough memory.
-	\param memory: A pointer to the start of the file in memory (allocated by you)
-	\param len: The length of the memory in bytes
-	\param fileName: The name given to this file
-	\param deleteMemoryWhenDropped: True if the memory should be deleted
-	along with the IWriteFile when it is dropped.
-	\return Pointer to the created file interface.
-	The returned pointer should be dropped when no longer needed.
-	See IReferenceCounted::drop() for more information.
-	*/
-	virtual IWriteFile* createMemoryWriteFile(void* memory, s32 len, const path& fileName, bool deleteMemoryWhenDropped=false) =0;
-
-
 	//! Opens a file for write access.
 	/** \param filename: Name of file to open.
 	\param append: If the file already exist, all write operations are
@@ -72,22 +57,9 @@ public:
 	See IReferenceCounted::drop() for more information. */
 	virtual IWriteFile* createAndWriteFile(const path& filename, bool append=false) =0;
 
-	//! Changes the search order of attached archives.
-	/**
-	\param sourceIndex: The index of the archive to change
-	\param relative: The relative change in position, archives with a lower index are searched first */
-	virtual bool moveFileArchive(u32 sourceIndex, s32 relative) =0;
-
 	//! Get the current working directory.
 	/** \return Current working directory as a string. */
 	virtual const path& getWorkingDirectory() =0;
-
-	//! Changes the current working directory.
-	/** \param newDirectory: A string specifying the new working directory.
-	The string is operating system dependent. Under Windows it has
-	the form "<drive>:\<directory>\<sudirectory>\<..>". An example would be: "C:\Windows\"
-	\return True if successful, otherwise false. */
-	virtual bool changeWorkingDirectoryTo(const path& newDirectory) =0;
 
 	//! Converts a relative path to an absolute (unique) path, resolving symbolic links if required
 	/** \param filename Possibly relative file or directory name to query.
@@ -99,30 +71,11 @@ public:
 	\return String containing the directory of the file. */
 	virtual path getFileDir(const path& filename) const =0;
 
-	//! Get the base part of a filename, i.e. the name without the directory part.
-	/** If no directory is prefixed, the full name is returned.
-	\param filename: The file to get the basename from
-	\param keepExtension True if filename with extension is returned otherwise everything
-	after the final '.' is removed as well. */
-	virtual path getFileBasename(const path& filename, bool keepExtension=true) const =0;
-
 	//! flatten a path and file name for example: "/you/me/../." becomes "/you"
 	virtual path& flattenFilename(path& directory, const path& root="/") const =0;
 
 	//! Get the relative filename, relative to the given directory
 	virtual path getRelativeFilename(const path& filename, const path& directory) const =0;
-
-	//! Creates a list of files and directories in the current working directory and returns it.
-	/** \return a Pointer to the created IFileList is returned. After the list has been used
-	it has to be deleted using its IFileList::drop() method.
-	See IReferenceCounted::drop() for more information. */
-	virtual IFileList* createFileList() =0;
-
-	//! Creates an empty filelist
-	/** \return a Pointer to the created IFileList is returned. After the list has been used
-	it has to be deleted using its IFileList::drop() method.
-	See IReferenceCounted::drop() for more information. */
-	virtual IFileList* createEmptyFileList(const io::path& path, bool ignoreCase, bool ignorePaths) =0;
 
 	//! Set the active type of file system.
 	virtual EFileSystemType setFileListSystem(EFileSystemType listType) =0;

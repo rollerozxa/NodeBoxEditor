@@ -44,20 +44,6 @@ public:
 
 	//! copies this surface into another
 	virtual void copyTo(IImage* target, const core::position2d<s32>& pos, const core::rect<s32>& sourceRect, const core::rect<s32>* clipRect=0) _IRR_OVERRIDE_;
-
-	//! copies this surface into another, using the alpha mask, an cliprect and a color to add with
-	virtual void copyToWithAlpha(IImage* target, const core::position2d<s32>& pos,
-			const core::rect<s32>& sourceRect, const SColor &color,
-			const core::rect<s32>* clipRect = 0, bool combineAlpha=false) _IRR_OVERRIDE_;
-
-	//! copies this surface into another, scaling it to fit, applying a box filter
-	virtual void copyToScalingBoxFilter(IImage* target, s32 bias = 0, bool blend = false) _IRR_OVERRIDE_;
-
-	//! fills the surface with given color
-	virtual void fill(const SColor &color) _IRR_OVERRIDE_;
-
-private:
-	inline SColor getPixelBox ( s32 x, s32 y, s32 fx, s32 fy, s32 bias ) const;
 };
 
 } // end namespace video

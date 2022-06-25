@@ -99,24 +99,6 @@ CNullDriver::~CNullDriver() {
 	removeAllHardwareBuffers();
 }
 
-//! Adds an external surface loader to the engine.
-void CNullDriver::addExternalImageLoader(IImageLoader* loader) {
-	if (!loader)
-		return;
-
-	loader->grab();
-	SurfaceLoader.push_back(loader);
-}
-
-//! Adds an external surface writer to the engine.
-void CNullDriver::addExternalImageWriter(IImageWriter* writer) {
-	if (!writer)
-		return;
-
-	writer->grab();
-	SurfaceWriter.push_back(writer);
-}
-
 //! Retrieve the number of image loaders
 u32 CNullDriver::getImageLoaderCount() const {
 	return SurfaceLoader.size();
@@ -232,18 +214,6 @@ u32 CNullDriver::getTextureCount() const {
 	return Textures.size();
 }
 
-//! Renames a texture
-void CNullDriver::renameTexture(ITexture* texture, const io::path& newName) {
-	// we can do a const_cast here safely, the name of the ITexture interface
-	// is just readonly to prevent the user changing the texture name without invoking
-	// this method, because the textures will need resorting afterwards
-
-	io::SNamedPath& name = const_cast<io::SNamedPath&>(texture->getName());
-	name.setPath(newName);
-
-	Textures.sort();
-}
-
 ITexture* CNullDriver::addTexture(const core::dimension2d<u32>& size, const io::path& name, ECOLOR_FORMAT format) {
 	if (0 == name.size()) {
 		os::Printer::log("Could not create ITexture, texture needs to have a non-empty name.", ELL_WARNING);
@@ -292,62 +262,6 @@ ITexture* CNullDriver::addTexture(const io::path& name, IImage* image) {
 		addTexture(t);
 		t->drop();
 	}
-
-	return t;
-}
-
-ITexture* CNullDriver::addTextureCubemap(const io::path& name, IImage* imagePosX, IImage* imageNegX, IImage* imagePosY,
-	IImage* imageNegY, IImage* imagePosZ, IImage* imageNegZ) {
-	if (0 == name.size() || !imagePosX || !imageNegX || !imagePosY || !imageNegY || !imagePosZ || !imageNegZ)
-		return 0;
-
-	ITexture* t = 0;
-
-	core::array<IImage*> imageArray(6);
-	imageArray.push_back(imagePosX);
-	imageArray.push_back(imageNegX);
-	imageArray.push_back(imagePosY);
-	imageArray.push_back(imageNegY);
-	imageArray.push_back(imagePosZ);
-	imageArray.push_back(imageNegZ);
-
-	if (checkImage(imageArray)) {
-		t = createDeviceDependentTextureCubemap(name, imageArray);
-	}
-
-	if (t) {
-		addTexture(t);
-		t->drop();
-	}
-
-	return t;
-}
-
-ITexture* CNullDriver::addTextureCubemap(const irr::u32 sideLen, const io::path& name, ECOLOR_FORMAT format) {
-	if ( 0 == sideLen )
-		return 0;
-
-	if (0 == name.size()) {
-		os::Printer::log("Could not create ITexture, texture needs to have a non-empty name.", ELL_WARNING);
-		return 0;
-	}
-
-	core::array<IImage*> imageArray(6);
-	for ( int i=0; i < 6; ++i )
-		imageArray.push_back(new CImage(format, core::dimension2du(sideLen, sideLen)));
-
-	ITexture* t = 0;
-	if (checkImage(imageArray)) {
-		t = createDeviceDependentTextureCubemap(name, imageArray);
-
-		if (t) {
-			addTexture(t);
-			t->drop();
-		}
-	}
-
-	for ( int i=0; i < 6; ++i )
-		imageArray[i]->drop();
 
 	return t;
 }
@@ -558,35 +472,9 @@ void CNullDriver::drawVertexPrimitiveList(const void* vertices, u32 vertexCount,
 	PrimitivesDrawn += primitiveCount;
 }
 
-//! draws a vertex primitive list in 2d
-void CNullDriver::draw2DVertexPrimitiveList(const void* vertices, u32 vertexCount, const void* indexList, u32 primitiveCount, E_VERTEX_TYPE vType, scene::E_PRIMITIVE_TYPE pType, E_INDEX_TYPE iType) {
-	if ((iType==EIT_16BIT) && (vertexCount>65536))
-		os::Printer::log("Too many vertices for 16bit index type, render artifacts may occur.");
-	PrimitivesDrawn += primitiveCount;
-}
-
 //! Draws a 3d line.
 void CNullDriver::draw3DLine(const core::vector3df& start,
 				const core::vector3df& end, SColor color) {
-}
-
-//! Draws a 3d triangle.
-void CNullDriver::draw3DTriangle(const core::triangle3df& triangle, SColor color) {
-	S3DVertex vertices[3];
-	vertices[0].Pos=triangle.pointA;
-	vertices[0].Color=color;
-	vertices[0].Normal=triangle.getNormal().normalize();
-	vertices[0].TCoords.set(0.f,0.f);
-	vertices[1].Pos=triangle.pointB;
-	vertices[1].Color=color;
-	vertices[1].Normal=vertices[0].Normal;
-	vertices[1].TCoords.set(0.5f,1.f);
-	vertices[2].Pos=triangle.pointC;
-	vertices[2].Color=color;
-	vertices[2].Normal=vertices[0].Normal;
-	vertices[2].TCoords.set(1.f,0.f);
-	const u16 indexList[] = {0,1,2};
-	drawVertexPrimitiveList(vertices, 3, indexList, 1, EVT_STANDARD, scene::EPT_TRIANGLES, EIT_16BIT);
 }
 
 //! Draws a 3d axis aligned box.
@@ -680,14 +568,6 @@ void CNullDriver::draw2DImage(const video::ITexture* texture, const core::positi
 				bool useAlphaChannelOfTexture) {
 }
 
-//! Draws the outline of a 2d rectangle
-void CNullDriver::draw2DRectangleOutline(const core::recti& pos, SColor color) {
-	draw2DLine(pos.UpperLeftCorner, core::position2di(pos.LowerRightCorner.X, pos.UpperLeftCorner.Y), color);
-	draw2DLine(core::position2di(pos.LowerRightCorner.X, pos.UpperLeftCorner.Y), pos.LowerRightCorner, color);
-	draw2DLine(pos.LowerRightCorner, core::position2di(pos.UpperLeftCorner.X, pos.LowerRightCorner.Y), color);
-	draw2DLine(core::position2di(pos.UpperLeftCorner.X, pos.LowerRightCorner.Y), pos.UpperLeftCorner, color);
-}
-
 //! Draw a 2d rectangle
 void CNullDriver::draw2DRectangle(SColor color, const core::rect<s32>& pos, const core::rect<s32>* clip) {
 	draw2DRectangle(pos, color, color, color, color, clip);
@@ -708,30 +588,6 @@ void CNullDriver::draw2DLine(const core::position2d<s32>& start,
 
 //! Draws a pixel
 void CNullDriver::drawPixel(u32 x, u32 y, const SColor & color) {
-}
-
-//! Draws a non filled concyclic regular 2d polygon.
-void CNullDriver::draw2DPolygon(core::position2d<s32> center,
-	f32 radius, video::SColor color, s32 count) {
-	if (count < 2)
-		return;
-
-	core::position2d<s32> first;
-	core::position2d<s32> a,b;
-
-	for (s32 j=0; j<count; ++j) {
-		b = a;
-
-		f32 p = j / (f32)count * (core::PI*2);
-		a = center + core::position2d<s32>((s32)(sin(p)*radius), (s32)(cos(p)*radius));
-
-		if (j==0)
-			first = a;
-		else
-			draw2DLine(a, b, color);
-	}
-
-	draw2DLine(a, first, color);
 }
 
 //! returns color format
@@ -786,140 +642,12 @@ const wchar_t* CNullDriver::getName() const {
 	return L"\"why is the screen blank\" renderer";
 }
 
-
-//! Draws a shadow volume into the stencil buffer. To draw a stencil shadow, do
-//! this: First, draw all geometry. Then use this method, to draw the shadow
-//! volume. Then, use IVideoDriver::drawStencilShadow() to visualize the shadow.
-void CNullDriver::drawStencilShadowVolume(const core::array<core::vector3df>& triangles, bool zfail, u32 debugDataVisible) {
-}
-
 //! Fills the stencil shadow with color. After the shadow volume has been drawn
 //! into the stencil buffer using IVideoDriver::drawStencilShadowVolume(), use this
 //! to draw the color of the shadow.
 void CNullDriver::drawStencilShadow(bool clearStencilBuffer,
 		video::SColor leftUpEdge, video::SColor rightUpEdge,
 		video::SColor leftDownEdge, video::SColor rightDownEdge) {
-}
-
-//! Creates a boolean alpha channel of the texture based of an color key.
-void CNullDriver::makeColorKeyTexture(video::ITexture* texture,
-									video::SColor color,
-									bool zeroTexels) const {
-	if (!texture)
-		return;
-
-	if (texture->getColorFormat() != ECF_A1R5G5B5 &&
-		texture->getColorFormat() != ECF_A8R8G8B8 ) {
-		os::Printer::log("Error: Unsupported texture color format for making color key channel.", ELL_ERROR);
-		return;
-	}
-
-	if (texture->getColorFormat() == ECF_A1R5G5B5) {
-		u16 *p = (u16*)texture->lock();
-
-		if (!p) {
-			os::Printer::log("Could not lock texture for making color key channel.", ELL_ERROR);
-			return;
-		}
-
-		const core::dimension2d<u32> dim = texture->getSize();
-		const u32 pitch = texture->getPitch() / 2;
-
-		// color with alpha disabled (i.e. fully transparent)
-		const u16 refZeroAlpha = (0x7fff & color.toA1R5G5B5());
-
-		const u32 pixels = pitch * dim.Height;
-
-		for (u32 pixel = 0; pixel < pixels; ++ pixel) {
-			// If the color matches the reference color, ignoring alphas,
-			// set the alpha to zero.
-			if(((*p) & 0x7fff) == refZeroAlpha) {
-				if(zeroTexels)
-					(*p) = 0;
-				else
-					(*p) = refZeroAlpha;
-			}
-
-			++p;
-		}
-
-		texture->unlock();
-	} else {
-		u32 *p = (u32*)texture->lock();
-
-		if (!p) {
-			os::Printer::log("Could not lock texture for making color key channel.", ELL_ERROR);
-			return;
-		}
-
-		core::dimension2d<u32> dim = texture->getSize();
-		u32 pitch = texture->getPitch() / 4;
-
-		// color with alpha disabled (fully transparent)
-		const u32 refZeroAlpha = 0x00ffffff & color.color;
-
-		const u32 pixels = pitch * dim.Height;
-		for (u32 pixel = 0; pixel < pixels; ++ pixel) {
-			// If the color matches the reference color, ignoring alphas,
-			// set the alpha to zero.
-			if(((*p) & 0x00ffffff) == refZeroAlpha) {
-				if(zeroTexels)
-					(*p) = 0;
-				else
-					(*p) = refZeroAlpha;
-			}
-
-			++p;
-		}
-
-		texture->unlock();
-	}
-	texture->regenerateMipMapLevels();
-}
-
-
-//! Creates an boolean alpha channel of the texture based of an color key position.
-void CNullDriver::makeColorKeyTexture(video::ITexture* texture,
-					core::position2d<s32> colorKeyPixelPos,
-					bool zeroTexels) const {
-	if (!texture)
-		return;
-
-	if (texture->getColorFormat() != ECF_A1R5G5B5 &&
-		texture->getColorFormat() != ECF_A8R8G8B8 ) {
-		os::Printer::log("Error: Unsupported texture color format for making color key channel.", ELL_ERROR);
-		return;
-	}
-
-	SColor colorKey;
-
-	if (texture->getColorFormat() == ECF_A1R5G5B5) {
-		u16 *p = (u16*)texture->lock(ETLM_READ_ONLY);
-
-		if (!p) {
-			os::Printer::log("Could not lock texture for making color key channel.", ELL_ERROR);
-			return;
-		}
-
-		u32 pitch = texture->getPitch() / 2;
-
-		const u16 key16Bit = 0x7fff & p[colorKeyPixelPos.Y*pitch + colorKeyPixelPos.X];
-
-		colorKey = video::A1R5G5B5toA8R8G8B8(key16Bit);
-	} else {
-		u32 *p = (u32*)texture->lock(ETLM_READ_ONLY);
-
-		if (!p) {
-			os::Printer::log("Could not lock texture for making color key channel.", ELL_ERROR);
-			return;
-		}
-
-		u32 pitch = texture->getPitch() / 4;
-		colorKey = 0x00ffffff & p[colorKeyPixelPos.Y*pitch + colorKeyPixelPos.X];
-	}
-
-	texture->unlock();
-	makeColorKeyTexture(texture, colorKey, zeroTexels);
 }
 
 //! Returns the maximum amount of primitives (mostly vertices) which
@@ -1134,13 +862,6 @@ bool CNullDriver::writeImageToFile(IImage* image, io::IWriteFile * file, u32 par
 		}
 	}
 	return false; // failed to write
-}
-
-//! Creates a software image from a byte array.
-IImage* CNullDriver::createImageFromData(ECOLOR_FORMAT format,
-	const core::dimension2d<u32>& size, void *data, bool ownForeignMemory,
-	bool deleteMemory) {
-	return new CImage(format, size, data, ownForeignMemory, deleteMemory);
 }
 
 //! Creates an empty software image.
@@ -1499,14 +1220,6 @@ void CNullDriver::setMaterialRendererName(s32 idx, const char* name) {
 	MaterialRenderers[idx].Name = name;
 }
 
-void CNullDriver::swapMaterialRenderers(u32 idx1, u32 idx2, bool swapNames) {
-	if ( idx1 < MaterialRenderers.size() && idx2 < MaterialRenderers.size() ) {
-		irr::core::swap(MaterialRenderers[idx1].Renderer, MaterialRenderers[idx2].Renderer);
-		if ( swapNames )
-			irr::core::swap(MaterialRenderers[idx1].Name, MaterialRenderers[idx2].Name);
-	}
-}
-
 //! Returns driver and operating system specific data about the IVideoDriver.
 const SExposedVideoData& CNullDriver::getExposedVideoData() {
 	return ExposedData;
@@ -1801,11 +1514,6 @@ ITexture* CNullDriver::addRenderTargetTexture(const core::dimension2d<u32>& size
 	return 0;
 }
 
-ITexture* CNullDriver::addRenderTargetTextureCubemap(const irr::u32 sideLen,
-				const io::path& name, const ECOLOR_FORMAT format) {
-	return 0;
-}
-
 void CNullDriver::clearBuffers(u16 flag, SColor color, f32 depth, u8 stencil) {
 }
 
@@ -1899,21 +1607,6 @@ bool CNullDriver::needsTransparentRenderPass(const irr::video::SMaterial& materi
 		return true;
 
 	return false;
-}
-
-//! Color conversion convenience function
-/** Convert an image (as array of pixels) from source to destination
-array, thereby converting the color format. The pixel size is
-determined by the color formats.
-\param sP Pointer to source
-\param sF Color format of source
-\param sN Number of pixels to convert, both array must be large enough
-\param dP Pointer to destination
-\param dF Color format of destination
-*/
-void CNullDriver::convertColor(const void* sP, ECOLOR_FORMAT sF, s32 sN,
-		void* dP, ECOLOR_FORMAT dF) const {
-	video::CColorConverter::convert_viaFormat(sP, sF, sN, dP, dF);
 }
 
 } // end namespace

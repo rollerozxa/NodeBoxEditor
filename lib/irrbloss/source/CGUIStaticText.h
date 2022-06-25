@@ -6,8 +6,6 @@
 #define __C_GUI_STATIC_TEXT_H_INCLUDED__
 
 #include "IrrCompileConfig.h"
-#ifdef _IRR_COMPILE_WITH_GUI_
-
 #include "IGUIStaticText.h"
 #include "irrArray.h"
 
@@ -134,8 +132,6 @@ namespace gui
 
 } // end namespace gui
 } // end namespace irr
-
-#endif // _IRR_COMPILE_WITH_GUI_
 
 #endif
 

@@ -7,7 +7,6 @@
 
 #include "IVideoDriver.h"
 #include "IFileSystem.h"
-#include "IImagePresenter.h"
 #include "IGPUProgrammingServices.h"
 #include "irrArray.h"
 #include "irrString.h"
@@ -86,17 +85,9 @@ namespace video {
 		//! Returns amount of textures currently loaded
 		virtual u32 getTextureCount() const _IRR_OVERRIDE_;
 
-		//! Renames a texture
-		virtual void renameTexture(ITexture* texture, const io::path& newName) _IRR_OVERRIDE_;
-
 		virtual ITexture* addTexture(const core::dimension2d<u32>& size, const io::path& name, ECOLOR_FORMAT format = ECF_A8R8G8B8) _IRR_OVERRIDE_;
 
 		virtual ITexture* addTexture(const io::path& name, IImage* image) _IRR_OVERRIDE_;
-
-		virtual ITexture* addTextureCubemap(const io::path& name, IImage* imagePosX, IImage* imageNegX, IImage* imagePosY,
-			IImage* imageNegY, IImage* imagePosZ, IImage* imageNegZ) _IRR_OVERRIDE_;
-
-		virtual ITexture* addTextureCubemap(const irr::u32 sideLen, const io::path& name, ECOLOR_FORMAT format = ECF_A8R8G8B8) _IRR_OVERRIDE_;
 
 		virtual bool setRenderTargetEx(IRenderTarget* target, u16 clearFlag, SColor clearColor = SColor(255,0,0,0),
 			f32 clearDepth = 1.f, u8 clearStencil = 0) _IRR_OVERRIDE_;
@@ -116,19 +107,9 @@ namespace video {
 				E_VERTEX_TYPE vType=EVT_STANDARD, scene::E_PRIMITIVE_TYPE pType=scene::EPT_TRIANGLES,
 				E_INDEX_TYPE iType=EIT_16BIT) _IRR_OVERRIDE_;
 
-		//! draws a vertex primitive list in 2d
-		virtual void draw2DVertexPrimitiveList(const void* vertices, u32 vertexCount,
-				const void* indexList, u32 primitiveCount,
-				E_VERTEX_TYPE vType=EVT_STANDARD, scene::E_PRIMITIVE_TYPE pType=scene::EPT_TRIANGLES,
-				E_INDEX_TYPE iType=EIT_16BIT) _IRR_OVERRIDE_;
-
 		//! Draws a 3d line.
 		virtual void draw3DLine(const core::vector3df& start,
 			const core::vector3df& end, SColor color = SColor(255,255,255,255)) _IRR_OVERRIDE_;
-
-		//! Draws a 3d triangle.
-		virtual void draw3DTriangle(const core::triangle3df& triangle,
-			SColor color = SColor(255,255,255,255)) _IRR_OVERRIDE_;
 
 		//! Draws a 3d axis aligned box.
 		virtual void draw3DBox(const core::aabbox3d<f32>& box,
@@ -204,9 +185,6 @@ namespace video {
 			SColor colorLeftUp, SColor colorRightUp, SColor colorLeftDown, SColor colorRightDown,
 			const core::rect<s32>* clip = 0) _IRR_OVERRIDE_;
 
-		//! Draws the outline of a 2d rectangle
-		virtual void draw2DRectangleOutline(const core::recti& pos, SColor color=SColor(255,255,255,255)) _IRR_OVERRIDE_;
-
 		//! Draws a 2d line.
 		virtual void draw2DLine(const core::position2d<s32>& start,
 					const core::position2d<s32>& end,
@@ -214,10 +192,6 @@ namespace video {
 
 		//! Draws a pixel
 		virtual void drawPixel(u32 x, u32 y, const SColor & color) _IRR_OVERRIDE_;
-
-		//! Draws a non filled concyclic reqular 2d polygon.
-		virtual void draw2DPolygon(core::position2d<s32> center,
-			f32 radius, video::SColor Color, s32 vertexCount) _IRR_OVERRIDE_;
 
 		virtual void setFog(SColor color=SColor(0,255,255,255),
 				E_FOG_TYPE fogType=EFT_FOG_LINEAR,
@@ -258,18 +232,6 @@ namespace video {
 		//! Get the global ambient light currently used by the driver
 		virtual const SColorf& getAmbientLight() const _IRR_OVERRIDE_;
 
-		//! Adds an external image loader to the engine.
-		virtual void addExternalImageLoader(IImageLoader* loader) _IRR_OVERRIDE_;
-
-		//! Adds an external image writer to the engine.
-		virtual void addExternalImageWriter(IImageWriter* writer) _IRR_OVERRIDE_;
-
-		//! Draws a shadow volume into the stencil buffer. To draw a stencil shadow, do
-		//! this: First, draw all geometry. Then use this method, to draw the shadow
-		//! volume. Then, use IVideoDriver::drawStencilShadow() to visualize the shadow.
-		virtual void drawStencilShadowVolume(const core::array<core::vector3df>& triangles,
-			bool zfail=true, u32 debugDataVisible=0) _IRR_OVERRIDE_;
-
 		//! Fills the stencil shadow with color. After the shadow volume has been drawn
 		//! into the stencil buffer using IVideoDriver::drawStencilShadowVolume(), use this
 		//! to draw the color of the shadow.
@@ -291,17 +253,6 @@ namespace video {
 		virtual ITexture* addRenderTargetTexture(const core::dimension2d<u32>& size,
 			const io::path& name, const ECOLOR_FORMAT format = ECF_UNKNOWN) _IRR_OVERRIDE_;
 
-		//! Creates a render target texture for a cubemap
-		ITexture* addRenderTargetTextureCubemap(const irr::u32 sideLen,
-				const io::path& name, const ECOLOR_FORMAT format) _IRR_OVERRIDE_;
-
-		//! Creates an 1bit alpha channel of the texture based of an color key.
-		virtual void makeColorKeyTexture(video::ITexture* texture, video::SColor color, bool zeroTexels) const _IRR_OVERRIDE_;
-
-		//! Creates an 1bit alpha channel of the texture based of an color key position.
-		virtual void makeColorKeyTexture(video::ITexture* texture, core::position2d<s32> colorKeyPixelPos,
-			bool zeroTexels) const _IRR_OVERRIDE_;
-
 		//! Returns the maximum amount of primitives (mostly vertices) which
 		//! the device is able to render with one drawIndexedTriangleList
 		//! call.
@@ -316,14 +267,6 @@ namespace video {
 		virtual core::array<IImage*> createImagesFromFile(const io::path& filename, E_TEXTURE_TYPE* type = 0) _IRR_OVERRIDE_;
 
 		virtual core::array<IImage*> createImagesFromFile(io::IReadFile* file, E_TEXTURE_TYPE* type = 0) _IRR_OVERRIDE_;
-
-		//! Creates a software image from a byte array.
-		/** \param useForeignMemory: If true, the image will use the data pointer
-		directly and own it from now on, which means it will also try to delete [] the
-		data when the image will be destructed. If false, the memory will by copied. */
-		virtual IImage* createImageFromData(ECOLOR_FORMAT format,
-			const core::dimension2d<u32>& size, void *data, bool ownForeignMemory = false,
-			bool deleteMemory = true) _IRR_OVERRIDE_;
 
 		//! Creates an empty software image.
 		virtual IImage* createImage(ECOLOR_FORMAT format, const core::dimension2d<u32>& size) _IRR_OVERRIDE_;
@@ -347,12 +290,6 @@ namespace video {
 		//! Draws the normals of a mesh buffer
 		virtual void drawMeshBufferNormals(const scene::IMeshBuffer* mb, f32 length=10.f,
 			SColor color=0xffffffff) _IRR_OVERRIDE_;
-
-		//! Check if the driver supports creating textures with the given color format
-		virtual bool queryTextureFormat(ECOLOR_FORMAT format) const _IRR_OVERRIDE_
-		{
-			return false;
-		}
 
 	protected:
 		struct SHWBufferLink
@@ -583,9 +520,6 @@ namespace video {
 		//! Sets the name of a material renderer.
 		virtual void setMaterialRendererName(s32 idx, const char* name) _IRR_OVERRIDE_;
 
-		//! Swap the material renderers used for certain id's
-		virtual void swapMaterialRenderers(u32 idx1, u32 idx2, bool swapNames) _IRR_OVERRIDE_;
-
 		//! looks if the image is already loaded
 		virtual video::ITexture* findTexture(const io::path& filename) _IRR_OVERRIDE_;
 
@@ -621,28 +555,11 @@ namespace video {
 		//! Enable the 2d override material
 		virtual void enableMaterial2D(bool enable=true) _IRR_OVERRIDE_;
 
-		//! Only used by the engine internally.
-		virtual void setAllowZWriteOnTransparent(bool flag) _IRR_OVERRIDE_
-		{ AllowZWriteOnTransparent=flag; }
-
 		//! Returns the maximum texture size supported.
 		virtual core::dimension2du getMaxTextureSize() const _IRR_OVERRIDE_;
 
 		//! Used by some SceneNodes to check if a material should be rendered in the transparent render pass
 		virtual bool needsTransparentRenderPass(const irr::video::SMaterial& material) const _IRR_OVERRIDE_;
-
-		//! Color conversion convenience function
-		/** Convert an image (as array of pixels) from source to destination
-		array, thereby converting the color format. The pixel size is
-		determined by the color formats.
-		\param sP Pointer to source
-		\param sF Color format of source
-		\param sN Number of pixels to convert, both array must be large enough
-		\param dP Pointer to destination
-		\param dF Color format of destination
-		*/
-		virtual void convertColor(const void* sP, ECOLOR_FORMAT sF, s32 sN,
-				void* dP, ECOLOR_FORMAT dF) const _IRR_OVERRIDE_;
 
 		//! deprecated method
 		virtual ITexture* createRenderTargetTexture(const core::dimension2d<u32>& size,

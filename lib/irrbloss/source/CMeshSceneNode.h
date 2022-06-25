@@ -53,14 +53,6 @@ namespace scene
 		//! Returns the current mesh
 		virtual IMesh* getMesh(void) _IRR_OVERRIDE_ { return Mesh; }
 
-		//! Sets if the scene node should not copy the materials of the mesh but use them in a read only style.
-		/* In this way it is possible to change the materials a mesh causing all mesh scene nodes
-		referencing this mesh to change too. */
-		virtual void setReadOnlyMaterials(bool readonly) _IRR_OVERRIDE_;
-
-		//! Returns if the scene node should not copy the materials of the mesh but use them in a read only style
-		virtual bool isReadOnlyMaterials() const _IRR_OVERRIDE_;
-
 		//! Creates a clone of this scene node and its children.
 		virtual ISceneNode* clone(ISceneNode* newParent=0, ISceneManager* newManager=0) _IRR_OVERRIDE_;
 

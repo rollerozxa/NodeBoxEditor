@@ -20,7 +20,7 @@ CIrrDeviceStub::CIrrDeviceStub(const SIrrlichtCreationParameters& params)
 : IrrlichtDevice(), VideoDriver(0), GUIEnvironment(0), SceneManager(0),
 	Timer(0), CursorControl(0), UserReceiver(params.EventReceiver),
 	Logger(0), Operator(0), FileSystem(0),
-	InputReceivingSceneManager(0), VideoModeList(0), ContextManager(0),
+	InputReceivingSceneManager(0), ContextManager(0),
 	CreationParams(params), Close(false) {
 	Timer = new CTimer(params.UsePerformanceTimer);
 	if (os::Printer::Logger) {
@@ -36,7 +36,6 @@ CIrrDeviceStub::CIrrDeviceStub(const SIrrlichtCreationParameters& params)
 	os::Printer::Logger = Logger;
 
 	FileSystem = io::createFileSystem();
-	VideoModeList = new video::CVideoModeList();
 
 	core::stringc s = "Irrlicht Engine version ";
 	s.append(getVersion());
@@ -46,8 +45,6 @@ CIrrDeviceStub::CIrrDeviceStub(const SIrrlichtCreationParameters& params)
 }
 
 CIrrDeviceStub::~CIrrDeviceStub() {
-	VideoModeList->drop();
-
 	if (GUIEnvironment)
 		GUIEnvironment->drop();
 
@@ -82,10 +79,8 @@ CIrrDeviceStub::~CIrrDeviceStub() {
 }
 
 void CIrrDeviceStub::createGUIAndScene() {
-	#ifdef _IRR_COMPILE_WITH_GUI_
 	// create gui environment
 	GUIEnvironment = gui::createGUIEnvironment(FileSystem, VideoDriver, Operator);
-	#endif
 
 	// create Scene manager
 	SceneManager = scene::createSceneManager(VideoDriver, FileSystem, CursorControl, GUIEnvironment);
@@ -129,12 +124,6 @@ const char* CIrrDeviceStub::getVersion() const {
 //! \return Returns a pointer to the mouse cursor control interface.
 gui::ICursorControl* CIrrDeviceStub::getCursorControl() {
 	return CursorControl;
-}
-
-//! \return Returns a pointer to a list with all video modes supported
-//! by the gfx adapter.
-video::IVideoModeList* CIrrDeviceStub::getVideoModeList() {
-	return VideoModeList;
 }
 
 //! return the context manager
@@ -247,55 +236,6 @@ video::ECOLOR_FORMAT CIrrDeviceStub::getColorFormat() const {
 	return video::ECF_R5G6B5;
 }
 
-/*!
-*/
-void CIrrDeviceStub::calculateGammaRamp ( u16 *ramp, f32 gamma, f32 relativebrightness, f32 relativecontrast ) {
-	s32 i;
-	s32 value;
-	s32 rbright = (s32) ( relativebrightness * (65535.f / 4 ) );
-	f32 rcontrast = 1.f / (255.f - ( relativecontrast * 127.5f ) );
-
-	gamma = gamma > 0.f ? 1.0f / gamma : 0.f;
-
-	for ( i = 0; i < 256; ++i ) {
-		value = (s32)(pow( rcontrast * i, gamma)*65535.f + 0.5f );
-		ramp[i] = (u16) core::s32_clamp ( value + rbright, 0, 65535 );
-	}
-
-}
-
-void CIrrDeviceStub::calculateGammaFromRamp ( f32 &gamma, const u16 *ramp ) {
-	/* The following is adapted from a post by Garrett Bass on OpenGL
-	Gamedev list, March 4, 2000.
-	*/
-	f32 sum = 0.0;
-	s32 i, count = 0;
-
-	gamma = 1.0;
-	for ( i = 1; i < 256; ++i ) {
-		if ( (ramp[i] != 0) && (ramp[i] != 65535) ) {
-			f32 B = (f32)i / 256.f;
-			f32 A = ramp[i] / 65535.f;
-			sum += (f32) ( logf(A) / logf(B) );
-			count++;
-		}
-	}
-	if ( count && sum ) {
-		gamma = 1.0f / (sum / count);
-	}
-
-}
-
-//! Set the current Gamma Value for the Display
-bool CIrrDeviceStub::setGammaRamp( f32 red, f32 green, f32 blue, f32 brightness, f32 contrast ) {
-	return false;
-}
-
-//! Get the current Gamma Value for the Display
-bool CIrrDeviceStub::getGammaRamp( f32 &red, f32 &green, f32 &blue, f32 &brightness, f32 &contrast ) {
-	return false;
-}
-
 //! Set the maximal elapsed time between 2 clicks to generate doubleclicks for the mouse. It also affects tripleclick behavior.
 void CIrrDeviceStub::setDoubleClickTime( u32 timeMs ) {
 	MouseMultiClicks.DoubleClickTime = timeMs;
@@ -304,10 +244,6 @@ void CIrrDeviceStub::setDoubleClickTime( u32 timeMs ) {
 //! Get the maximal elapsed time between 2 clicks to generate double- and tripleclicks for the mouse.
 u32 CIrrDeviceStub::getDoubleClickTime() const {
 	return MouseMultiClicks.DoubleClickTime;
-}
-
-//! Remove all messages pending in the system message loop
-void CIrrDeviceStub::clearSystemMessages() {
 }
 
 //! Checks whether the input device should take input from the IME

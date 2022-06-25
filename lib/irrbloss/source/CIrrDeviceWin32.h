@@ -10,14 +10,11 @@
 
 #include "CIrrDeviceStub.h"
 #include "IrrlichtDevice.h"
-#include "IImagePresenter.h"
 
 #define WIN32_LEAN_AND_MEAN
-#if !defined(_IRR_XBOX_PLATFORM_)
-	#include <windows.h>
-	#include <mmsystem.h> // For JOYCAPS
-	#include <windowsx.h>
-#endif
+#include <windows.h>
+#include <mmsystem.h> // For JOYCAPS
+#include <windowsx.h>
 #if !defined(GET_X_LPARAM)
 #define GET_X_LPARAM(lp) ((int)(short)LOWORD(lp))
 #define GET_Y_LPARAM(lp) ((int)(short)HIWORD(lp))
@@ -25,7 +22,7 @@
 
 namespace irr {
 
-	class CIrrDeviceWin32 : public CIrrDeviceStub, video::IImagePresenter
+	class CIrrDeviceWin32 : public CIrrDeviceStub
 	{
 	public:
 
@@ -54,12 +51,6 @@ namespace irr {
 		//! returns if window has focus
 		virtual bool isWindowFocused() const _IRR_OVERRIDE_;
 
-		//! returns if window is minimized
-		virtual bool isWindowMinimized() const _IRR_OVERRIDE_;
-
-		//! presents a surface in the client area
-		virtual bool present(video::IImage* surface, void* windowId=0, core::rect<s32>* src=0) _IRR_OVERRIDE_;
-
 		//! notifies the device that it should close itself
 		virtual void closeDevice() _IRR_OVERRIDE_;
 
@@ -73,26 +64,8 @@ namespace irr {
 		//! Resize the render window.
 		virtual void setWindowSize(const irr::core::dimension2d<u32>& size) _IRR_OVERRIDE_;
 
-		//! Minimizes the window.
-		virtual void minimizeWindow() _IRR_OVERRIDE_;
-
-		//! Maximizes the window.
-		virtual void maximizeWindow() _IRR_OVERRIDE_;
-
-		//! Restores the window size.
-		virtual void restoreWindow() _IRR_OVERRIDE_;
-
 		//! Get the position of the window on screen
 		virtual core::position2di getWindowPosition() _IRR_OVERRIDE_;
-
-		//! Set the current Gamma Value for the Display
-		virtual bool setGammaRamp( f32 red, f32 green, f32 blue, f32 brightness, f32 contrast ) _IRR_OVERRIDE_;
-
-		//! Get the current Gamma Value for the Display
-		virtual bool getGammaRamp( f32 &red, f32 &green, f32 &blue, f32 &brightness, f32 &contrast ) _IRR_OVERRIDE_;
-
-		//! Remove all messages pending in the system message loop
-		virtual void clearSystemMessages() _IRR_OVERRIDE_;
 
 		//! Get the device type
 		virtual E_DEVICE_TYPE getType() const _IRR_OVERRIDE_
@@ -111,15 +84,8 @@ namespace irr {
 		//! Switch to fullscreen
 		bool switchToFullScreen();
 
-		//! Check for and show last Windows API error to help internal debugging.
-		//! Does call GetLastError and on errors formats the error text and displays it in a messagebox.
-		static void ReportLastWinApiError();
-
 		//! Same function Windows offers in VersionHelpers.h, but we can't use that as it's not available before SDK 8.1
 		static bool isWindowsVistaOrGreater();
-
-		// convert an Irrlicht texture to a windows cursor
-		HCURSOR TextureToCursor(HWND hwnd, irr::video::ITexture * tex, const core::rect<s32>& sourceRect, const core::position2d<s32> &hotspot);
 
 		//! Implementation of the win32 cursor control
 		class CCursorControl : public gui::ICursorControl
@@ -301,12 +267,6 @@ namespace irr {
 			{
 				return ActiveIcon;
 			}
-
-			//! Add a custom sprite as cursor icon.
-			virtual gui::ECURSOR_ICON addIcon(const gui::SCursorSprite& icon) _IRR_OVERRIDE_;
-
-			//! replace the given cursor icon.
-			virtual void changeIcon(gui::ECURSOR_ICON iconId, const gui::SCursorSprite& icon) _IRR_OVERRIDE_;
 
 			//! Return a system-specific size which is supported for cursors. Larger icons will fail, smaller icons might work.
 			virtual core::dimension2di getSupportedIconSize() const _IRR_OVERRIDE_;

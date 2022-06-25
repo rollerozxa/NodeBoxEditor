@@ -95,15 +95,6 @@ bool CFileList::isDirectory(u32 index) const {
 	return ret;
 }
 
-//! Returns the size of a file
-u32 CFileList::getFileSize(u32 index) const {
-	return index < Files.size() ? Files[index].Size : 0;
-}
-
-u32 CFileList::getFileOffset(u32 index) const {
-	return index < Files.size() ? Files[index].Offset : 0;
-}
-
 //! Searches for a file or folder within the list, returns the index
 s32 CFileList::findFile(const io::path& filename, bool isDirectory = false) const {
 	SFileListEntry entry;

@@ -165,17 +165,6 @@ namespace gui
 		//! Gets the currently active icon
 		virtual ECURSOR_ICON getActiveIcon() const { return gui::ECI_NORMAL; }
 
-		//! Add a custom sprite as cursor icon.
-		/** \return Identification for the icon */
-		virtual ECURSOR_ICON addIcon(const gui::SCursorSprite& icon) { return gui::ECI_NORMAL; }
-
-		//! replace a cursor icon.
-		/** Changing cursor icons is so far only supported on Win32 and Linux
-			Note that this only changes the icons within your application, system cursors outside your
-			application will not be affected.
-		*/
-		virtual void changeIcon(ECURSOR_ICON iconId, const gui::SCursorSprite& sprite) {}
-
 		//! Return a system-specific size which is supported for cursors. Larger icons will fail, smaller icons might work.
 		virtual core::dimension2di getSupportedIconSize() const { return core::dimension2di(0,0); }
 

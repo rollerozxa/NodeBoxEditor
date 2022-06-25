@@ -30,22 +30,11 @@ public:
 	//! Creates an IReadFile interface for accessing memory like a file.
 	virtual IReadFile* createMemoryReadFile(const void* memory, s32 len, const io::path& fileName, bool deleteMemoryWhenDropped = false) _IRR_OVERRIDE_;
 
-	//! Creates an IWriteFile interface for accessing memory like a file.
-	virtual IWriteFile* createMemoryWriteFile(void* memory, s32 len, const io::path& fileName, bool deleteMemoryWhenDropped=false) _IRR_OVERRIDE_;
-
 	//! Opens a file for write access.
 	virtual IWriteFile* createAndWriteFile(const io::path& filename, bool append=false) _IRR_OVERRIDE_;
 
-	//! move the hirarchy of the filesystem. moves sourceIndex relative up or down
-	virtual bool moveFileArchive(u32 sourceIndex, s32 relative) _IRR_OVERRIDE_;
-
 	//! Returns the string of the current working directory
 	virtual const io::path& getWorkingDirectory() _IRR_OVERRIDE_;
-
-	//! Changes the current Working Directory to the string given.
-	//! The string is operating system dependent. Under Windows it will look
-	//! like this: "drive:\directory\sudirectory\"
-	virtual bool changeWorkingDirectoryTo(const io::path& newDirectory) _IRR_OVERRIDE_;
 
 	//! Converts a relative path to an absolute (unique) path, resolving symbolic links
 	virtual io::path getAbsolutePath(const io::path& filename) const _IRR_OVERRIDE_;
@@ -54,11 +43,6 @@ public:
 	/** \param filename: The file to get the directory from */
 	virtual io::path getFileDir(const io::path& filename) const _IRR_OVERRIDE_;
 
-	//! Returns the base part of a filename, i.e. the name without the directory
-	//! part. If no directory is prefixed, the full name is returned.
-	/** \param filename: The file to get the basename from */
-	virtual io::path getFileBasename(const io::path& filename, bool keepExtension=true) const _IRR_OVERRIDE_;
-
 	//! flatten a path and file name for example: "/you/me/../." becomes "/you"
 	virtual io::path& flattenFilename( io::path& directory, const io::path& root = "/" ) const _IRR_OVERRIDE_;
 
@@ -66,13 +50,6 @@ public:
 	virtual path getRelativeFilename(const path& filename, const path& directory) const _IRR_OVERRIDE_;
 
 	virtual EFileSystemType setFileListSystem(EFileSystemType listType) _IRR_OVERRIDE_;
-
-	//! Creates a list of files and directories in the current working directory
-	//! and returns it.
-	virtual IFileList* createFileList() _IRR_OVERRIDE_;
-
-	//! Creates an empty filelist
-	virtual IFileList* createEmptyFileList(const io::path& path, bool ignoreCase, bool ignorePaths) _IRR_OVERRIDE_;
 
 	//! determines if a file exists and would be able to be opened.
 	virtual bool existFile(const io::path& filename) const _IRR_OVERRIDE_;

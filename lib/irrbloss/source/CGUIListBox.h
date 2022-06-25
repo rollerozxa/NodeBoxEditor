@@ -6,8 +6,6 @@
 #define __C_GUI_LIST_BOX_H_INCLUDED__
 
 #include "IrrCompileConfig.h"
-#ifdef _IRR_COMPILE_WITH_GUI_
-
 #include "IGUIListBox.h"
 #include "irrArray.h"
 
@@ -93,12 +91,6 @@ namespace gui
 		//! set all item colors of specified type at given index to color
 		virtual void setItemOverrideColor(u32 index, EGUI_LISTBOX_COLOR colorType, video::SColor color) _IRR_OVERRIDE_;
 
-		//! clear all item colors at index
-		virtual void clearItemOverrideColor(u32 index) _IRR_OVERRIDE_;
-
-		//! clear item color at index for given colortype
-		virtual void clearItemOverrideColor(u32 index, EGUI_LISTBOX_COLOR colorType) _IRR_OVERRIDE_;
-
 		//! has the item at index its color overwritten?
 		virtual bool hasItemOverrideColor(u32 index, EGUI_LISTBOX_COLOR colorType) const _IRR_OVERRIDE_;
 
@@ -114,9 +106,6 @@ namespace gui
 		//! Insert the item at the given index
 		//! Return the index on success or -1 on failure.
 		virtual s32 insertItem(u32 index, const wchar_t* text, s32 icon) _IRR_OVERRIDE_;
-
-		//! Swap the items at the given indices
-		virtual void swapItems(u32 index1, u32 index2) _IRR_OVERRIDE_;
 
 		//! set global itemHeight
 		virtual void setItemHeight( s32 height ) _IRR_OVERRIDE_;
@@ -179,7 +168,5 @@ namespace gui
 
 } // end namespace gui
 } // end namespace irr
-
-#endif // _IRR_COMPILE_WITH_GUI_
 
 #endif

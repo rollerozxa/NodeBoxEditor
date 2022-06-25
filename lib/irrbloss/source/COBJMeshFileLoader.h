@@ -89,14 +89,10 @@ private:
 	//! Find and return the material with the given name
 	SObjMtl* findMtl(const core::stringc& mtlName, const core::stringc& grpName);
 
-	//! Read RGB color
-	const c8* readColor(const c8* bufPtr, video::SColor& color, const c8* const pBufEnd);
 	//! Read 3d vector of floats
 	const c8* readVec3(const c8* bufPtr, core::vector3df& vec, const c8* const pBufEnd);
 	//! Read 2d vector of floats
 	const c8* readUV(const c8* bufPtr, core::vector2df& vec, const c8* const pBufEnd);
-	//! Read boolean value represented as 'on' or 'off'
-	const c8* readBool(const c8* bufPtr, bool& tf, const c8* const bufEnd);
 
 	// reads and convert to integer the vertex indices in a line of obj file's face statement
 	// -1 for the index if it doesn't exist

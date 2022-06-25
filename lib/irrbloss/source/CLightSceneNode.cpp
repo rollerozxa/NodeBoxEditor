@@ -131,15 +131,6 @@ video::E_LIGHT_TYPE CLightSceneNode::getLightType() const {
 	return LightData.Type;
 }
 
-//! Sets whether this light casts shadows.
-/** Enabling this flag won't automatically cast shadows, the meshes
-will still need shadow scene nodes attached. But one can enable or
-disable distinct lights for shadow casting for performance reasons.
-\param shadow True if this light shall cast shadows. */
-void CLightSceneNode::enableCastShadow(bool shadow) {
-	LightData.CastShadows=shadow;
-}
-
 //! Check whether this light casts shadows.
 /** \return True if light would cast shadows, else false. */
 bool CLightSceneNode::getCastShadow() const {

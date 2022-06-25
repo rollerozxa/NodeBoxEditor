@@ -99,12 +99,6 @@ public:
 	//! Returns true if the file is a directory
 	virtual bool isDirectory(u32 index) const _IRR_OVERRIDE_;
 
-	//! Returns the size of a file
-	virtual u32 getFileSize(u32 index) const _IRR_OVERRIDE_;
-
-	//! Returns the offset of a file
-	virtual u32 getFileOffset(u32 index) const _IRR_OVERRIDE_;
-
 	//! Searches for a file or folder within the list, returns the index
 	virtual s32 findFile(const io::path& filename, bool isFolder) const _IRR_OVERRIDE_;
 

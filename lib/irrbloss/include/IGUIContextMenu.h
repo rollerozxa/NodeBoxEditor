@@ -121,9 +121,6 @@ namespace gui
 		/** \param idx: Zero based index of the menu item */
 		virtual void removeItem(u32 idx) = 0;
 
-		//! Removes all menu items
-		virtual void removeAllItems() = 0;
-
 		//! Get the selected item in the menu
 		/** \return Index of the selected item, -1 if none selected. */
 		virtual s32 getSelectedItem() const = 0;

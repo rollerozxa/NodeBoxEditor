@@ -81,39 +81,6 @@ namespace scene {
 		\return Pointer to the mesh or 0 if there is none with this number. */
 		virtual IAnimatedMesh* getMeshByName(const io::path& name) = 0;
 
-		//! Get the name of a loaded mesh, based on its index.
-		/** \param index: Index of the mesh, number between 0 and getMeshCount()-1.
-		\return The name if mesh was found and has a name, else the path is empty. */
-		virtual const io::SNamedPath& getMeshName(u32 index) const = 0;
-
-		//! Get the name of the loaded mesh if there is any.
-		/** \param mesh Pointer to mesh to query.
-		\return The name if mesh was found and has a name, else the path is empty. */
-		virtual const io::SNamedPath& getMeshName(const IMesh* const mesh) const = 0;
-
-		//! Renames a loaded mesh.
-		/** Note that renaming meshes might change the ordering of the
-		meshes, and so the index of the meshes as returned by
-		getMeshIndex() or taken by some methods will change.
-		\param index The index of the mesh in the cache.
-		\param name New name for the mesh.
-		\return True if mesh was renamed. */
-		virtual bool renameMesh(u32 index, const io::path& name) = 0;
-
-		//! Renames the loaded mesh
-		/** Note that renaming meshes might change the ordering of the
-		meshes, and so the index of the meshes as returned by
-		getMeshIndex() or taken by some methods will change.
-		\param mesh Mesh to be renamed.
-		\param name New name for the mesh.
-		\return True if mesh was renamed. */
-		virtual bool renameMesh(const IMesh* const mesh, const io::path& name) = 0;
-
-		//! Check if a mesh was already loaded.
-		/** \param name Name of the mesh. Usually a filename.
-		\return True if the mesh has been loaded, else false. */
-		virtual bool isMeshLoaded(const io::path& name) = 0;
-
 		//! Clears the whole mesh cache, removing all meshes.
 		/** All meshes will be reloaded completely when using ISceneManager::getMesh()
 		after calling this method.

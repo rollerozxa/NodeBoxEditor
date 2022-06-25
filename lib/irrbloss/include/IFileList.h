@@ -34,18 +34,6 @@ public:
 	\return File name of the file. Returns 0 if an error occurred. */
 	virtual const io::path& getFullFileName(u32 index) const = 0;
 
-	//! Returns the size of a file in the file list, based on an index.
-	/** \param index is the zero based index of the file which should be returned.
-	The index must be less than the amount getFileCount() returns.
-	\return The size of the file in bytes. */
-	virtual u32 getFileSize(u32 index) const = 0;
-
-	//! Returns the file offset of a file in the file list, based on an index.
-	/** \param index is the zero based index of the file which should be returned.
-	The index must be less than the amount getFileCount() returns.
-	\return The offset of the file in bytes. */
-	virtual u32 getFileOffset(u32 index) const = 0;
-
 	//! Returns the ID of a file in the file list, based on an index.
 	/** This optional ID can be used to link the file list entry to information held
 	elsewhere. For example this could be an index in an IFileArchive, linking the entry

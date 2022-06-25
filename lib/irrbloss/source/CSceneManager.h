@@ -131,12 +131,6 @@ namespace scene {
 		virtual ITriangleSelector* createOctreeTriangleSelector(IMeshBuffer* meshBuffer, irr::u32 materialIndex,
 			ISceneNode* node, s32 minimalPolysPerNode=32) _IRR_OVERRIDE_;
 
-		//! Creates a meta triangle selector.
-		virtual IMetaTriangleSelector* createMetaTriangleSelector() _IRR_OVERRIDE_;
-
-		//! Adds an external mesh loader.
-		virtual void addExternalMeshLoader(IMeshLoader* externalLoader) _IRR_OVERRIDE_;
-
 		//! Returns the number of mesh loaders supported by Irrlicht at this time
 		virtual u32 getMeshLoaderCount() const _IRR_OVERRIDE_;
 

@@ -12,7 +12,6 @@
 #include "EDeviceTypes.h"
 #include "IEventReceiver.h"
 #include "ICursorControl.h"
-#include "IVideoModeList.h"
 #include "ITimer.h"
 #include "IOSOperator.h"
 
@@ -85,14 +84,6 @@ namespace irr {
 		/** \return Pointer to the logger. */
 		virtual ILogger* getLogger() = 0;
 
-		//! Gets a list with all video modes available.
-		/** You only need a null driver (ED_NULL) to access
-		those video modes. So you can get the available modes
-		before starting any other video driver.
-		\return Pointer to a list with all video modes supported
-		by the gfx adapter. */
-		virtual video::IVideoModeList* getVideoModeList() = 0;
-
 		//! Get context manager
 		virtual video::IContextManager* getContextManager() = 0;
 
@@ -123,10 +114,6 @@ namespace irr {
 		//! Checks if the Irrlicht window has the input focus
 		/** \return True if window has focus. */
 		virtual bool isWindowFocused() const = 0;
-
-		//! Checks if the Irrlicht window is minimized
-		/** \return True if window is minimized. */
-		virtual bool isWindowMinimized() const = 0;
 
 		//! Checks if the Irrlicht window is running in fullscreen mode
 		/** \return True if window is fullscreen. */
@@ -184,25 +171,8 @@ namespace irr {
 		*/
 		virtual void setWindowSize(const irr::core::dimension2d<u32>& size) = 0;
 
-		//! Minimizes the window if possible.
-		virtual void minimizeWindow() =0;
-
-		//! Maximizes the window if possible.
-		virtual void maximizeWindow() =0;
-
-		//! Restore the window to normal size if possible.
-		virtual void restoreWindow() =0;
-
 		//! Get the position of the frame on-screen
 		virtual core::position2di getWindowPosition() = 0;
-
-		//! Set the current Gamma Value for the Display
-		virtual bool setGammaRamp(f32 red, f32 green, f32 blue,
-					f32 relativebrightness, f32 relativecontrast) =0;
-
-		//! Get the current Gamma Value for the Display
-		virtual bool getGammaRamp(f32 &red, f32 &green, f32 &blue,
-					f32 &brightness, f32 &contrast) =0;
 
 		//! Set the maximal elapsed time between 2 clicks to generate doubleclicks for the mouse. It also affects tripleclick behavior.
 		/** When set to 0 no double- and tripleclicks will be generated.
@@ -215,18 +185,6 @@ namespace irr {
 		\return maximal time in milliseconds for two consecutive clicks to be recognized as double click
 		*/
 		virtual u32 getDoubleClickTime() const =0;
-
-		//! Remove messages pending in the system message loop
-		/** This function is usually used after messages have been buffered for a longer time, for example
-		when loading a large scene. Clearing the message loop prevents that mouse- or buttonclicks which users
-		have pressed in the meantime will now trigger unexpected actions in the gui. <br>
-		So far the following messages are cleared:<br>
-		Win32: All keyboard and mouse messages<br>
-		Linux: All keyboard and mouse messages<br>
-		All other devices are not yet supported here.<br>
-		The function is still somewhat experimental, as the kind of messages we clear is based on just a few use-cases.
-		If you think further messages should be cleared, or some messages should not be cleared here, then please tell us. */
-		virtual void clearSystemMessages() = 0;
 
 		//! Get the type of the device.
 		/** This allows the user to check which windowing system is currently being

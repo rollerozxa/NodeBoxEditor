@@ -50,14 +50,6 @@ namespace scene {
 		//! Returns the current displayed frame number.
 		virtual f32 getFrameNr() const _IRR_OVERRIDE_;
 
-		//! Sets if the scene node should not copy the materials of the mesh but use them in a read only style.
-		/* In this way it is possible to change the materials a mesh causing all mesh scene nodes
-		referencing this mesh to change too. */
-		virtual void setReadOnlyMaterials(bool readonly) _IRR_OVERRIDE_;
-
-		//! Returns if the scene node should not copy the materials of the mesh but use them in a read only style
-		virtual bool isReadOnlyMaterials() const _IRR_OVERRIDE_;
-
 		//! Sets a new mesh
 		virtual void setMesh(IAnimatedMesh* mesh) _IRR_OVERRIDE_;
 

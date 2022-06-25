@@ -91,39 +91,10 @@ IReadFile* CFileSystem::createMemoryReadFile(const void* memory, s32 len,
 		return new CMemoryReadFile(memory, len, fileName, deleteMemoryWhenDropped);
 }
 
-//! Creates an IReadFile interface for treating memory like a file.
-IWriteFile* CFileSystem::createMemoryWriteFile(void* memory, s32 len,
-		const io::path& fileName, bool deleteMemoryWhenDropped) {
-	if (!memory)
-		return 0;
-	else
-		return new CMemoryWriteFile(memory, len, fileName, deleteMemoryWhenDropped);
-}
-
 
 //! Opens a file for write access.
 IWriteFile* CFileSystem::createAndWriteFile(const io::path& filename, bool append) {
 	return CWriteFile::createWriteFile(filename, append);
-}
-
-//! move the hirarchy of the filesystem. moves sourceIndex relative up or down
-bool CFileSystem::moveFileArchive(u32 sourceIndex, s32 relative) {
-	bool r = false;
-	const s32 dest = (s32) sourceIndex + relative;
-	const s32 dir = relative < 0 ? -1 : 1;
-	const s32 sourceEnd = ((s32) FileArchives.size() ) - 1;
-	IFileArchive *t;
-
-	for (s32 s = (s32) sourceIndex;s != dest; s += dir) {
-		if (s < 0 || s > sourceEnd || s + dir < 0 || s + dir > sourceEnd)
-			continue;
-
-		t = FileArchives[s + dir];
-		FileArchives[s + dir] = FileArchives[s];
-		FileArchives[s] = t;
-		r = true;
-	}
-	return r;
 }
 
 //! Returns the string of the current working directory
@@ -163,30 +134,6 @@ const io::path& CFileSystem::getWorkingDirectory() {
 
 	return WorkingDirectory[type];
 }
-
-
-//! Changes the current Working Directory to the given string.
-bool CFileSystem::changeWorkingDirectoryTo(const io::path& newDirectory) {
-	bool success=false;
-
-	if (FileSystemType != FILESYSTEM_NATIVE) {
-		WorkingDirectory[FILESYSTEM_VIRTUAL] = newDirectory;
-		// is this empty string constant really intended?
-		flattenFilename(WorkingDirectory[FILESYSTEM_VIRTUAL], _IRR_TEXT(""));
-		success = true;
-	} else {
-		WorkingDirectory[FILESYSTEM_NATIVE] = newDirectory;
-
-#if defined(_MSC_VER)
-	success = (_chdir(newDirectory.c_str()) == 0);
-#else
-	success = (chdir(newDirectory.c_str()) == 0);
-#endif
-	}
-
-	return success;
-}
-
 
 io::path CFileSystem::getAbsolutePath(const io::path& filename) const {
 	if ( filename.empty() )
@@ -235,35 +182,6 @@ io::path CFileSystem::getFileDir(const io::path& filename) const {
 		return filename.subString(0, lastSlash);
 	else
 		return _IRR_TEXT(".");
-}
-
-
-//! returns the base part of a filename, i.e. all except for the directory
-//! part. If no directory path is prefixed, the full name is returned.
-io::path CFileSystem::getFileBasename(const io::path& filename, bool keepExtension) const {
-	// find last forward or backslash
-	s32 lastSlash = filename.findLast('/');
-	const s32 lastBackSlash = filename.findLast('\\');
-	lastSlash = core::max_(lastSlash, lastBackSlash);
-
-	// get number of chars after last dot
-	s32 end = 0;
-	if (!keepExtension) {
-		// take care to search only after last slash to check only for
-		// dots in the filename
-		end = filename.findLast('.');
-		if (end == -1 || end < lastSlash)
-			end=0;
-		else
-			end = filename.size()-end;
-	}
-
-	if ((u32)lastSlash < filename.size())
-		return filename.subString(lastSlash+1, filename.size()-lastSlash-1-end);
-	else if (end != 0)
-		return filename.subString(0, filename.size()-end);
-	else
-		return filename;
 }
 
 
@@ -373,122 +291,6 @@ EFileSystemType CFileSystem::setFileListSystem(EFileSystemType listType) {
 	EFileSystemType current = FileSystemType;
 	FileSystemType = listType;
 	return current;
-}
-
-
-//! Creates a list of files and directories in the current working directory
-IFileList* CFileSystem::createFileList() {
-	CFileList* r = 0;
-	io::path Path = getWorkingDirectory();
-	Path.replace('\\', '/');
-	if (!Path.empty() && Path.lastChar() != '/')
-		Path.append('/');
-
-	//! Construct from native filesystem
-	if (FileSystemType == FILESYSTEM_NATIVE) {
-		// --------------------------------------------
-		//! Windows version
-		#ifdef _IRR_WINDOWS_API_
-		#if !defined ( _WIN32_WCE )
-
-		r = new CFileList(Path, true, false);
-
-		// TODO: Should be unified once mingw adapts the proper types
-#if defined(__GNUC__)
-		long hFile; //mingw return type declaration
-#else
-		intptr_t hFile;
-#endif
-
-		struct _tfinddata_t c_file;
-		if( (hFile = _tfindfirst( _T("*"), &c_file )) != -1L ) {
-			do
-			{
-				r->addItem(Path + c_file.name, 0, c_file.size, (_A_SUBDIR & c_file.attrib) != 0, 0);
-			}
-			while( _tfindnext( hFile, &c_file ) == 0 );
-
-			_findclose( hFile );
-		}
-		#endif
-
-		//TODO add drives
-		//entry.Name = "E:\\";
-		//entry.isDirectory = true;
-		//Files.push_back(entry);
-		#endif
-
-		// --------------------------------------------
-		//! Linux version
-		#if defined(_IRR_POSIX_API_)
-
-		r = new CFileList(Path, false, false);
-
-		r->addItem(Path + _IRR_TEXT(".."), 0, 0, true, 0);
-
-		//! We use the POSIX compliant methods instead of scandir
-		DIR* dirHandle=opendir(Path.c_str());
-		if (dirHandle) {
-			struct dirent *dirEntry;
-			while ((dirEntry=readdir(dirHandle))) {
-				u32 size = 0;
-				bool isDirectory = false;
-
-				if((strcmp(dirEntry->d_name, ".")==0) ||
-				   (strcmp(dirEntry->d_name, "..")==0)) {
-					continue;
-				}
-				struct stat buf;
-				if (stat(dirEntry->d_name, &buf)==0) {
-					size = buf.st_size;
-					isDirectory = S_ISDIR(buf.st_mode);
-				}
-				#if !defined(_IRR_SOLARIS_PLATFORM_) && !defined(__CYGWIN__)
-				// only available on some systems
-				else {
-					isDirectory = dirEntry->d_type == DT_DIR;
-				}
-				#endif
-
-				r->addItem(Path + dirEntry->d_name, 0, size, isDirectory, 0);
-			}
-			closedir(dirHandle);
-		}
-		#endif
-	} else {
-		//! create file list for the virtual filesystem
-		r = new CFileList(Path, false, false);
-
-		//! add relative navigation
-		SFileListEntry e2;
-		SFileListEntry e3;
-
-		//! PWD
-		r->addItem(Path + _IRR_TEXT("."), 0, 0, true, 0);
-
-		//! parent
-		r->addItem(Path + _IRR_TEXT(".."), 0, 0, true, 0);
-
-		//! merge archives
-		for (u32 i=0; i < FileArchives.size(); ++i) {
-			const IFileList *merge = FileArchives[i]->getFileList();
-
-			for (u32 j=0; j < merge->getFileCount(); ++j) {
-				if (core::isInSameDirectory(Path, merge->getFullFileName(j)) == 0) {
-					r->addItem(merge->getFullFileName(j), merge->getFileOffset(j), merge->getFileSize(j), merge->isDirectory(j), 0);
-				}
-			}
-		}
-	}
-
-	if (r)
-		r->sort();
-	return r;
-}
-
-//! Creates an empty filelist
-IFileList* CFileSystem::createEmptyFileList(const io::path& path, bool ignoreCase, bool ignorePaths) {
-	return new CFileList(path, ignoreCase, ignorePaths);
 }
 
 

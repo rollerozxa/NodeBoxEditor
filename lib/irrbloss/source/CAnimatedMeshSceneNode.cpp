@@ -272,16 +272,6 @@ u32 CAnimatedMeshSceneNode::getMaterialCount() const {
 	return Materials.size();
 }
 
-//! Sets if the scene node should not copy the materials of the mesh but use them in a read only style.
-void CAnimatedMeshSceneNode::setReadOnlyMaterials(bool readonly) {
-	ReadOnlyMaterials = readonly;
-}
-
-//! Returns if the scene node should not copy the materials of the mesh but use them in a read only style
-bool CAnimatedMeshSceneNode::isReadOnlyMaterials() const {
-	return ReadOnlyMaterials;
-}
-
 //! Sets a new mesh
 void CAnimatedMeshSceneNode::setMesh(IAnimatedMesh* mesh) {
 	if (!mesh)

@@ -62,15 +62,6 @@ namespace scene
 		//! Returns the currently displayed frame number.
 		virtual f32 getFrameNr() const = 0;
 
-		//! Sets if the scene node should not copy the materials of the mesh but use them in a read only style.
-		/** In this way it is possible to change the materials a mesh
-		causing all mesh scene nodes referencing this mesh to change
-		too. */
-		virtual void setReadOnlyMaterials(bool readonly) = 0;
-
-		//! Returns if the scene node should not copy the materials of the mesh but use them in a read only style
-		virtual bool isReadOnlyMaterials() const = 0;
-
 		//! Sets a new mesh
 		virtual void setMesh(IAnimatedMesh* mesh) = 0;
 

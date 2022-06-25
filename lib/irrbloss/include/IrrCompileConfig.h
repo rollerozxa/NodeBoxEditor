@@ -108,22 +108,6 @@ define out. */
 #undef _IRR_LINUX_X11_XINPUT2_
 #endif
 
-//! X11 has by default only monochrome cursors, but using the Xcursor library we can also get color cursor support.
-//! If you have the need for custom color cursors on X11 then enable this and make sure you also link
-//! to the Xcursor library in your Makefile/Projectfile.
-//#define _IRR_LINUX_XCURSOR_
-#ifdef NO_IRR_LINUX_XCURSOR_
-#undef _IRR_LINUX_XCURSOR_
-#endif
-
-#endif
-
-//! Define _IRR_COMPILE_WITH_GUI_ to compile the engine with the built-in GUI
-/** Disable this if you are using an external library to draw the GUI. If you disable this then
-you will not be able to use anything provided by the GUI Environment, including loading fonts. */
-#define _IRR_COMPILE_WITH_GUI_
-#ifdef NO_IRR_COMPILE_WITH_GUI_
-#undef _IRR_COMPILE_WITH_GUI_
 #endif
 
 // Some cleanup and standard stuff

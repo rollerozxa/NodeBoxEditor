@@ -5,9 +5,7 @@
 #include "COSOperator.h"
 
 #ifdef _IRR_WINDOWS_API_
-#ifndef _IRR_XBOX_PLATFORM_
 #include <windows.h>
-#endif
 #else
 #include <string.h>
 #include <unistd.h>
